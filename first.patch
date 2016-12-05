@@ -1,0 +1,16 @@
+Index: app/src/main/java/com/example/lzc/retrofitandrxjavatest/RecyclerViewTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/lzc/retrofitandrxjavatest/RecyclerViewTest.java	(date 1478759217000)
++++ app/src/main/java/com/example/lzc/retrofitandrxjavatest/RecyclerViewTest.java	(revision )
+@@ -27,7 +27,7 @@
+     protected void onCreate(@Nullable Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_recycler_view);
+-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
++        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar); 
+         toolbar.setTitle("Hello");
+         toolbar.setSubtitle("lzc");
+         mRecycleView = (RecyclerView) findViewById(R.id.recycler);
