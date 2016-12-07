@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RetrofitAndRxJavaTest.iml" filepath="$PROJECT_DIR$/RetrofitAndRxJavaTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/XiuXianShiGuang.iml" filepath="$PROJECT_DIR$/XiuXianShiGuang.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/design.iml" filepath="$PROJECT_DIR$/design.iml" />
     </modules>
   </component>
 </project>

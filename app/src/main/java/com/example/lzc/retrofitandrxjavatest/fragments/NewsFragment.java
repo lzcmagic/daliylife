@@ -3,6 +3,7 @@ package com.example.lzc.retrofitandrxjavatest.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +21,17 @@ import butterknife.Unbinder;
 
 public class NewsFragment extends Fragment {
     View mRootView;
-    @BindView(R.id.news_text)
-    TextView mTextView;
     Unbinder mUnbinder;
+    @BindView(R.id.text)
+    TextView text;
+    @BindView(R.id.recycler)
+    RecyclerView recycler;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView=inflater.inflate(R.layout.news,null);
+        mRootView = inflater.inflate(R.layout.news, null);
         mUnbinder = ButterKnife.bind(this, mRootView);
-        mTextView.setText("this is news");
         return mRootView;
     }
 

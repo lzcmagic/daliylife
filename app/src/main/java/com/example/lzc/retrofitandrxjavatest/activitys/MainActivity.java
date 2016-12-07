@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.frame_cont)
     FrameLayout container;
     private SubscriberOnNextListener getTopMovieOnNext;
-
+    /**toolbar标题更改*/
     private ToolbarTitleChange mTitleListener;
 
 
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        toolbar.setTitle(getResources().getString(R.string.toolbar_news));
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -59,12 +60,13 @@ public class MainActivity extends AppCompatActivity
                 toolbar.setTitle(title);
             }
         };
-        toolbar.setTitle(getResources().getString(R.string.toolbar_news));
         navView.setNavigationItemSelectedListener(this);
         ColorStateList stateList = getResources().getColorStateList(R.color.navigation_menu_item_color);
         navView.setItemIconTintList(stateList);
         navView.setItemTextColor(stateList);
         navView.getMenu().getItem(0).setChecked(true);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new NewsFragment());
+        transaction.commit();
     }
 //        getTopMovieOnNext = new SubscriberOnNextListener() {
 //            @Override
@@ -108,6 +110,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_about) {
+
+        }else{
 
         }
         mTransaction.commit();
