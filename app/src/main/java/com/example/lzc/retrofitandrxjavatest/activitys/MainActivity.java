@@ -1,7 +1,9 @@
 package com.example.lzc.retrofitandrxjavatest.activitys;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import com.example.lzc.retrofitandrxjavatest.R;
@@ -38,7 +41,8 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     @BindView(R.id.frame_cont)
     FrameLayout container;
-    private SubscriberOnNextListener getTopMovieOnNext;
+    @BindView(R.id.floatBtn)
+    FloatingActionButton floatButton;
     /**toolbar标题更改*/
     private ToolbarTitleChange mTitleListener;
 
@@ -54,6 +58,12 @@ public class MainActivity extends AppCompatActivity
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        floatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this,RecyclerViewTest.class));
+            }
+        });
         mTitleListener=new ToolbarTitleChange() {
             @Override
             public void TitleChange(String title) {
@@ -68,15 +78,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new NewsFragment());
         transaction.commit();
     }
-//        getTopMovieOnNext = new SubscriberOnNextListener() {
-//            @Override
-//            public void onNext(Object o) {
-//                if (o instanceof MovieEntity) {
-//                    resultTV.setText(((MovieEntity) o).toString());
-//
-//                }
-//            }
-//        };
+
 
     @Override
     public void onBackPressed() {
@@ -130,7 +132,14 @@ public class MainActivity extends AppCompatActivity
 //    }
 
     private void getMovie() {
-        HttpMethods.getInstance().getTopMovie(new ProgressSubscriber<MovieEntity>(getTopMovieOnNext, MainActivity.this), 0, 10);
+        HttpMethods.getInstance().getTopMovie(new ProgressSubscriber<MovieEntity>(new SubscriberOnNextListener() {
+            @Override
+            public void onNext(Object o) {
+                if (o instanceof MovieEntity) {
+                   // resultTV.setText(((MovieEntity) o).toString());
+                }
+            }
+        }, MainActivity.this), 0, 10);
     }
 
 }

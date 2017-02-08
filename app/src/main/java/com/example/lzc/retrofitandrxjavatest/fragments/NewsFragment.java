@@ -2,14 +2,19 @@ package com.example.lzc.retrofitandrxjavatest.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.lzc.retrofitandrxjavatest.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,19 +25,68 @@ import butterknife.Unbinder;
  */
 
 public class NewsFragment extends Fragment {
-    View mRootView;
     Unbinder mUnbinder;
-    @BindView(R.id.text)
-    TextView text;
-    @BindView(R.id.recycler)
-    RecyclerView recycler;
-
+   @BindView(R.id.news_viewPager)
+    ViewPager viewPager;
+    @BindView(R.id.tabs)
+    TabLayout tabLayout;
+//    @BindView(R.id.toolbar)
+//    Toolbar toolBar;
+    private  NewsFragmentAdapter newsFragmentAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.news, null);
+       View mRootView = inflater.inflate(R.layout.news, null);
         mUnbinder = ButterKnife.bind(this, mRootView);
+//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolBar);
+        newsFragmentAdapter=new NewsFragmentAdapter(getChildFragmentManager());
+        viewPager.setAdapter(newsFragmentAdapter);
+        initTabs();
         return mRootView;
+    }
+
+    private void initTabs() {
+//        TabLayout.Tab tabOne=tabLayout.newTab();
+//        tabOne.setText("热门新闻");
+//        TabLayout.Tab tabTwo=tabLayout.newTab();
+//        tabTwo.setText("体育新闻");
+//        TabLayout.Tab tabThree=tabLayout.newTab();
+//        tabThree.setText("房产新闻");
+//        tabLayout.addTab(tabOne);
+//        tabLayout.addTab(tabTwo);
+//        tabLayout.addTab(tabThree);
+      tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private class NewsFragmentAdapter extends FragmentPagerAdapter{
+        private List<Fragment> fragments;
+        private List<String> pagerTitles;
+        public NewsFragmentAdapter(FragmentManager fm) {
+            super(fm);
+            fragments=new ArrayList<>();
+            fragments.add(new HotNewsFragment());
+            fragments.add(new SportNewsFragment());
+            fragments.add(new HouseNewsFragment());
+            pagerTitles=new ArrayList<>();
+            pagerTitles.add("热门新闻");
+            pagerTitles.add("体育新闻");
+            pagerTitles.add("房产新闻");
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return pagerTitles.get(position);
+        }
     }
 
     @Override

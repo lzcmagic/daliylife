@@ -1,5 +1,6 @@
 package com.example.lzc.retrofitandrxjavatest.activitys;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,27 +19,33 @@ import android.widget.Toast;
 
 import com.example.lzc.retrofitandrxjavatest.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by lzc on 2016/11/10.
  */
 public class RecyclerViewTest extends AppCompatActivity {
-    private RecyclerView mRecycleView;
+    @BindView(R.id.recycler)
+    RecyclerView mRecycleView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Hello");
         toolbar.setSubtitle("lzc");
-        mRecycleView = (RecyclerView) findViewById(R.id.recycler);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                        .setAction("最帅的是谁？", new View.OnClickListener() {
+                        .setAction("myAction", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Toast.makeText(RecyclerViewTest.this, "ok", Toast.LENGTH_SHORT).show();
@@ -52,22 +59,22 @@ public class RecyclerViewTest extends AppCompatActivity {
 
     private class MyRecycleAdapter extends RecyclerView.Adapter<MyRecycleAdapter.MyViewHolder> {
 
-        private LayoutInflater mInflater;
+        private final LayoutInflater mInflater;
 
         public MyRecycleAdapter() {
             this.mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
+        @SuppressLint("InflateParams")
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            MyViewHolder holder = new MyViewHolder(mInflater.inflate(R.layout.recycler_itemview, null));
-            return holder;
+            return new MyViewHolder(mInflater.inflate(R.layout.recycler_itemview, null));
         }
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
             holder.mImageView.setImageResource(R.drawable.ic_menu_share);
-            holder.mTextView.setText("where are you from");
+            holder.mTextView.setText(getResources().getString(R.string.app_name));
         }
 
         @Override
@@ -77,8 +84,8 @@ public class RecyclerViewTest extends AppCompatActivity {
 
         class MyViewHolder extends RecyclerView.ViewHolder {
 
-            private ImageView mImageView;
-            private TextView mTextView;
+            private final ImageView mImageView;
+            private final TextView mTextView;
 
             public MyViewHolder(View itemView) {
                 super(itemView);

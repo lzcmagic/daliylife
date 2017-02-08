@@ -50,6 +50,7 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
         dismissProgressDialog();
     }
 
+
     @Override
     public void onNext(Object o) {
         mSubscriberOnNextListener.onNext(o);
