@@ -26,50 +26,47 @@ import butterknife.Unbinder;
 
 public class NewsFragment extends Fragment {
     Unbinder mUnbinder;
-   @BindView(R.id.news_viewPager)
+    @BindView(R.id.news_viewPager)
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
-//    @BindView(R.id.toolbar)
+    //    @BindView(R.id.toolbar)
 //    Toolbar toolBar;
-    private  NewsFragmentAdapter newsFragmentAdapter;
+    private NewsFragmentAdapter newsFragmentAdapter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       View mRootView = inflater.inflate(R.layout.news, null);
+        View mRootView = inflater.inflate(R.layout.news, null);
         mUnbinder = ButterKnife.bind(this, mRootView);
-//        ((AppCompatActivity)getActivity()).setSupportActionBar(toolBar);
-        newsFragmentAdapter=new NewsFragmentAdapter(getChildFragmentManager());
+        newsFragmentAdapter = new NewsFragmentAdapter(getChildFragmentManager());
         viewPager.setAdapter(newsFragmentAdapter);
         initTabs();
         return mRootView;
     }
 
     private void initTabs() {
-//        TabLayout.Tab tabOne=tabLayout.newTab();
-//        tabOne.setText("热门新闻");
-//        TabLayout.Tab tabTwo=tabLayout.newTab();
-//        tabTwo.setText("体育新闻");
-//        TabLayout.Tab tabThree=tabLayout.newTab();
-//        tabThree.setText("房产新闻");
-//        tabLayout.addTab(tabOne);
-//        tabLayout.addTab(tabTwo);
-//        tabLayout.addTab(tabThree);
-      tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    private class NewsFragmentAdapter extends FragmentPagerAdapter{
+    private class NewsFragmentAdapter extends FragmentPagerAdapter {
         private List<Fragment> fragments;
         private List<String> pagerTitles;
+
         public NewsFragmentAdapter(FragmentManager fm) {
             super(fm);
-            fragments=new ArrayList<>();
+            fragments = new ArrayList<>();
             fragments.add(new HotNewsFragment());
             fragments.add(new SportNewsFragment());
             fragments.add(new HouseNewsFragment());
-            pagerTitles=new ArrayList<>();
+            fragments.add(new HouseNewsFragment());
+            fragments.add(new HouseNewsFragment());
+            pagerTitles = new ArrayList<>();
             pagerTitles.add("热门新闻");
             pagerTitles.add("体育新闻");
+            pagerTitles.add("房产新闻");
+            pagerTitles.add("房产新闻");
             pagerTitles.add("房产新闻");
         }
 

@@ -1,11 +1,19 @@
 package com.example.lzc.daliylife.utils;
 
+import android.util.Log;
+
+import com.example.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.example.lzc.daliylife.entity.MovieEntity;
+import com.example.lzc.daliylife.entity.WeatherEntity;
+import com.example.lzc.daliylife.framework.Constants;
+import com.example.lzc.daliylife.httplistener.LaoHuangLiServiceObserv;
 import com.example.lzc.daliylife.httplistener.MovieServiceObserv;
+import com.example.lzc.daliylife.httplistener.WeatherServiceObserv;
 
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,50 +25,97 @@ import rx.schedulers.Schedulers;
  * Created by lzc on 2016/11/14.
  */
 public class HttpMethods {
-    public static final String BASE_URL = "https://api.douban.com/v2/movie/";
-
     private static final int DEFAULT_TIMEOUT = 5;
 
     private Retrofit retrofit;
     private MovieServiceObserv movieService;
+    private WeatherServiceObserv weatherServiceObserv;
+    private LaoHuangLiServiceObserv laoHuangLiServiceObserv;
+    private static HttpMethods SingleInstance;
 
     //构造方法私有
-    private HttpMethods() {
+    private HttpMethods(String url) {
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+            @Override
+            public void log(String message) {
+                //打印retrofit日志
+                Log.i("RetrofitLog", "retrofitBack = " + message);
+            }
+        });
+        //1.NONE 不打印
+        //2.BASIC 请求/响应行
+        //3.HEADERS 请求/响应行+头
+        //4.BODY 请求/响应行 + 头 + 体
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         //手动创建一个OkHttpClient并设置超时时间
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
         httpClientBuilder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-
+        httpClientBuilder.addInterceptor(loggingInterceptor);
         retrofit = new Retrofit.Builder()
                 .client(httpClientBuilder.build())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(url)
                 .build();
+        Log.d(Constants.NORMALTAG, url);
 
-        movieService = retrofit.create(MovieServiceObserv.class);
     }
 
-    //在访问HttpMethods时创建单例
-    private static class SingletonHolder{
-        private static final HttpMethods INSTANCE = new HttpMethods();
-    }
 
     //获取单例
-    public static HttpMethods getInstance(){
-        return SingletonHolder.INSTANCE;
+    public static synchronized HttpMethods getInstance(String url) {
+        SingleInstance = new HttpMethods(url);
+        return SingleInstance;
     }
 
     /**
      * 用于获取豆瓣电影Top250的数据
+     *
      * @param subscriber 由调用者传过来的观察者对象
-     * @param start 起始位置
-     * @param count 获取长度
+     * @param start      起始位置
+     * @param count      获取长度
      */
-    public void getTopMovie(Subscriber<MovieEntity> subscriber, int start, int count){
+    public void getTopMovie(Subscriber<MovieEntity> subscriber, int start, int count) {
+        movieService = retrofit.create(MovieServiceObserv.class);
         movieService.getTopMovie(start, count)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
     }
+
+    /**
+     * get near week weather
+     *
+     * @param subscriber
+     * @param key
+     * @param city
+     * @param province
+     */
+    public void getWeekWeather(Subscriber<WeatherEntity> subscriber, String key, String city, String province) {
+        weatherServiceObserv = retrofit.create(WeatherServiceObserv.class);
+        weatherServiceObserv.getWeekWeather(key, city, province)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取老黄历信息
+     *
+     * @param subscriber
+     * @param key
+     * @param date
+     */
+    public void getDayLHL(Subscriber<LaoHuangLiEntity> subscriber, String key, String date) {
+        laoHuangLiServiceObserv = retrofit.create(LaoHuangLiServiceObserv.class);
+        laoHuangLiServiceObserv.getDayLHL(key, date)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.lzc.daliylife.activitys;
+package com.example.lzc.daliylife.activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

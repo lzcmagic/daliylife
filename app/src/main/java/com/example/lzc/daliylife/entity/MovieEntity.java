@@ -11,7 +11,7 @@ public class MovieEntity {
     String start;
     String total;
     String title;
-    ArrayList<Subject> subjects;
+    ArrayList<subjects> subjects;
 
     @Override
     public String toString() {
@@ -20,7 +20,7 @@ public class MovieEntity {
                 ", start='" + start + '\'' +
                 ", total='" + total + '\'' +
                 ", title='" + title + '\'' +
-                ", subjectList=" + subjects +
+                ", subjectsList=" + subjects +
                 '}';
     }
 
@@ -56,15 +56,15 @@ public class MovieEntity {
         this.title = title;
     }
 
-    public ArrayList<Subject> getSubjects() {
+    public ArrayList<subjects> getsubjects() {
         return subjects;
     }
 
-    public void setSubjects(ArrayList<Subject> subjects) {
+    public void setsubjects(ArrayList<subjects> subjects) {
         this.subjects = subjects;
     }
 
-    class Subject {
+    class subjects {
         private String id;
         private String alt;
         private String year;
@@ -77,10 +77,10 @@ public class MovieEntity {
 
         @Override
         public String toString() {
-            return "Subject.id=" + id
-                    + " Subject.title=" + title
-                    + " Subject.year=" + year
-                    + " Subject.originalTitle=" + original_title + casts.toString() + directors.toString() + " | ";
+            return "subjects.id=" + id
+                    + " subjects.title=" + title
+                    + " subjects.year=" + year
+                    + " subjects.originalTitle=" + original_title + casts.toString() + directors.toString() + " | ";
         }
 
         public String getId() {

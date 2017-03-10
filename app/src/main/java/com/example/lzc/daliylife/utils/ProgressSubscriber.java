@@ -1,7 +1,8 @@
 package com.example.lzc.daliylife.utils;
 
-import android.content.Context;
-import android.widget.Toast;
+import android.util.Log;
+
+import com.example.lzc.daliylife.framework.Constants;
 
 import rx.Subscriber;
 
@@ -11,12 +12,12 @@ import rx.Subscriber;
 public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCancelListener {
     private SubscriberOnNextListener mSubscriberOnNextListener;
     private ProgressDialogHandler mProgressDialogHandler;
-    private Context context;
+//    private Context context;
 
-    public ProgressSubscriber(SubscriberOnNextListener mSubscriberOnNextListener, Context context) {
+    public ProgressSubscriber(SubscriberOnNextListener mSubscriberOnNextListener) {
         this.mSubscriberOnNextListener = mSubscriberOnNextListener;
-        this.context = context;
-        mProgressDialogHandler = new ProgressDialogHandler(context, this, true);
+//        this.context = context;
+        mProgressDialogHandler = new ProgressDialogHandler(this, true);
     }
 
     private void showProgressDialog() {
@@ -46,7 +47,8 @@ public class ProgressSubscriber<T> extends Subscriber<T> implements ProgressCanc
 
     @Override
     public void onError(Throwable e) {
-        Toast.makeText(context, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+//        Toast.makeText(, "error:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+        Log.d(Constants.NORMALTAG,"error:" + e.getMessage());
         dismissProgressDialog();
     }
 

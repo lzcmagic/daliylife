@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
+import android.view.WindowManager;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.framework.ApplWork;
 
 /**
  * 保持在主线程中的对话框
@@ -16,31 +18,39 @@ public class ProgressDialogHandler extends Handler {
     public static final int SHOW_PROGRESS_DIALOG = 1;
     public static final int DISMISS_PROGRESS_DIALOG = 2;
 
-    private ProgressDialog pd;
-
-    private Context context;
+//    private ProgressDialog pd;
+    private MyProgressDialog mpd;
+//    private Context context;
     private boolean cancelable;
     private ProgressCancelListener mProgressCancelListener;
 
-    public ProgressDialogHandler(Context context, ProgressCancelListener mProgressCancelListener,
+    private class MyProgressDialog extends ProgressDialog{
+
+        public MyProgressDialog(Context context) {
+            super(context);
+            this.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
+    }
+
+    public ProgressDialogHandler( ProgressCancelListener mProgressCancelListener,
                                  boolean cancelable) {
         super();
-        this.context = context;
+//        this.context = context;
         this.mProgressCancelListener = mProgressCancelListener;
         this.cancelable = cancelable;
     }
 
     private void initProgressDialog(){
-        if (pd == null) {
-            pd = new ProgressDialog(context);
-            pd.setTitle(R.string.dialog_progress_tip);
-            pd.setIcon(R.mipmap.ic_launcher);
-            pd.setMessage(context.getString(R.string.dialog_progress_message));
+        if (mpd == null) {
+            mpd = new MyProgressDialog(ApplWork.getApplWorkContext());
+            mpd.setTitle(R.string.dialog_progress_tip);
+            mpd.setIcon(R.mipmap.ic_launcher);
+            mpd.setMessage(ApplWork.ApplWorkContext.getString(R.string.dialog_progress_message));
 
-            pd.setCancelable(cancelable);
+            mpd.setCancelable(cancelable);
 
             if (cancelable) {
-                pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                mpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
                         mProgressCancelListener.onCancelProgress();
@@ -48,16 +58,16 @@ public class ProgressDialogHandler extends Handler {
                 });
             }
 
-            if (!pd.isShowing()) {
-                pd.show();
+            if (!mpd.isShowing()) {
+                mpd.show();
             }
         }
     }
 
     private void dismissProgressDialog(){
-        if (pd != null) {
-            pd.dismiss();
-            pd = null;
+        if (mpd != null) {
+            mpd.dismiss();
+            mpd = null;
         }
     }
 
