@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/hot_recycler"
+        android:id="@+id/rv_android"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout>

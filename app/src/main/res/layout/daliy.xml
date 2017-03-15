@@ -1,13 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    app:cardBackgroundColor="@color/cardViewBg"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="10dp"
+    app:contentPadding="10dp">
 
-    //xmlns：app = “http://schemas.android.com/apk/res-auto”
-    <TextView
-        android:id="@+id/daliy_text"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_normal_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                tools:text="daliy" />
+
+            <TextView
+                android:id="@+id/tv_lunar_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_normal_date"
+                android:layout_centerHorizontal="true"
+                tools:text="daliy" />
+
+            <LinearLayout
+                android:id="@+id/ll_avoid_suit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_lunar_date"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_suit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    tools:text="sdfa\nsafasdf\n" />
+
+                <TextView
+                    android:id="@+id/tv_avoid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    tools:text="sdfa\nsafasdf\n" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_jishen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ll_avoid_suit"
+                android:layout_marginTop="10dp" />
+
+            <TextView
+                android:id="@+id/tv_xiongshen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_jishen" />
+        </RelativeLayout>
+    </ScrollView>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_select_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="daliy"/>
+        android:layout_gravity="right|bottom"
+        android:layout_margin="6dp" />
 </android.support.v7.widget.CardView>

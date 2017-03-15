@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.framework.Constants;
+import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utils.HttpMethods;
 
 import butterknife.BindView;
@@ -49,8 +50,14 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                WeatherEntity.Result result = CurrentWeather.getresult().get(0);
-                MainActivity.actionStart(getApplicationContext(),result.getWeather(),result.getTemperature());
+                if (CurrentWeather != null) {
+                    WeatherEntity.Result result = CurrentWeather.getresult().get(0);
+                    WeatherEntity.Result.Future future = CurrentWeather.getresult().get(0).getfuture().get(0);
+                    MainActivity.actionStart(getApplicationContext(), result.getWeather(), result.getTemperature(),future.getTemperature());
+                }else{
+                    T.showLong("天气信息获取失败");
+                    MainActivity.actionStart(getApplicationContext(), null, null,null);
+                }
                 finish();
             }
 
@@ -67,12 +74,11 @@ public class SplashActivity extends AppCompatActivity {
         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
             @Override
             public void onCompleted() {
-                textView.startAnimation(scaleAnimation);
             }
 
             @Override
             public void onError(Throwable e) {
-                CurrentWeather=null;
+                CurrentWeather = null;
             }
 
             @Override
@@ -80,6 +86,7 @@ public class SplashActivity extends AppCompatActivity {
                 CurrentWeather = weatherEntity;
             }
         }, Constants.WEATHERKEY, "无锡", "江苏");
+        textView.startAnimation(scaleAnimation);
     }
 
     @Override

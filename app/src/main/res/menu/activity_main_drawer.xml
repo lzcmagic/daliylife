@@ -5,7 +5,7 @@
         <item
             android:id="@+id/news"
             android:icon="@mipmap/news_normal"
-            android:title="新闻头条" />
+            android:title="Gank干货" />
         <item
             android:id="@+id/wechart"
             android:icon="@mipmap/wechat_normal"

@@ -12,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.fragments.fuli.AndroidFragment;
+import com.example.lzc.daliylife.fragments.fuli.FuLiFragment;
+import com.example.lzc.daliylife.fragments.fuli.IOSFragment;
+import com.example.lzc.daliylife.fragments.fuli.QianDuanFragment;
+import com.example.lzc.daliylife.fragments.fuli.TuoZhanFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +35,6 @@ public class NewsFragment extends Fragment {
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
-    //    @BindView(R.id.toolbar)
-//    Toolbar toolBar;
     private NewsFragmentAdapter newsFragmentAdapter;
 
     @Nullable
@@ -57,17 +60,17 @@ public class NewsFragment extends Fragment {
         public NewsFragmentAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
-            fragments.add(new HotNewsFragment());
-            fragments.add(new SportNewsFragment());
-            fragments.add(new HouseNewsFragment());
-            fragments.add(new HouseNewsFragment());
-            fragments.add(new HouseNewsFragment());
+            fragments.add(new FuLiFragment());
+            fragments.add(new AndroidFragment());
+            fragments.add(new IOSFragment());
+            fragments.add(new QianDuanFragment());
+            fragments.add(new TuoZhanFragment());
             pagerTitles = new ArrayList<>();
-            pagerTitles.add("热门新闻");
-            pagerTitles.add("体育新闻");
-            pagerTitles.add("房产新闻");
-            pagerTitles.add("房产新闻");
-            pagerTitles.add("房产新闻");
+            pagerTitles.add("福利");
+            pagerTitles.add("Android");
+            pagerTitles.add("iOS");
+            pagerTitles.add("前端");
+            pagerTitles.add("拓展资源");
         }
 
         @Override

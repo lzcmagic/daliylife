@@ -2,12 +2,22 @@ package com.example.lzc.daliylife.utils;
 
 import android.util.Log;
 
+import com.example.lzc.daliylife.entity.AndroidEntity;
+import com.example.lzc.daliylife.entity.FuLiEntity;
+import com.example.lzc.daliylife.entity.IOSEntity;
 import com.example.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.example.lzc.daliylife.entity.MovieEntity;
+import com.example.lzc.daliylife.entity.QianDuanEntity;
+import com.example.lzc.daliylife.entity.TuoZhanEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.framework.Constants;
+import com.example.lzc.daliylife.httplistener.AndroidServiceObserv;
+import com.example.lzc.daliylife.httplistener.FuLiServiceObserv;
+import com.example.lzc.daliylife.httplistener.IosServiceObserv;
 import com.example.lzc.daliylife.httplistener.LaoHuangLiServiceObserv;
 import com.example.lzc.daliylife.httplistener.MovieServiceObserv;
+import com.example.lzc.daliylife.httplistener.QianDuanServiceObserv;
+import com.example.lzc.daliylife.httplistener.TuoZhanServiceObserv;
 import com.example.lzc.daliylife.httplistener.WeatherServiceObserv;
 
 import java.util.concurrent.TimeUnit;
@@ -31,6 +41,11 @@ public class HttpMethods {
     private MovieServiceObserv movieService;
     private WeatherServiceObserv weatherServiceObserv;
     private LaoHuangLiServiceObserv laoHuangLiServiceObserv;
+    private FuLiServiceObserv fuLiServiceObserv;
+    private AndroidServiceObserv androidServiceObserv;
+    private IosServiceObserv iosServiceObserv;
+    private QianDuanServiceObserv qianDuanServiceObserv;
+    private TuoZhanServiceObserv tuoZhanServiceObserv;
     private static HttpMethods SingleInstance;
 
     //构造方法私有
@@ -63,7 +78,7 @@ public class HttpMethods {
     }
 
 
-    //获取单例
+    //获取单例 饿汉模式
     public static synchronized HttpMethods getInstance(String url) {
         SingleInstance = new HttpMethods(url);
         return SingleInstance;
@@ -112,6 +127,90 @@ public class HttpMethods {
     public void getDayLHL(Subscriber<LaoHuangLiEntity> subscriber, String key, String date) {
         laoHuangLiServiceObserv = retrofit.create(LaoHuangLiServiceObserv.class);
         laoHuangLiServiceObserv.getDayLHL(key, date)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取福利数据
+     *
+     * @param subscriber
+     * @param type
+     * @param number
+     * @param page
+     */
+    public void getFuLiInfo(Subscriber<FuLiEntity> subscriber, String type, int number, int page) {
+        fuLiServiceObserv = retrofit.create(FuLiServiceObserv.class);
+        fuLiServiceObserv.getFuLiInfo(type, number, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+    }
+
+    /**
+     * 获取android信息
+     *
+     * @param subscriber
+     * @param type
+     * @param number
+     * @param page
+     */
+    public void getAndroidInfo(Subscriber<AndroidEntity> subscriber, String type, int number, int page) {
+        androidServiceObserv = retrofit.create(AndroidServiceObserv.class);
+        androidServiceObserv.getAndroidInfo(type, number, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取IOS信息
+     *
+     * @param subscribe
+     * @param type
+     * @param number
+     * @param page
+     */
+    public void getIOSInfo(Subscriber<IOSEntity> subscribe, String type, int number, int page) {
+        iosServiceObserv = retrofit.create(IosServiceObserv.class);
+        iosServiceObserv.getIOSInfo(type, number, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscribe);
+    }
+
+    /**
+     * 获取前端信息
+     * @param subscriber
+     * @param type
+     * @param number
+     * @param page
+     */
+    public void getQianDuanInfo(Subscriber<QianDuanEntity> subscriber, String type, int number, int page) {
+        qianDuanServiceObserv = retrofit.create(QianDuanServiceObserv.class);
+        qianDuanServiceObserv.getQianDuanInfo(type, number, page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取拓展信息
+     * @param subscriber
+     * @param type
+     * @param number
+     * @param page
+     */
+    public void getTuoZhanInfo(Subscriber<TuoZhanEntity> subscriber,String type,int number,int page){
+        tuoZhanServiceObserv=retrofit.create(TuoZhanServiceObserv.class);
+        tuoZhanServiceObserv.getTuoZhanInfo(type,number,page)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

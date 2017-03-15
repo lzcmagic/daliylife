@@ -1,10 +1,10 @@
 package com.example.lzc.daliylife.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.entity.MovieEntity;
+import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.fragments.DaliyEventsFragment;
 import com.example.lzc.daliylife.fragments.NewsFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
@@ -32,7 +34,11 @@ import com.example.lzc.daliylife.utils.SubscriberOnNextListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 
+/**
+ * 主页
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -45,35 +51,32 @@ public class MainActivity extends AppCompatActivity
     DrawerLayout drawerLayout;
     @BindView(R.id.frame_cont)
     FrameLayout container;
-    @BindView(R.id.floatBtn)
-    FloatingActionButton floatButton;
+    //    @BindView(R.id.floatBtn)
+//    FloatingActionButton floatButton;
     private String CurrentWeather;
     private String CurrentWeatherText;
+    private String CurrentTemperature;
     /**
      * toolbar标题更改
      */
     private ToolbarTitleChange mTitleListener;
-
+    private ProgressDialog mPDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        initProgressDialog();
         CurrentWeather = getIntent().getStringExtra("weather");
         CurrentWeatherText = getIntent().getStringExtra("weatherText");
+        CurrentTemperature=getIntent().getStringExtra("temperature");
         toolbar.setTitle(getResources().getString(R.string.toolbar_news));
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        floatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, RecyclerViewTest.class));
-            }
-        });
         mTitleListener = new ToolbarTitleChange() {
             @Override
             public void TitleChange(String title) {
@@ -93,13 +96,83 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void initProgressDialog() {
+        mPDialog=new ProgressDialog(this);
+        mPDialog.setMessage("正在加载中...");
+    }
+
     private void initNavHeadView() {
         View headerView = navView.getHeaderView(0);
         ImageView image = (ImageView) headerView.findViewById(R.id.imageView);
-        TextView weather = (TextView) headerView.findViewById(R.id.weather);
-        TextView weatherText = (TextView) headerView.findViewById(R.id.weather_text);
-        weather.setText(CurrentWeather);
-        weatherText.setText(CurrentWeatherText);
+        final TextView weather = (TextView) headerView.findViewById(R.id.weather);
+        final TextView weatherText = (TextView) headerView.findViewById(R.id.weather_text);
+        final TextView weatherTemp = (TextView) headerView.findViewById(R.id.weather_temp);
+        if (!TextUtils.isEmpty(CurrentWeather)) {
+            weather.setText(CurrentWeather);
+        } else {
+            //获取天气信息失败
+            weather.setText("天气信息获取失败,点击图标重试");
+        }
+        if (!TextUtils.isEmpty(CurrentWeatherText)) {
+            weatherText.setText(CurrentWeatherText);
+        } else {
+            //获取天气信息失败
+            weatherText.setText("");
+        }
+        if (!TextUtils.isEmpty(CurrentTemperature)) {
+            weatherTemp.setText(CurrentTemperature);
+        } else {
+            //获取天气信息失败
+            weatherTemp.setText("");
+        }
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        mPDialog.show();
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        mPDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mPDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNext(WeatherEntity weatherEntity) {
+                        WeatherEntity.Result result = weatherEntity.getresult().get(0);
+                        String weatherInfo = result.getWeather();
+                        String temperatureInfo = result.getTemperature();
+                        String weatherTempInfo=result.getfuture().get(0).getTemperature();
+                        if (!TextUtils.isEmpty(weatherInfo)) {
+                           weather.setText(weatherInfo);
+                        } else {
+                            //获取天气信息失败
+                            weather.setText("天气信息获取失败,点击图标重试");
+                        }
+                        if (!TextUtils.isEmpty(temperatureInfo)) {
+                            weatherText.setText(temperatureInfo);
+                        } else {
+                            //获取天气信息失败
+                            weatherText.setText("");
+                        }
+                        if (!TextUtils.isEmpty(weatherTempInfo)) {
+                            weatherTemp.setText(weatherTempInfo);
+                        } else {
+                            //获取天气信息失败
+                            weatherTemp.setText("");
+                        }
+                    }
+                }, Constants.WEATHERKEY, "无锡", "江苏");
+            }
+        });
     }
 
     /**
@@ -107,12 +180,13 @@ public class MainActivity extends AppCompatActivity
      *
      * @param context
      */
-    public static void actionStart(Context context, String weather, String weatherText) {
+    public static void actionStart(Context context, String weather, String weatherText,String temperature) {
         Intent intent = new Intent();
         intent.setClass(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("weather", weather);
         intent.putExtra("weatherText", weatherText);
+        intent.putExtra("temperature", temperature);
         context.startActivity(intent);
     }
 

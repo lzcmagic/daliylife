@@ -5,7 +5,7 @@ package com.example.lzc.daliylife.framework;
  */
 
 public class Constants {
-    public static final String FragmentTagNews="news";
+    public static final String FragmentTagNews="gank";
     public static final String FragmentTagWeChart="wechart";
     public static final String FragmentTagDaliy="daliy";
     public static final String NewsFragmentTagHot="news_hot";
@@ -17,4 +17,5 @@ public class Constants {
     public static final String WEATHERKEY="1bf78f5fdfbe0";
     public static final String LAOHUANGLIAPI="http://apicloud.mob.com/appstore/laohuangli/";
     public static final String LAOHUANGLIKEY="1bf78f5fdfbe0";
+    public static final String GANKMAINAPI="http://gank.io/api/";
 }

@@ -253,7 +253,7 @@ public class WeatherEntity {
         String wind;
         ArrayList<Future> future;
 
-        class Future {
+        public class Future {
             @Override
             public String toString() {
                 return "Future{" +

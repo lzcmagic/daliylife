@@ -6,8 +6,11 @@
     <string name="action_settings">Settings</string>
     <string name="dialog_progress_tip">提示</string>
     <string name="dialog_progress_message">加载中...</string>
-    <string name="toolbar_news">新闻头条</string>
+    <string name="toolbar_news">Gank干货</string>
     <string name="toolbar_wechart">微信精选</string>
     <string name="toolbar_car">车辆违章</string>
     <string name="toolbar_daliy">老黄历</string>
+    <string name="load_more">加载中...</string>
+    <string name="load_finish">暂无更多</string>
+    <string name="load_data_abnormal">数据加载异常</string>
 </resources>

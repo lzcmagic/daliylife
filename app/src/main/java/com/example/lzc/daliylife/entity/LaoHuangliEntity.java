@@ -5,9 +5,9 @@ package com.example.lzc.daliylife.entity;
  */
 
 public class LaoHuangLiEntity {
-    String msg;
-    String retCode;
-    LaoHuangLiEntity.Result result;
+    String msg;//返回信息
+    String retCode;//返回码
+    LaoHuangLiEntity.Result result;//返回结果集
 
     @Override
     public String toString() {
@@ -42,13 +42,13 @@ public class LaoHuangLiEntity {
         this.result = result;
     }
 
-    class Result{
-        String avoid;
-        String date;
-        String jishen;
-        String lunar;
-        String suit;
-        String xiongshen;
+    public class Result{
+        String avoid;//不宜
+        String date;//查询日期
+        String jishen;//吉煞
+        String lunar;//农历日期
+        String suit;//宜
+        String xiongshen;//凶煞
 
         @Override
         public String toString() {
