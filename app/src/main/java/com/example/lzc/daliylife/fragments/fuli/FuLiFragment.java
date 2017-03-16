@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lzc.daliylife.R;
-import com.example.lzc.daliylife.entity.FuLiEntity;
+import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utils.HttpMethods;
@@ -51,13 +51,19 @@ public class FuLiFragment extends Fragment {
     private int LastVisiblePosition;
     private boolean IsRefreshFinish = false;
     private boolean IsDataRefresh = false;
+    private boolean IsFirstLoad=true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        FuLiLists = new ArrayList<>();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.hot_news_fragment, null);
         unBinder = ButterKnife.bind(this, rootView);
-        FuLiLists = new ArrayList<>();
         initSwipeLayout();
         mLinearManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearManager);
@@ -90,12 +96,6 @@ public class FuLiFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
     /**
      * 初始化下拉刷新
      */
@@ -126,8 +126,10 @@ public class FuLiFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
+        if (isVisibleToUser&&IsFirstLoad){
             initFuLiData();
+            IsFirstLoad=false;
+        }
     }
 
     /**

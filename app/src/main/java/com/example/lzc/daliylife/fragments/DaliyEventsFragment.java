@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.activity.MainActivity;
 import com.example.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.utils.HttpMethods;
@@ -51,6 +53,8 @@ public class DaliyEventsFragment extends Fragment {
     TextView XiongShen;
     @BindView(fab_select_date)
     FloatingActionButton SelectDate;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     /**
      * 当前对话框显示的日期
      */
@@ -67,7 +71,10 @@ public class DaliyEventsFragment extends Fragment {
         initProgressDialog();
         initDate(null);
         initFab();
-
+        mToolbar.setTitle(getResources().getString(R.string.toolbar_daliy));
+        ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
+        //绑定DrawerLayout
+        ((MainActivity)getActivity()).initDrawerLayout(mToolbar);
         return mRootView;
     }
 

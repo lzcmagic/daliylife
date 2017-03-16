@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.example.lzc.daliylife.R;
@@ -27,16 +30,18 @@ import butterknife.ButterKnife;
 
 public class GankDetailInfo extends AppCompatActivity {
 
-    @BindView(R.id.wv_gank_detail)
-    WebView mWebView;
     @BindView(R.id.tb_gank_detail)
     Toolbar mToolbar;
+    @BindView(R.id.ll_webview_container)
+    FrameLayout WebViewContainer;
+    WebView mWebView;
     @BindView(R.id.pb_web_load)
     ProgressBar mProgressBar;
     private String title;
     private String date;
     private String user;
     private String url;
+    private boolean IsFirstFinish = true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -44,14 +49,42 @@ public class GankDetailInfo extends AppCompatActivity {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_gank_detail_info);
         ButterKnife.bind(this);
+        mToolbar.setTitle(R.string.toolbar_news);
         setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         title = getIntent().getStringExtra("title");
         date = getIntent().getStringExtra("date");
         user = getIntent().getStringExtra("user");
         url = getIntent().getStringExtra("url");
-        mToolbar.setTitle("GANK干货");
         initWebView();
         Log.d("click", url);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+//
+                if (IsFirstFinish) {
+                    if (mWebView != null) {
+                   mWebView.stopLoading();
+                }
+                    finish();
+                    IsFirstFinish = false;
+                }
+                break;
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mWebView.onPause();
     }
 
     @Override
@@ -61,6 +94,9 @@ public class GankDetailInfo extends AppCompatActivity {
                 mWebView.goBack();
                 return true;
             }
+            if (mWebView!=null){
+                mWebView.stopLoading();
+            }
             return super.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
@@ -69,6 +105,7 @@ public class GankDetailInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mWebView.onResume();
         mWebView.loadUrl(url);
     }
 
@@ -76,8 +113,10 @@ public class GankDetailInfo extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         if (mWebView != null) {
+
             mWebView.removeAllViews();
             mWebView.destroy();
+
         }
     }
 
@@ -106,10 +145,13 @@ public class GankDetailInfo extends AppCompatActivity {
      * 初始化WebView
      */
     private void initWebView() {
+        mWebView=new WebView(getApplicationContext());
+        WebViewContainer.addView(mWebView);
         // 启用支持javascript
         WebSettings settings = mWebView.getSettings();
         // //设置加载进来的页面自适应手机屏幕
         settings.setUseWideViewPort(true);
+        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebClient());
         // 覆盖webview默认使用第三方或系统默认浏览器打开网页得行为，是网页用webview打开

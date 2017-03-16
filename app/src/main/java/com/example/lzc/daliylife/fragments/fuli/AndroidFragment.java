@@ -8,7 +8,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,8 @@ import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.activity.GankDetailInfo;
-import com.example.lzc.daliylife.entity.AndroidEntity;
+import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
+import com.example.lzc.daliylife.entity.gankentity.Result;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
@@ -45,7 +45,7 @@ public class AndroidFragment extends Fragment {
     ScrollChildSwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.rv_android)
     RecyclerView mRecyclerView;
-    private List<AndroidEntity.Result> AndroidEntitys;
+    private List<Result> AndroidEntitys;
     private boolean IsRefreshFinish;
     private boolean IsDataRefresh;
     private int Number = 10;
@@ -53,13 +53,19 @@ public class AndroidFragment extends Fragment {
     private MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int LastVisiblePosition;
+    private boolean IsFirstLoad = true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        AndroidEntitys = new ArrayList<>();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.android_info_fragment, null);
         mUnbinder = ButterKnife.bind(this, rootView);
-        AndroidEntitys = new ArrayList<>();
         mAdapter = new MyAdapter();
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -88,8 +94,7 @@ public class AndroidFragment extends Fragment {
         mAdapter.setOnitemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                AndroidEntity.Result result = AndroidEntitys.get(position);
-                Log.d("click",result.toString());
+               Result result = AndroidEntitys.get(position);
                 GankDetailInfo.actionIntentStart(getActivity(),
                         result.getDesc(),
                         result.getPublishedAt(),
@@ -98,6 +103,7 @@ public class AndroidFragment extends Fragment {
             }
         });
         initRefreshLauyout();
+        mAdapter.notifyDataSetChanged();
         return rootView;
     }
 
@@ -134,8 +140,11 @@ public class AndroidFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
+        if (isVisibleToUser && IsFirstLoad) {
             initData();
+            IsFirstLoad = false;
+        }
+
     }
 
     /**
@@ -169,9 +178,9 @@ public class AndroidFragment extends Fragment {
 
             @Override
             public void onNext(AndroidEntity androidEntity) {
-                ArrayList<AndroidEntity.Result> results = androidEntity.getResults();
+                ArrayList<Result> results = androidEntity.getResults();
                 if (results != null && results.size() > 0) {
-                    for (AndroidEntity.Result result : results) {
+                    for (Result result : results) {
                         AndroidEntitys.add(result);
                     }
                 }
@@ -192,10 +201,11 @@ public class AndroidFragment extends Fragment {
 
         /**
          * 初始化接口
+         *
          * @param mOnitemClickListener
          */
-        public void setOnitemClickListener(OnRecyclerViewItemClickListener mOnitemClickListener){
-            MyAdapter.this.mOnitemClickListener=mOnitemClickListener;
+        public void setOnitemClickListener(OnRecyclerViewItemClickListener mOnitemClickListener) {
+            MyAdapter.this.mOnitemClickListener = mOnitemClickListener;
 
         }
 
@@ -233,10 +243,10 @@ public class AndroidFragment extends Fragment {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mOnitemClickListener.onItemClick(holder,position);
+                        mOnitemClickListener.onItemClick(holder, position);
                     }
                 });
-                AndroidEntity.Result result = AndroidEntitys.get(position);
+                Result result = AndroidEntitys.get(position);
                 ((NormalHolder) holder).mTitle.setText(result.getDesc());
                 ((NormalHolder) holder).mUser.setText("作者: " + result.getWho());
                 ((NormalHolder) holder).mDate.setText(DateTimeFormat

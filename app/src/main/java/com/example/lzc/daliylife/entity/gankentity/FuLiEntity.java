@@ -1,4 +1,4 @@
-package com.example.lzc.daliylife.entity;
+package com.example.lzc.daliylife.entity.gankentity;
 
 import java.util.ArrayList;
 

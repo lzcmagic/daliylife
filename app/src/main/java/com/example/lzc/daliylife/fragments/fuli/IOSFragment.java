@@ -16,9 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
-import com.example.lzc.daliylife.entity.IOSEntity;
+import com.example.lzc.daliylife.activity.GankDetailInfo;
+import com.example.lzc.daliylife.entity.gankentity.IOSEntity;
+import com.example.lzc.daliylife.entity.gankentity.Result;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
+import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.GlideUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
@@ -43,7 +46,7 @@ public class IOSFragment extends Fragment {
     ScrollChildSwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.rv_ios)
     RecyclerView mRecyclerView;
-    private List<IOSEntity.Result> IosEntitys;
+    private List<Result> IosEntitys;
     private boolean IsRefreshFinish;
     private boolean IsDataRefresh;
     private int Number = 10;
@@ -51,13 +54,19 @@ public class IOSFragment extends Fragment {
     private IOSFragment.MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int LastVisiblePosition;
+    private boolean IsFirstLoad=true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        IosEntitys = new ArrayList<>();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ios_info_fragment, null);
         mUnbinder = ButterKnife.bind(this, rootView);
-        IosEntitys = new ArrayList<>();
         mAdapter = new IOSFragment.MyAdapter();
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -81,6 +90,17 @@ public class IOSFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+        mAdapter.setOnitemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                Result result = IosEntitys.get(position);
+                GankDetailInfo.actionIntentStart(getActivity(),
+                        result.getDesc(),
+                        result.getPublishedAt(),
+                        result.getWho(),
+                        result.getUrl());
             }
         });
         initRefreshLauyout();
@@ -120,8 +140,10 @@ public class IOSFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
+        if (isVisibleToUser&&IsFirstLoad){
             initData();
+            IsFirstLoad=false;
+        }
     }
 
     /**
@@ -155,9 +177,9 @@ public class IOSFragment extends Fragment {
 
             @Override
             public void onNext(IOSEntity iosEntity) {
-                ArrayList<IOSEntity.Result> results = iosEntity.getResults();
+                ArrayList<Result> results = iosEntity.getResults();
                 if (results != null && results.size() > 0) {
-                    for (IOSEntity.Result result : results) {
+                    for (Result result : results) {
                         IosEntitys.add(result);
                     }
                 }
@@ -170,9 +192,19 @@ public class IOSFragment extends Fragment {
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
         private int LOAD_FINISH = 2;
+        private OnRecyclerViewItemClickListener mOnItemClickListener;
 
         public MyAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+        /**
+         * 初始化接口
+         *
+         * @param mOnitemClickListener
+         */
+        public void setOnitemClickListener(OnRecyclerViewItemClickListener mOnitemClickListener) {
+            IOSFragment.MyAdapter.this.mOnItemClickListener = mOnitemClickListener;
+
         }
 
         @Override
@@ -203,9 +235,15 @@ public class IOSFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             if (holder instanceof IOSFragment.MyAdapter.NormalHolder) {
-                IOSEntity.Result result = IosEntitys.get(position);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnItemClickListener.onItemClick(holder, position);
+                    }
+                });
+               Result result = IosEntitys.get(position);
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mTitle.setText(result.getDesc());
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mUser.setText("作者: " + result.getWho());
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mDate.setText(DateTimeFormat

@@ -24,10 +24,9 @@ import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.entity.MovieEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.fragments.DaliyEventsFragment;
-import com.example.lzc.daliylife.fragments.NewsFragment;
+import com.example.lzc.daliylife.fragments.GankFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
 import com.example.lzc.daliylife.framework.Constants;
-import com.example.lzc.daliylife.utillistener.ToolbarTitleChange;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.utils.ProgressSubscriber;
 import com.example.lzc.daliylife.utils.SubscriberOnNextListener;
@@ -43,23 +42,15 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)
-    DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
     @BindView(R.id.frame_cont)
     FrameLayout container;
-    //    @BindView(R.id.floatBtn)
-//    FloatingActionButton floatButton;
     private String CurrentWeather;
     private String CurrentWeatherText;
     private String CurrentTemperature;
-    /**
-     * toolbar标题更改
-     */
-    private ToolbarTitleChange mTitleListener;
     private ProgressDialog mPDialog;
 
     @Override
@@ -70,19 +61,8 @@ public class MainActivity extends AppCompatActivity
         initProgressDialog();
         CurrentWeather = getIntent().getStringExtra("weather");
         CurrentWeatherText = getIntent().getStringExtra("weatherText");
-        CurrentTemperature=getIntent().getStringExtra("temperature");
-        toolbar.setTitle(getResources().getString(R.string.toolbar_news));
-        setSupportActionBar(toolbar);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        mTitleListener = new ToolbarTitleChange() {
-            @Override
-            public void TitleChange(String title) {
-                toolbar.setTitle(title);
-            }
-        };
+        CurrentTemperature = getIntent().getStringExtra("temperature");
+
         navView.setNavigationItemSelectedListener(this);
         ColorStateList stateList = getResources().getColorStateList(R.color.navigation_menu_item_color);
         navView.setItemIconTintList(stateList);
@@ -91,13 +71,24 @@ public class MainActivity extends AppCompatActivity
 
         initNavHeadView();
         if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new NewsFragment());
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new GankFragment());
             transaction.commit();
         }
     }
 
+    /**
+     * 初始化抽屉
+     * @param mToolbar
+     */
+    public void initDrawerLayout(final Toolbar mToolbar) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+    }
+
     private void initProgressDialog() {
-        mPDialog=new ProgressDialog(this);
+        mPDialog = new ProgressDialog(this);
         mPDialog.setMessage("正在加载中...");
     }
 
@@ -150,9 +141,9 @@ public class MainActivity extends AppCompatActivity
                         WeatherEntity.Result result = weatherEntity.getresult().get(0);
                         String weatherInfo = result.getWeather();
                         String temperatureInfo = result.getTemperature();
-                        String weatherTempInfo=result.getfuture().get(0).getTemperature();
+                        String weatherTempInfo = result.getfuture().get(0).getTemperature();
                         if (!TextUtils.isEmpty(weatherInfo)) {
-                           weather.setText(weatherInfo);
+                            weather.setText(weatherInfo);
                         } else {
                             //获取天气信息失败
                             weather.setText("天气信息获取失败,点击图标重试");
@@ -180,7 +171,7 @@ public class MainActivity extends AppCompatActivity
      *
      * @param context
      */
-    public static void actionStart(Context context, String weather, String weatherText,String temperature) {
+    public static void actionStart(Context context, String weather, String weatherText, String temperature) {
         Intent intent = new Intent();
         intent.setClass(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -208,17 +199,13 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().beginTransaction();
         int id = item.getItemId();
         if (id == R.id.news) {
-            mTransaction.replace(R.id.frame_cont, new NewsFragment(), Constants.FragmentTagNews);
-            mTitleListener.TitleChange(getResources().getString(R.string.toolbar_news));
+            mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
         } else if (id == R.id.wechart) {
             mTransaction.replace(R.id.frame_cont, new WeChartFragment(), Constants.FragmentTagWeChart);
-            mTitleListener.TitleChange(getResources().getString(R.string.toolbar_wechart));
         } else if (id == R.id.car) {
-            mTransaction.replace(R.id.frame_cont, new NewsFragment(), Constants.FragmentTagNews);
-            mTitleListener.TitleChange(getResources().getString(R.string.toolbar_car));
+            mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
         } else if (id == R.id.daliy) {
             mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);
-            mTitleListener.TitleChange(getResources().getString(R.string.toolbar_daliy));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_about) {

@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.activity.MainActivity;
 import com.example.lzc.daliylife.fragments.fuli.AndroidFragment;
 import com.example.lzc.daliylife.fragments.fuli.FuLiFragment;
 import com.example.lzc.daliylife.fragments.fuli.IOSFragment;
@@ -25,18 +27,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.example.lzc.daliylife.R.id.toolbar;
+
 /**
  * Created by lzc on 2016/12/5.
  */
 
-public class NewsFragment extends Fragment {
+public class GankFragment extends Fragment {
     Unbinder mUnbinder;
     @BindView(R.id.news_viewPager)
     ViewPager viewPager;
     @BindView(R.id.tabs)
     TabLayout tabLayout;
     private NewsFragmentAdapter newsFragmentAdapter;
-
+    @BindView(toolbar)
+    Toolbar mToolbar;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,6 +49,10 @@ public class NewsFragment extends Fragment {
         mUnbinder = ButterKnife.bind(this, mRootView);
         newsFragmentAdapter = new NewsFragmentAdapter(getChildFragmentManager());
         viewPager.setAdapter(newsFragmentAdapter);
+        mToolbar.setTitle(getResources().getString(R.string.toolbar_news));
+        ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
+        //绑定DrawerLayout
+        ((MainActivity)getActivity()).initDrawerLayout(mToolbar);
         initTabs();
         return mRootView;
     }

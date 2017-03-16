@@ -2,13 +2,13 @@ package com.example.lzc.daliylife.utils;
 
 import android.util.Log;
 
-import com.example.lzc.daliylife.entity.AndroidEntity;
-import com.example.lzc.daliylife.entity.FuLiEntity;
-import com.example.lzc.daliylife.entity.IOSEntity;
+import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
+import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
+import com.example.lzc.daliylife.entity.gankentity.IOSEntity;
 import com.example.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.example.lzc.daliylife.entity.MovieEntity;
-import com.example.lzc.daliylife.entity.QianDuanEntity;
-import com.example.lzc.daliylife.entity.TuoZhanEntity;
+import com.example.lzc.daliylife.entity.gankentity.QianDuanEntity;
+import com.example.lzc.daliylife.entity.gankentity.TuoZhanEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.httplistener.AndroidServiceObserv;

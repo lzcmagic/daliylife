@@ -1,6 +1,6 @@
 package com.example.lzc.daliylife.httplistener;
 
-import com.example.lzc.daliylife.entity.FuLiEntity;
+import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;

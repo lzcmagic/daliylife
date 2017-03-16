@@ -16,9 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
-import com.example.lzc.daliylife.entity.TuoZhanEntity;
+import com.example.lzc.daliylife.activity.GankDetailInfo;
+import com.example.lzc.daliylife.entity.gankentity.Result;
+import com.example.lzc.daliylife.entity.gankentity.TuoZhanEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
+import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.GlideUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
@@ -42,7 +45,7 @@ public class TuoZhanFragment extends Fragment {
     ScrollChildSwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.rv_tuozhan)
     RecyclerView mRecyclerView;
-    private List<TuoZhanEntity.Result> TuoZhanEntitys;
+    private List<Result> TuoZhanEntitys;
     private boolean IsRefreshFinish;
     private boolean IsDataRefresh;
     private int Number = 10;
@@ -50,13 +53,19 @@ public class TuoZhanFragment extends Fragment {
     private TuoZhanFragment.MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int LastVisiblePosition;
+    private boolean IsFirstLoad=true;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        TuoZhanEntitys = new ArrayList<>();
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.tuozhan_info_fragment, null);
         mUnbinder = ButterKnife.bind(this, rootView);
-        TuoZhanEntitys = new ArrayList<>();
         mAdapter = new TuoZhanFragment.MyAdapter();
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -80,6 +89,17 @@ public class TuoZhanFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LastVisiblePosition = mLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+        mAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                Result result = TuoZhanEntitys.get(position);
+                GankDetailInfo.actionIntentStart(getActivity(),
+                        result.getDesc(),
+                        result.getPublishedAt(),
+                        result.getWho(),
+                        result.getUrl());
             }
         });
         initRefreshLauyout();
@@ -119,8 +139,10 @@ public class TuoZhanFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser)
+        if (isVisibleToUser&&IsFirstLoad){
             initData();
+            IsFirstLoad=false;
+        }
     }
 
     /**
@@ -154,9 +176,9 @@ public class TuoZhanFragment extends Fragment {
 
             @Override
             public void onNext(TuoZhanEntity tuozhanEntity) {
-                ArrayList<TuoZhanEntity.Result> results = tuozhanEntity.getResults();
+                ArrayList<Result> results = tuozhanEntity.getResults();
                 if (results != null && results.size() > 0) {
-                    for (TuoZhanEntity.Result result : results) {
+                    for (Result result : results) {
                         TuoZhanEntitys.add(result);
                     }
                 }
@@ -169,9 +191,19 @@ public class TuoZhanFragment extends Fragment {
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
         private int LOAD_FINISH = 2;
+        private OnRecyclerViewItemClickListener mOnItemClickListener;
 
         public MyAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        }
+
+        /**
+         * 初始化接口
+         *
+         * @param mOnitemClickListener
+         */
+        public void setOnItemClickListener(OnRecyclerViewItemClickListener mOnitemClickListener) {
+            TuoZhanFragment.MyAdapter.this.mOnItemClickListener = mOnitemClickListener;
         }
 
         @Override
@@ -202,9 +234,15 @@ public class TuoZhanFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             if (holder instanceof TuoZhanFragment.MyAdapter.NormalHolder) {
-                TuoZhanEntity.Result result = TuoZhanEntitys.get(position);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnItemClickListener.onItemClick(holder, position);
+                    }
+                });
+                Result result = TuoZhanEntitys.get(position);
                 ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mTitle.setText(result.getDesc());
                 ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mUser.setText("作者: " + result.getWho());
                 ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mDate.setText(DateTimeFormat
