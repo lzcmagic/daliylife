@@ -40,7 +40,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initAnimation() {
         scaleAnimation = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(500);
+        scaleAnimation.setDuration(1000);
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -50,15 +50,8 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (CurrentWeather != null) {
-                    WeatherEntity.Result result = CurrentWeather.getresult().get(0);
-                    WeatherEntity.Result.Future future = CurrentWeather.getresult().get(0).getfuture().get(0);
-                    MainActivity.actionStart(getApplicationContext(), result.getWeather(), result.getTemperature(),future.getTemperature());
-                }else{
-                    T.showLong("天气信息获取失败");
-                    MainActivity.actionStart(getApplicationContext(), null, null,null);
-                }
-                finish();
+
+               // ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.Re)
             }
 
             @Override
@@ -66,6 +59,18 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void IntentMainActivity(){
+        if (CurrentWeather != null) {
+            WeatherEntity.Result result = CurrentWeather.getresult().get(0);
+            WeatherEntity.Result.Future future = CurrentWeather.getresult().get(0).getfuture().get(0);
+            MainActivity.actionStart(getApplicationContext(), result.getWeather(), result.getTemperature(),future.getTemperature());
+        }else{
+            T.showLong("天气信息获取失败");
+            MainActivity.actionStart(getApplicationContext(), null, null,null);
+        }
+        finish();
     }
 
     @Override

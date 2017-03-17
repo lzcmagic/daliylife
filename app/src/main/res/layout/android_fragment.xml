@@ -24,10 +24,11 @@
             android:paddingBottom="6dp"
             android:layout_marginRight="40dp"
             tools:text="2017年伊始，你需要尝试的25个Android第三方库"/>
-        <ImageView
+        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/iv_android_image"
             android:layout_below="@id/tv_android_title"
-            android:scaleType="centerCrop"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             android:layout_width="match_parent"
             android:layout_height="120dp"/>
         <TextView

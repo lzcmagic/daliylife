@@ -28,6 +28,9 @@ public class ApplWork extends Application {
         });
     }
 
+    public void getApplicationLongTime(){
+    }
+
     public static Context getApplWorkContext(){
         return ApplWorkContext;
     }

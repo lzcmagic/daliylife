@@ -2,16 +2,17 @@ package com.example.lzc.daliylife.fragments.fuli;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -81,7 +82,12 @@ public class AndroidFragment extends Fragment {
                         return;
                     Page++;
                     IsDataRefresh = true;
-                    loadData();
+                    recyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                        }
+                    }, 500);
                 }
             }
 
@@ -94,7 +100,7 @@ public class AndroidFragment extends Fragment {
         mAdapter.setOnitemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-               Result result = AndroidEntitys.get(position);
+                Result result = AndroidEntitys.get(position);
                 GankDetailInfo.actionIntentStart(getActivity(),
                         result.getDesc(),
                         result.getPublishedAt(),
@@ -113,7 +119,7 @@ public class AndroidFragment extends Fragment {
     private void initRefreshLauyout() {
         mRefreshLayout.setColorSchemeColors(
                 getResources().getColor(android.R.color.darker_gray),
-                getResources().getColor(android.R.color.holo_red_dark),
+                getResources().getColor(android.R.color.holo_green_dark),
                 getResources().getColor(android.R.color.holo_blue_dark));
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -124,7 +130,14 @@ public class AndroidFragment extends Fragment {
                 AndroidEntitys.clear();
                 Page = 1;
                 IsDataRefresh = true;
-                initData();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //加载数据
+                        initData();
+                    }
+                },500);
+
             }
         });
     }
@@ -288,7 +301,7 @@ public class AndroidFragment extends Fragment {
             TextView mTitle;
             TextView mUser;
             TextView mDate;
-            ImageView mImage;
+            AppCompatImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
@@ -296,7 +309,7 @@ public class AndroidFragment extends Fragment {
                 mTitle = (TextView) itemView.findViewById(R.id.tv_android_title);
                 mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
                 mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
-                mImage = (ImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage = (AppCompatImageView) itemView.findViewById(R.id.iv_android_image);
             }
         }
 

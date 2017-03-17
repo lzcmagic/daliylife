@@ -22,11 +22,12 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
+            <com.example.lzc.daliylife.views.RatioImageView
                 android:id="@+id/iv_fuli_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="fitCenter" />
+                android:transitionName="fuli_picture_detail"
+                android:scaleType="fitXY" />
 
             <TextView
                 android:id="@+id/tv_fuli_desc"

@@ -1,26 +1,33 @@
 package com.example.lzc.daliylife.fragments.fuli;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.activity.FuLiDetailActivity;
 import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
+import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
+import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.HttpMethods;
+import com.example.lzc.daliylife.views.RatioImageView;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -47,11 +54,12 @@ public class FuLiFragment extends Fragment {
     //从1开始
     private int Page = 1;
     //Layout布局
-    private LinearLayoutManager mLinearManager;
+//    private LinearLayoutManager mLinearManager;
+    private StaggeredGridLayoutManager mStaggeredLayoutManager;
     private int LastVisiblePosition;
     private boolean IsRefreshFinish = false;
     private boolean IsDataRefresh = false;
-    private boolean IsFirstLoad=true;
+    private boolean IsFirstLoad = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,11 +73,14 @@ public class FuLiFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.hot_news_fragment, null);
         unBinder = ButterKnife.bind(this, rootView);
         initSwipeLayout();
-        mLinearManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLinearManager);
+//        mLinearManager = new LinearLayoutManager(getContext());
+        mStaggeredLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(mStaggeredLayoutManager);
         mFuLiAdapter = new FuLiAdapter();
         recyclerView.setAdapter(mFuLiAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            boolean isBottom = false;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -82,17 +93,53 @@ public class FuLiFragment extends Fragment {
                     //执行刷新
                     Page++;
                     IsDataRefresh = true;
-                    loadData();
+                    recyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadData();
+                        }
+                    }, 500);
+
                 }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                LastVisiblePosition = mLinearManager.findLastVisibleItemPosition();
+                int[] positions = mStaggeredLayoutManager.findLastVisibleItemPositions(new int[2]);
+                isBottom = mFuLiAdapter.getItemCount() - Number >= positions[1];
+                LastVisiblePosition = positions[1] > positions[0] ? positions[1] : positions[0];
+                Log.d(Constants.NORMALTAG, positions[0] +
+                        "  " + positions[1] +
+                        "  " + mFuLiAdapter.getItemCount());
             }
         });
+        mFuLiAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                Intent intent = FuLiDetailActivity.newIntent(getContext(),
+                        FuLiLists.get(position).getUrl(),
+                        DateTimeFormat.formatDateTime(FuLiLists.get(position).getPublishedAt()));
+                FuLiAdapter.MyHolder viewById = (FuLiAdapter.MyHolder) holder;
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(),
+                                viewById.fuliImage,
+                                FuLiDetailActivity.TRANSIT_PIC);
 
+                if (android.os.Build.VERSION.SDK_INT > 20) {
+                   startActivity(intent, options.toBundle());
+                } else {
+                   startActivity(intent);
+                }
+//                try {
+//                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
+//                } catch (Exception e) {
+//                    //避免4.4系统
+//                    e.printStackTrace();
+//                    startActivity(intent);
+//                }
+            }
+        });
         return rootView;
     }
 
@@ -103,7 +150,7 @@ public class FuLiFragment extends Fragment {
         mRefreshLayout.setScrollUpChild(recyclerView);
         mRefreshLayout.setColorSchemeColors(
                 getResources().getColor(android.R.color.darker_gray),
-                getResources().getColor(android.R.color.holo_red_dark),
+                getResources().getColor(android.R.color.holo_green_dark),
                 getResources().getColor(android.R.color.holo_blue_dark));
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -112,9 +159,13 @@ public class FuLiFragment extends Fragment {
                     Page = 1;
                     FuLiLists.clear();
                     IsDataRefresh = true;
-                    //加载数据
-                    loadData();
-
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //加载数据
+                            loadData();
+                        }
+                    }, 500);
                 }
 
             }
@@ -126,9 +177,9 @@ public class FuLiFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser&&IsFirstLoad){
+        if (isVisibleToUser && IsFirstLoad) {
             initFuLiData();
-            IsFirstLoad=false;
+            IsFirstLoad = false;
         }
     }
 
@@ -186,10 +237,15 @@ public class FuLiFragment extends Fragment {
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
         private int LOAD_FINISH = 2;
+        private OnRecyclerViewItemClickListener mOnItemClickListener;
 
         public FuLiAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+        }
+
+        public void setOnItemClickListener(OnRecyclerViewItemClickListener mOnItemClickListener) {
+            this.mOnItemClickListener = mOnItemClickListener;
         }
 
         @Override
@@ -211,14 +267,21 @@ public class FuLiFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
             if (holder instanceof MyHolder) {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mOnItemClickListener.onItemClick(holder, position);
+                    }
+                });
                 ((MyHolder) holder).fuliText.setText(FuLiLists.get(position).getDesc());
                 Glide.with(FuLiFragment.this)
                         //加载500像素的图片
                         .load(FuLiLists.get(position).getUrl() + "?imageView2/0/w/500")
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .placeholder(R.mipmap.loading)
+                        //.placeholder(R.mipmap.loading)
+                        .centerCrop()
                         .error(R.drawable.ic_menu_gallery)
                         .into(((MyHolder) holder).fuliImage);
             } else if (holder instanceof LoadMoreHolder) {
@@ -248,21 +311,19 @@ public class FuLiFragment extends Fragment {
             return FuLiLists.size() + 1;
         }
 
-//        @Override
-//        public void onBindViewHolder(MyHolder holder, int position) {
-//
-//        }
 
         class MyHolder extends RecyclerView.ViewHolder {
             //            @BindView(R.id.tv_fuli_desc)
             TextView fuliText;
             //            @BindView(R.id.iv_fuli_image)
-            ImageView fuliImage;
+            RatioImageView fuliImage;
 
             public MyHolder(View itemView) {
                 super(itemView);
                 fuliText = (TextView) itemView.findViewById(R.id.tv_fuli_desc);
-                fuliImage = (ImageView) itemView.findViewById(R.id.iv_fuli_image);
+                fuliImage = (RatioImageView) itemView.findViewById(R.id.iv_fuli_image);
+                //4:5
+                fuliImage.setOriginalSize(40, 50);
 //                ButterKnife.bind(this,itemView);
             }
         }

@@ -3,6 +3,7 @@ package com.example.lzc.daliylife.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -11,6 +12,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.DensityUtils;
 import com.example.lzc.daliylife.normalUtil.ScreenUtils;
 
@@ -82,12 +84,18 @@ public class GlideUtils {
                     }
 
                     @Override
-                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    public boolean onResourceReady(Bitmap resource, String model,
+                                                   Target<Bitmap> target,
+                                                   boolean isFromMemoryCache,
+                                                   boolean isFirstResource) {
+                        Log.d(Constants.NORMALTAG,"vw: ");
                         if (imageView == null) {
                             return false;
                         }
                         ViewGroup.LayoutParams params = imageView.getLayoutParams();
+
                         int vw = imageView.getWidth() - imageView.getPaddingLeft() - imageView.getPaddingRight();
+                        Log.d(Constants.NORMALTAG,"vw: "+vw);
                         float scale = (float) vw / (float) resource.getWidth();
                         int vh = Math.round(resource.getHeight() * scale);
                         if (vw < DensityUtils.dp2px(context.getContext(), 100f)) {
