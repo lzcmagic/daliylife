@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by lzc on 2017/3/15.
  */
 
-public class AndroidEntity implements Parcelable {
+public class AndroidEntity {
     String error;
     ArrayList<Result> results;
 
@@ -38,34 +38,34 @@ public class AndroidEntity implements Parcelable {
         this.error = error;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.error);
-        dest.writeTypedList(this.results);
-    }
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(this.error);
+//        dest.writeTypedList(this.results);
+//    }
 
     public AndroidEntity() {
     }
 
-    protected AndroidEntity(Parcel in) {
-        this.error = in.readString();
-        this.results = in.createTypedArrayList(Result.CREATOR);
-    }
-
-    public static final Parcelable.Creator<AndroidEntity> CREATOR = new Parcelable.Creator<AndroidEntity>() {
-        @Override
-        public AndroidEntity createFromParcel(Parcel source) {
-            return new AndroidEntity(source);
-        }
-
-        @Override
-        public AndroidEntity[] newArray(int size) {
-            return new AndroidEntity[size];
-        }
-    };
+//    protected AndroidEntity(Parcel in) {
+//        this.error = in.readString();
+//        this.results = in.createTypedArrayList(Result.CREATOR);
+//    }
+//
+//    public static final Parcelable.Creator<AndroidEntity> CREATOR = new Parcelable.Creator<AndroidEntity>() {
+//        @Override
+//        public AndroidEntity createFromParcel(Parcel source) {
+//            return new AndroidEntity(source);
+//        }
+//
+//        @Override
+//        public AndroidEntity[] newArray(int size) {
+//            return new AndroidEntity[size];
+//        }
+//    };
 }

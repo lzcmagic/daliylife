@@ -24,13 +24,13 @@
             android:paddingBottom="6dp"
             android:layout_marginRight="40dp"
             tools:text="2017年伊始，你需要尝试的25个Android第三方库"/>
-        <android.support.v7.widget.AppCompatImageView
+        <com.example.lzc.daliylife.views.RatioImageView
             android:id="@+id/iv_android_image"
             android:layout_below="@id/tv_android_title"
             android:scaleType="fitXY"
             android:adjustViewBounds="true"
             android:layout_width="match_parent"
-            android:layout_height="120dp"/>
+            android:layout_height="wrap_content"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

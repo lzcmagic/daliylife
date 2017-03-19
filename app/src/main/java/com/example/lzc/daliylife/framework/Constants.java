@@ -8,6 +8,7 @@ public class Constants {
     public static final String FragmentTagNews="gank";
     public static final String FragmentTagWeChart="wechart";
     public static final String FragmentTagDaliy="daliy";
+    public static final String FragmentTagLottery="daliy";
     public static final String NewsFragmentTagHot="news_hot";
     public static final String NewsFragmentTagSport="news_sport";
     public static final String NewsFragmentTagHouse="news_house";
@@ -18,4 +19,12 @@ public class Constants {
     public static final String LAOHUANGLIAPI="http://apicloud.mob.com/appstore/laohuangli/";
     public static final String LAOHUANGLIKEY="1bf78f5fdfbe0";
     public static final String GANKMAINAPI="http://gank.io/api/";
+    public static final String LOTTERYAPI="http://apicloud.mob.com/lottery/";
+    public static final String LOTTERY_SSQ="双色球";
+    public static final String LOTTERY_DLT="大乐透";
+    public static final String LOTTERY_3D="3D";
+    public static final String LOTTERY_PL3="排列3";
+    public static final String LOTTERY_PL5="排列5";
+    public static final String LOTTERY_QXC="七星彩";
+    public static final String LOTTERY_QLC="七乐彩";
 }

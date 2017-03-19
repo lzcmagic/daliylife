@@ -26,6 +26,7 @@ import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.GlideUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
+import com.example.lzc.daliylife.views.RatioImageView;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public class IOSFragment extends Fragment {
     private IOSFragment.MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int LastVisiblePosition;
-    private boolean IsFirstLoad=true;
+    private boolean IsFirstLoad = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,7 +137,7 @@ public class IOSFragment extends Fragment {
                         //加载数据
                         initData();
                     }
-                },500);
+                }, 500);
             }
         });
     }
@@ -152,9 +153,9 @@ public class IOSFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser&&IsFirstLoad){
+        if (isVisibleToUser && IsFirstLoad) {
             initData();
-            IsFirstLoad=false;
+            IsFirstLoad = false;
         }
     }
 
@@ -209,6 +210,7 @@ public class IOSFragment extends Fragment {
         public MyAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
+
         /**
          * 初始化接口
          *
@@ -255,7 +257,7 @@ public class IOSFragment extends Fragment {
                         mOnItemClickListener.onItemClick(holder, position);
                     }
                 });
-               Result result = IosEntitys.get(position);
+                Result result = IosEntitys.get(position);
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mTitle.setText(result.getDesc());
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mUser.setText("作者: " + result.getWho());
                 ((IOSFragment.MyAdapter.NormalHolder) holder).mDate.setText(DateTimeFormat
@@ -264,9 +266,8 @@ public class IOSFragment extends Fragment {
                     String images = result.getImages().get(0);
                     if (!TextUtils.isEmpty(images)) {
                         ((IOSFragment.MyAdapter.NormalHolder) holder).mImage.setVisibility(View.VISIBLE);
-                        GlideUtils.loadIntoUseFitWidth(IOSFragment.this
+                        GlideUtils.loadGankRatioImage(IOSFragment.this
                                 , images + "?imageView2/0/w/500"
-                                , R.drawable.ic_menu_gallery
                                 , ((IOSFragment.MyAdapter.NormalHolder) holder).mImage);
                     } else {
                         ((IOSFragment.MyAdapter.NormalHolder) holder).mImage.setVisibility(View.GONE);
@@ -296,14 +297,15 @@ public class IOSFragment extends Fragment {
             TextView mTitle;
             TextView mUser;
             TextView mDate;
-            AppCompatImageView mImage;
+            RatioImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
                 mTitle = (TextView) itemView.findViewById(R.id.tv_android_title);
                 mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
                 mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
-                mImage = (AppCompatImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage = (RatioImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage.setOriginalSize(70,40);
             }
         }
 

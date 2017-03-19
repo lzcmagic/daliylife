@@ -2,6 +2,7 @@ package com.example.lzc.daliylife.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -90,6 +91,7 @@ public class DaliyEventsFragment extends Fragment {
      * 初始化fab按钮点击
      */
     private void initFab() {
+        SelectDate.setImageResource(R.mipmap.calendarr);
         SelectDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,9 +191,9 @@ public class DaliyEventsFragment extends Fragment {
     }
 
     private void initDatePickerDialog() {
-        final int year = 1990;
-        final int monthOfYear = Calendar.JANUARY;
-        final int dayOfMonth = 1;
+        final int year = Calendar.getInstance().get(Calendar.YEAR);
+        final int monthOfYear = Calendar.getInstance().get(Calendar.MONTH)+1;
+        final int dayOfMonth = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         DateDefault.clear();
         mDatePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
 

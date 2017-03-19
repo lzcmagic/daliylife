@@ -17,25 +17,27 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:layout_scrollFlags="scroll|enterAlways" />
+           />
 
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <!--<android.support.v4.widget.NestedScrollView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--&gt;-->
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:orientation="vertical">
 
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/ll_webview_container"></FrameLayout>
                 <ProgressBar
                     android:id="@+id/pb_web_load"
                     style="?android:attr/progressBarStyleHorizontal"
@@ -43,15 +45,10 @@
                     android:layout_height="3dp"
                     android:background="@drawable/progress_bar_states"
                     android:max="100" />
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/ll_webview_container"></FrameLayout>
-            </LinearLayout>
+            </FrameLayout>
 
 
-        <!--</android.support.v4.widget.NestedScrollView>-->
-    </android.support.v4.widget.NestedScrollView>
+    <!--</android.support.v4.widget.NestedScrollView>-->
 
 
 </android.support.design.widget.CoordinatorLayout>

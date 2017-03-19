@@ -68,8 +68,8 @@ public class GankDetailInfo extends AppCompatActivity {
 //
                 if (IsFirstFinish) {
                     if (mWebView != null) {
-                   mWebView.stopLoading();
-                }
+                        mWebView.stopLoading();
+                    }
                     finish();
                     IsFirstFinish = false;
                 }
@@ -94,7 +94,7 @@ public class GankDetailInfo extends AppCompatActivity {
                 mWebView.goBack();
                 return true;
             }
-            if (mWebView!=null){
+            if (mWebView != null) {
                 mWebView.stopLoading();
             }
             return super.onKeyDown(keyCode, event);
@@ -114,7 +114,7 @@ public class GankDetailInfo extends AppCompatActivity {
         super.onDestroy();
         if (mWebView != null) {
 
-            mWebView.removeAllViews();
+//            mWebView.removeAllViews();
             mWebView.destroy();
 
         }
@@ -145,14 +145,20 @@ public class GankDetailInfo extends AppCompatActivity {
      * 初始化WebView
      */
     private void initWebView() {
-        mWebView=new WebView(getApplicationContext());
+        mWebView = new WebView(getApplicationContext());
         WebViewContainer.addView(mWebView);
         // 启用支持javascript
         WebSettings settings = mWebView.getSettings();
-        // //设置加载进来的页面自适应手机屏幕
-        settings.setUseWideViewPort(true);
-        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
         settings.setJavaScriptEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setAppCacheEnabled(true);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        settings.setSupportZoom(true);
+
+//        // //设置加载进来的页面自适应手机屏幕
+//        settings.setUseWideViewPort(true);
+//        settings.setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+//        settings.setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebClient());
         // 覆盖webview默认使用第三方或系统默认浏览器打开网页得行为，是网页用webview打开
         mWebView.setWebViewClient(new WebViewClient() {
@@ -160,7 +166,8 @@ public class GankDetailInfo extends AppCompatActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 // 返回值是true得时候控制去webview打开，为false调用系统浏览器或第三方浏览器
                 mProgressBar.setVisibility(View.VISIBLE);
-                view.loadUrl(url);
+                if (url != null)
+                    view.loadUrl(url);
                 return true;
             }
 
@@ -175,11 +182,11 @@ public class GankDetailInfo extends AppCompatActivity {
     private class WebClient extends WebChromeClient {
         @Override
         public void onProgressChanged(WebView web, int progress) {
+            super.onProgressChanged(web, progress);
             mProgressBar.setProgress(progress);
             if (progress == 100) {
                 mProgressBar.setVisibility(View.GONE);
             }
-            super.onProgressChanged(web, progress);
         }
     }
 }

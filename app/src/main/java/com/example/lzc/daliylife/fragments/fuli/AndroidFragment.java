@@ -10,12 +10,15 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.activity.GankDetailInfo;
 import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
@@ -26,6 +29,7 @@ import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.GlideUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
+import com.example.lzc.daliylife.views.RatioImageView;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -266,12 +270,12 @@ public class AndroidFragment extends Fragment {
                         .formatDateTime(result.getPublishedAt()));
                 if (result.getImages() != null && result.getImages().size() > 0) {
                     String images = result.getImages().get(0);
+                    Log.d(Constants.NORMALTAG,"position: "+position+" images: "+images);
                     if (!TextUtils.isEmpty(images)) {
                         ((NormalHolder) holder).mImage.setVisibility(View.VISIBLE);
-                        GlideUtils.loadIntoUseFitWidth(AndroidFragment.this
-                                , images + "?imageView2/0/w/500"
-                                , R.drawable.ic_menu_gallery
-                                , ((NormalHolder) holder).mImage);
+                        GlideUtils.loadGankRatioImage(AndroidFragment.this,
+                                images + "?imageView2/0/w/500",
+                                ((NormalHolder) holder).mImage);
                     } else {
                         ((NormalHolder) holder).mImage.setVisibility(View.GONE);
                     }
@@ -301,7 +305,7 @@ public class AndroidFragment extends Fragment {
             TextView mTitle;
             TextView mUser;
             TextView mDate;
-            AppCompatImageView mImage;
+            RatioImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
@@ -309,7 +313,8 @@ public class AndroidFragment extends Fragment {
                 mTitle = (TextView) itemView.findViewById(R.id.tv_android_title);
                 mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
                 mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
-                mImage = (AppCompatImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage = (RatioImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage.setOriginalSize(70,40);
             }
         }
 

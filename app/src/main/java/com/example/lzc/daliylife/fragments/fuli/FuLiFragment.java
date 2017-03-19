@@ -278,11 +278,11 @@ public class FuLiFragment extends Fragment {
                 ((MyHolder) holder).fuliText.setText(FuLiLists.get(position).getDesc());
                 Glide.with(FuLiFragment.this)
                         //加载500像素的图片
-                        .load(FuLiLists.get(position).getUrl() + "?imageView2/0/w/500")
+                        .load(FuLiLists.get(position).getUrl())
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         //.placeholder(R.mipmap.loading)
                         .centerCrop()
-                        .error(R.drawable.ic_menu_gallery)
+                        .error(R.mipmap.fail_load)
                         .into(((MyHolder) holder).fuliImage);
             } else if (holder instanceof LoadMoreHolder) {
                 if (IsRefreshFinish) {

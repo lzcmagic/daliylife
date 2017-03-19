@@ -19,7 +19,9 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.framework.Constants;
@@ -48,17 +50,20 @@ public class FuLiDetailActivity extends AppCompatActivity {
     PhotoViewAttacher mAttacher;
     AlertDialog mChooseDialog;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuli_detail);
         ButterKnife.bind(this);
-        pareseIntent();
+        parseIntent();
         initChooseDialog();
         Picasso.with(this).load(url).into(mImageView, new Callback() {
             @Override
             public void onSuccess() {
-
+                RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
+                params.topMargin=20;
+                mImageView.setLayoutParams(params);
             }
 
             @Override
@@ -109,40 +114,6 @@ public class FuLiDetailActivity extends AppCompatActivity {
 
     }
 
-    private void askWritePermssion(){
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission_group.STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-        }else {
-            saveImageToGallery();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 1)
-        {
-
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
-            {
-                saveImageToGallery();
-            } else
-            {
-                // Permission Denied
-                Alerter.create(FuLiDetailActivity.this)
-                        .setTitle("提示")
-                        .setText("未授权权限，保存图片失败")
-                        .setBackgroundColor(android.R.color.holo_red_dark)
-                        .setIcon(R.mipmap.loading)
-                        .setDuration(500)
-                        .show();
-            }
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
-
     /**
      * 保存图片
      */
@@ -153,7 +124,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
             public void run() {
                 try {
                     Bitmap bitmap = Picasso.with(FuLiDetailActivity.this).load(url).get();
-                    File appDir = new File(Environment.getExternalStorageDirectory(), "Meizhi");
+                    File appDir = new File(Environment.getExternalStorageDirectory(), "JiXin");
                     if (!appDir.exists()) {
                         appDir.mkdir();
                     }
@@ -172,7 +143,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
                             .setTitle("提示")
                             .setText("保存成功")
                             .setBackgroundColor(R.color.colorAccent)
-                            .setIcon(R.mipmap.loading)
+                            .setIcon(R.mipmap.xiaolian)
                             .setDuration(500)
                             .show();
                 } catch (IOException e) {
@@ -181,7 +152,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
                             .setTitle("提示")
                             .setText("操作失败")
                             .setBackgroundColor(android.R.color.holo_orange_dark)
-                            .setIcon(R.mipmap.loading)
+                            .setIcon(R.mipmap.kulian)
                             .setDuration(500)
                             .show();
                 }
@@ -190,12 +161,16 @@ public class FuLiDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        mAttacher.cleanup();
+    }
+
     /**
      * 初始化选择框
      */
     private void initChooseDialog() {
         AlertDialog.Builder buld = new AlertDialog.Builder(this);
-
         buld.setTitle("提示");
         buld.setMessage("保存图片吗");
         buld.setPositiveButton("确认", new DialogInterface.OnClickListener() {
@@ -214,7 +189,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
         mChooseDialog = buld.create();
     }
 
-    private void pareseIntent() {
+    private void parseIntent() {
         url = getIntent().getStringExtra("url");
         date = getIntent().getStringExtra("date");
         Log.d(Constants.NORMALTAG, url);

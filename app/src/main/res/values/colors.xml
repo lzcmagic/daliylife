@@ -3,8 +3,12 @@
     <color name="colorPrimary">#037365</color>
     <color name="colorPrimaryDark">#00303F</color>
     <color name="colorAccent">#BEA32E</color>
-    <color name="colorNaviPress">#16667f</color>
+    <color name="colorNaviPress">#037365</color>
     <color name="colorNaviNormal">#515151</color>
     <color name="cardViewBg">#FFFFFF</color>
+    <color name="lotteryTitle">#515151</color>
+    <color name="lotterySubTitle">#535353</color>
+    <color name="lotteryRed">#c62828</color>
+    <color name="lotteryBlue">#1565c0</color>
     <color name="fulidetailBg">#bb000000</color>
 </resources>

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -25,11 +27,13 @@ import com.example.lzc.daliylife.entity.MovieEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.fragments.DaliyEventsFragment;
 import com.example.lzc.daliylife.fragments.GankFragment;
+import com.example.lzc.daliylife.fragments.OtherFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.utils.ProgressSubscriber;
 import com.example.lzc.daliylife.utils.SubscriberOnNextListener;
+import com.example.lzc.daliylife.utils.WeatherToIcon;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,12 +98,13 @@ public class MainActivity extends AppCompatActivity
 
     private void initNavHeadView() {
         View headerView = navView.getHeaderView(0);
-        ImageView image = (ImageView) headerView.findViewById(R.id.imageView);
+        final ImageView image = (ImageView) headerView.findViewById(R.id.imageView);
         final TextView weather = (TextView) headerView.findViewById(R.id.weather);
         final TextView weatherText = (TextView) headerView.findViewById(R.id.weather_text);
         final TextView weatherTemp = (TextView) headerView.findViewById(R.id.weather_temp);
         if (!TextUtils.isEmpty(CurrentWeather)) {
             weather.setText(CurrentWeather);
+            image.setImageResource(WeatherToIcon.Weather2Icon(CurrentWeather));
         } else {
             //获取天气信息失败
             weather.setText("天气信息获取失败,点击图标重试");
@@ -119,49 +124,52 @@ public class MainActivity extends AppCompatActivity
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
+                mPDialog.show();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
-                    public void onStart() {
-                        super.onStart();
-                        mPDialog.show();
-                    }
+                    public void run() {
+                        HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
 
-                    @Override
-                    public void onCompleted() {
-                        mPDialog.dismiss();
-                    }
+                            @Override
+                            public void onCompleted() {
+                                mPDialog.dismiss();
+                            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        mPDialog.dismiss();
-                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                mPDialog.dismiss();
+                            }
 
-                    @Override
-                    public void onNext(WeatherEntity weatherEntity) {
-                        WeatherEntity.Result result = weatherEntity.getresult().get(0);
-                        String weatherInfo = result.getWeather();
-                        String temperatureInfo = result.getTemperature();
-                        String weatherTempInfo = result.getfuture().get(0).getTemperature();
-                        if (!TextUtils.isEmpty(weatherInfo)) {
-                            weather.setText(weatherInfo);
-                        } else {
-                            //获取天气信息失败
-                            weather.setText("天气信息获取失败,点击图标重试");
-                        }
-                        if (!TextUtils.isEmpty(temperatureInfo)) {
-                            weatherText.setText(temperatureInfo);
-                        } else {
-                            //获取天气信息失败
-                            weatherText.setText("");
-                        }
-                        if (!TextUtils.isEmpty(weatherTempInfo)) {
-                            weatherTemp.setText(weatherTempInfo);
-                        } else {
-                            //获取天气信息失败
-                            weatherTemp.setText("");
-                        }
+                            @Override
+                            public void onNext(WeatherEntity weatherEntity) {
+                                WeatherEntity.Result result = weatherEntity.getresult().get(0);
+                                String weatherInfo = result.getWeather();
+                                String temperatureInfo = result.getTemperature();
+                                String weatherTempInfo = result.getfuture().get(0).getTemperature();
+                                if (!TextUtils.isEmpty(weatherInfo)) {
+                                    weather.setText(weatherInfo);
+                                    image.setImageResource(WeatherToIcon.Weather2Icon(weatherInfo));
+                                } else {
+                                    //获取天气信息失败
+                                    weather.setText("天气信息获取失败,稍后再试");
+                                }
+                                if (!TextUtils.isEmpty(temperatureInfo)) {
+                                    weatherText.setText(temperatureInfo);
+                                } else {
+                                    //获取天气信息失败
+                                    weatherText.setText("");
+                                }
+                                if (!TextUtils.isEmpty(weatherTempInfo)) {
+                                    weatherTemp.setText(weatherTempInfo);
+                                } else {
+                                    //获取天气信息失败
+                                    weatherTemp.setText("");
+                                }
+                            }
+                        }, Constants.WEATHERKEY, "无锡", "江苏");
                     }
-                }, Constants.WEATHERKEY, "无锡", "江苏");
+                },1000);
+
             }
         });
     }
@@ -203,7 +211,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.wechart) {
             mTransaction.replace(R.id.frame_cont, new WeChartFragment(), Constants.FragmentTagWeChart);
         } else if (id == R.id.car) {
-            mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
+            mTransaction.replace(R.id.frame_cont, new OtherFragment(), Constants.FragmentTagLottery);
         } else if (id == R.id.daliy) {
             mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);
         } else if (id == R.id.nav_share) {

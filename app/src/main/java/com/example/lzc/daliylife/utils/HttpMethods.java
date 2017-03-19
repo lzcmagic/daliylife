@@ -2,6 +2,7 @@ package com.example.lzc.daliylife.utils;
 
 import android.util.Log;
 
+import com.example.lzc.daliylife.entity.LotteryEntity;
 import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
 import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.example.lzc.daliylife.entity.gankentity.IOSEntity;
@@ -15,6 +16,7 @@ import com.example.lzc.daliylife.httplistener.AndroidServiceObserv;
 import com.example.lzc.daliylife.httplistener.FuLiServiceObserv;
 import com.example.lzc.daliylife.httplistener.IosServiceObserv;
 import com.example.lzc.daliylife.httplistener.LaoHuangLiServiceObserv;
+import com.example.lzc.daliylife.httplistener.LotteryServiceObserv;
 import com.example.lzc.daliylife.httplistener.MovieServiceObserv;
 import com.example.lzc.daliylife.httplistener.QianDuanServiceObserv;
 import com.example.lzc.daliylife.httplistener.TuoZhanServiceObserv;
@@ -46,6 +48,7 @@ public class HttpMethods {
     private IosServiceObserv iosServiceObserv;
     private QianDuanServiceObserv qianDuanServiceObserv;
     private TuoZhanServiceObserv tuoZhanServiceObserv;
+    private LotteryServiceObserv lotteryServiceObserv;
     private static HttpMethods SingleInstance;
 
     //构造方法私有
@@ -211,6 +214,21 @@ public class HttpMethods {
     public void getTuoZhanInfo(Subscriber<TuoZhanEntity> subscriber,String type,int number,int page){
         tuoZhanServiceObserv=retrofit.create(TuoZhanServiceObserv.class);
         tuoZhanServiceObserv.getTuoZhanInfo(type,number,page)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    /**
+     * 获取彩票信息
+     * @param subscriber
+     * @param key
+     * @param name
+     */
+    public void getLotteryInfo(Subscriber<LotteryEntity> subscriber, String key, String name){
+        lotteryServiceObserv=retrofit.create(LotteryServiceObserv.class);
+        lotteryServiceObserv.getLotteryInfo(key,name)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -26,6 +26,7 @@ import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.DateTimeFormat;
 import com.example.lzc.daliylife.utils.GlideUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
+import com.example.lzc.daliylife.views.RatioImageView;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
@@ -263,9 +264,8 @@ public class TuoZhanFragment extends Fragment {
                     String images = result.getImages().get(0);
                     if (!TextUtils.isEmpty(images)) {
                         ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mImage.setVisibility(View.VISIBLE);
-                        GlideUtils.loadIntoUseFitWidth(TuoZhanFragment.this
+                        GlideUtils.loadGankRatioImage(TuoZhanFragment.this
                                 , images + "?imageView2/0/w/500"
-                                , R.drawable.ic_menu_gallery
                                 , ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mImage);
                     } else {
                         ((TuoZhanFragment.MyAdapter.NormalHolder) holder).mImage.setVisibility(View.GONE);
@@ -295,14 +295,15 @@ public class TuoZhanFragment extends Fragment {
             TextView mTitle;
             TextView mUser;
             TextView mDate;
-            AppCompatImageView mImage;
+            RatioImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
                 mTitle = (TextView) itemView.findViewById(R.id.tv_android_title);
                 mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
                 mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
-                mImage = (AppCompatImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage = (RatioImageView) itemView.findViewById(R.id.iv_android_image);
+                mImage.setOriginalSize(70,40);
             }
         }
 
