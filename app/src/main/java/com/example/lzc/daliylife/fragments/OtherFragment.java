@@ -18,10 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.activity.LotteryDetailInfo;
 import com.example.lzc.daliylife.activity.MainActivity;
 import com.example.lzc.daliylife.entity.LotteryEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.DensityUtils;
+import com.example.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
@@ -76,6 +78,12 @@ public class OtherFragment extends Fragment {
         ((MainActivity) getActivity()).initDrawerLayout(mToolbar);
         initSwpeRefreshLayout();
         mAdapter = new MyAdapter();
+        mAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
+                LotteryDetailInfo.actionStart(getActivity(), LotteryMaps.get(position));
+            }
+        });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
         Log.d("lzccc", "onCreate");
@@ -149,6 +157,11 @@ public class OtherFragment extends Fragment {
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
         private LayoutInflater mInflater;
+        private OnRecyclerViewItemClickListener mOnItemClickListener;
+
+        public void setOnItemClickListener(OnRecyclerViewItemClickListener mOnItemClickListener) {
+            this.mOnItemClickListener = mOnItemClickListener;
+        }
 
         public MyAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -162,8 +175,15 @@ public class OtherFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(MyAdapter.MyHolder viewHolder, int i) {
+        public void onBindViewHolder(final MyAdapter.MyHolder viewHolder, final int i) {
             LotteryEntity lotteryEntity = LotteryMaps.get(i);
+            Log.d(Constants.NORMALTAG, lotteryEntity.toString());
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListener.onItemClick(viewHolder, i);
+                }
+            });
             LotteryEntity.Result result = lotteryEntity.getResult();
             ArrayList<String> lotteryNumber = result.getLotteryNumber();
             LinearLayout.LayoutParams params = new LinearLayout.
@@ -217,7 +237,7 @@ public class OtherFragment extends Fragment {
                     view.setGravity(Gravity.CENTER);
                     viewHolder.mLayout.addView(view);
                 }
-                viewHolder.mDateText.setText("每周一,三,六(20:30)开奖");
+                viewHolder.mDateText.setText("每周一,三,六(22:00)开奖");
                 viewHolder.mSubTitleText.setText("20" + result.getPeriod() + "期");
             } else if (name.equals(Constants.LOTTERY_3D)) {
                 for (int j = 0; j < lotteryNumber.size(); j++) {

@@ -59,6 +59,10 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize"></activity>
 
+        <activity
+            android:name=".activity.LotteryDetailInfo"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <!--key:开发者申请的Key-->
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"

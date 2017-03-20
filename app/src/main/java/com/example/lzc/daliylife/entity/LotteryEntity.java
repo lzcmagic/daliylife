@@ -1,12 +1,13 @@
 package com.example.lzc.daliylife.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by lzc on 2017/3/18.
  */
 
-public class LotteryEntity {
+public class LotteryEntity implements Serializable{
     String retCode;//返回码
     String msg;//返回说明
     Result result;//返回结果集
@@ -44,7 +45,7 @@ public class LotteryEntity {
         this.result = result;
     }
 
-    public class Result {
+    public class Result implements Serializable{
         String awardDateTime;//
         String name;//彩种
         String period;//期次
@@ -122,7 +123,7 @@ public class LotteryEntity {
             this.lotteryDetails = lotteryDetails;
         }
 
-        public class LotteryDetail{
+        public class LotteryDetail implements Serializable{
             String awardNumber;//	中奖注数
             String awardPrice;//中奖金额
             String awards;//奖项
