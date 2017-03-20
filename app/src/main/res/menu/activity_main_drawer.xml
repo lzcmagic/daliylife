@@ -9,11 +9,11 @@
         <item
             android:id="@+id/wechart"
             android:icon="@mipmap/wechat_normal"
-            android:title="微信精选" />
+            android:title="@string/toolbar_wechart" />
         <item
             android:id="@+id/car"
             android:icon="@mipmap/lottery"
-            android:title="@string/toolbar_wechart" />
+            android:title="@string/toolbar_lottery" />
         <item
             android:id="@+id/daliy"
             android:icon="@mipmap/daliy_normal"

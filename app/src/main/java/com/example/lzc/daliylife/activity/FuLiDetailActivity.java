@@ -1,25 +1,20 @@
 package com.example.lzc.daliylife.activity;
 
-import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -49,7 +44,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
     ImageView mImageView;
     PhotoViewAttacher mAttacher;
     AlertDialog mChooseDialog;
-
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,17 +53,20 @@ public class FuLiDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         parseIntent();
         initChooseDialog();
+        initProgressDialog();
+        mProgressDialog.show();
         Picasso.with(this).load(url).into(mImageView, new Callback() {
             @Override
             public void onSuccess() {
                 RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
                 params.topMargin=20;
                 mImageView.setLayoutParams(params);
+                mProgressDialog.dismiss();
             }
 
             @Override
             public void onError() {
-
+                mProgressDialog.dismiss();
             }
         });
         mAttacher = new PhotoViewAttacher(mImageView);
@@ -112,6 +110,14 @@ public class FuLiDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    /**
+     * 初始化等待框
+     */
+    private void initProgressDialog() {
+        mProgressDialog=new ProgressDialog(this);
+        mProgressDialog.setMessage(getResources().getString(R.string.load_more));
     }
 
     /**

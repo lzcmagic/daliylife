@@ -1,12 +1,8 @@
 package com.example.lzc.daliylife.fragments;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
@@ -27,13 +22,11 @@ import com.example.lzc.daliylife.activity.MainActivity;
 import com.example.lzc.daliylife.entity.LotteryEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.DensityUtils;
-import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -71,12 +64,13 @@ public class OtherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         LotteryMaps = new HashMap<>();
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View viewRoot = inflater.inflate(R.layout.lottery_fragment, null);
         mBind = ButterKnife.bind(this, viewRoot);
-        mToolbar.setTitle(getResources().getString(R.string.toolbar_wechart));
+        mToolbar.setTitle(getResources().getString(R.string.toolbar_lottery));
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
         ((MainActivity) getActivity()).initDrawerLayout(mToolbar);
@@ -84,8 +78,14 @@ public class OtherFragment extends Fragment {
         mAdapter = new MyAdapter();
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
+        Log.d("lzccc", "onCreate");
         IsXiaLaRefresh = false;
-        mRefreshLayout.setRefreshing(true);
+        mRefreshLayout.post(new Runnable() {
+            @Override
+            public void run() {
+                mRefreshLayout.setRefreshing(true);
+            }
+        });
         initData();
         return viewRoot;
     }
@@ -101,28 +101,25 @@ public class OtherFragment extends Fragment {
                 @Override
                 public void onCompleted() {
                     CurrentIndex += 1;
-                            mRefreshLayout.setRefreshing(false);
                     //保持最后一次刷新adapter
                     if (CurrentIndex == lotteryType.length) {
-                        Log.d(Constants.NORMALTAG,"sdkjfhsf");
+                        if (IsXiaLaRefresh) {
+                            mRefreshLayout.setRefreshing(false);
+                        } else {
+                            mRefreshLayout.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mRefreshLayout.setRefreshing(false);
+                                }
+                            }, 1000);
+                        }
                         mAdapter.notifyDataSetChanged();
-//                        if (IsXiaLaRefresh) {
-//                        } else {
-//                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    if (mRefreshLayout != null)
-//                                        mRefreshLayout.setRefreshing(false);
-//                                }
-//                            }, 2000);
-//                        }
                     }
                 }
 
                 @Override
                 public void onError(Throwable e) {
                     mRefreshLayout.setRefreshing(false);
-//                    mAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -144,7 +141,6 @@ public class OtherFragment extends Fragment {
                     } else if (name.equals(Constants.LOTTERY_QXC)) {
                         LotteryMaps.put(6, lotteryEntity);
                     }
-                    Log.d(Constants.NORMALTAG, "onNext: " + LotteryMaps.size());
                 }
             }, Constants.WEATHERKEY, lotteryType[i]);
         }
@@ -173,15 +169,16 @@ public class OtherFragment extends Fragment {
             LinearLayout.LayoutParams params = new LinearLayout.
                     LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.width=DensityUtils.dp2px(getContext(),24f);
-            params.height=DensityUtils.dp2px(getContext(),24f);
+            viewHolder.mLayout.removeAllViews();
+            params.width = DensityUtils.dp2px(getContext(), 24f);
+            params.height = DensityUtils.dp2px(getContext(), 24f);
             String name = result.getName();
             viewHolder.mTitleText.setText(name);
             if (name.equals(Constants.LOTTERY_SSQ)) {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     if (lotteryNumber.size() == j + 1) {
                         view.setTextColor(getResources().getColor(R.color.lotteryBlue));
@@ -203,7 +200,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     if (lotteryNumber.size() - 1 == j ||
                             lotteryNumber.size() - 2 == j) {
@@ -226,7 +223,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     view.setTextColor(getResources().getColor(R.color.lotteryRed));
                     view.setBackgroundResource(R.mipmap.lottery_red);
@@ -243,7 +240,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     view.setTextColor(getResources().getColor(R.color.lotteryRed));
                     view.setBackgroundResource(R.mipmap.lottery_red);
@@ -260,7 +257,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     view.setTextColor(getResources().getColor(R.color.lotteryRed));
                     view.setBackgroundResource(R.mipmap.lottery_red);
@@ -277,7 +274,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     if (lotteryNumber.size() - 1 == j) {
                         view.setTextColor(getResources().getColor(R.color.lotteryBlue));
@@ -299,7 +296,7 @@ public class OtherFragment extends Fragment {
                 for (int j = 0; j < lotteryNumber.size(); j++) {
                     TextView view = new TextView(getContext());
                     if (j != 0) {
-                        params.leftMargin=DensityUtils.dp2px(getContext(),5f);
+                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
                     }
                     view.setTextColor(getResources().getColor(R.color.lotteryRed));
                     view.setBackgroundResource(R.mipmap.lottery_red);
@@ -346,6 +343,7 @@ public class OtherFragment extends Fragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                CurrentIndex = 0;
                 IsXiaLaRefresh = true;
                 mRefreshLayout.postDelayed(new Runnable() {
                     @Override

@@ -3,6 +3,7 @@ package com.example.lzc.daliylife.utils;
 import android.util.Log;
 
 import com.example.lzc.daliylife.entity.LotteryEntity;
+import com.example.lzc.daliylife.entity.WechatEntity;
 import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
 import com.example.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.example.lzc.daliylife.entity.gankentity.IOSEntity;
@@ -20,6 +21,7 @@ import com.example.lzc.daliylife.httplistener.LotteryServiceObserv;
 import com.example.lzc.daliylife.httplistener.MovieServiceObserv;
 import com.example.lzc.daliylife.httplistener.QianDuanServiceObserv;
 import com.example.lzc.daliylife.httplistener.TuoZhanServiceObserv;
+import com.example.lzc.daliylife.httplistener.WeChatServiceObserv;
 import com.example.lzc.daliylife.httplistener.WeatherServiceObserv;
 
 import java.util.concurrent.TimeUnit;
@@ -49,6 +51,7 @@ public class HttpMethods {
     private QianDuanServiceObserv qianDuanServiceObserv;
     private TuoZhanServiceObserv tuoZhanServiceObserv;
     private LotteryServiceObserv lotteryServiceObserv;
+    private WeChatServiceObserv weChatServiceObserv;
     private static HttpMethods SingleInstance;
 
     //构造方法私有
@@ -235,4 +238,20 @@ public class HttpMethods {
                 .subscribe(subscriber);
     }
 
+
+    /**
+     * 获取彩票信息
+     * @param subscriber
+     * @param pno
+     * @param ps
+     * @param dtype
+     */
+    public void getWechatInfo(Subscriber<WechatEntity> subscriber, int pno, int ps,String dtype,String key){
+        weChatServiceObserv=retrofit.create(WeChatServiceObserv.class);
+        weChatServiceObserv.getWechatInfo(pno,ps,dtype,key)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
 }

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/cardViewBg"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/tv_wechart_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="40dp"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:textColor="@color/colorPrimary"
+            tools:text="2017年伊始，你需要尝试的25个Android第三方库" />
+
+        <com.example.lzc.daliylife.views.RatioImageView
+            android:id="@+id/iv_wechart_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_wechart_title"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_wechart_image"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_wechart_source"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:lines="1"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="发布者: admin" />
+
+            <TextView
+                android:id="@+id/tv_wechart_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:drawablePadding="5dp"
+                android:drawableRight="@mipmap/more_right"
+                android:paddingBottom="6dp"
+                android:paddingTop="6dp"
+                android:textColor="@color/colorPrimaryDark"
+                tools:text="03-14 13:17" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

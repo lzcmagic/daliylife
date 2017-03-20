@@ -11,7 +11,6 @@
         app:cardBackgroundColor="@color/cardViewBg"
         app:cardCornerRadius="10dp"
         app:cardElevation="10dp"
-
         app:contentPadding="10dp">
 
 

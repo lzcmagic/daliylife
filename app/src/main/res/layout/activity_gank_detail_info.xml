@@ -16,39 +16,31 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-           />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </android.support.design.widget.AppBarLayout>
 
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:orientation="vertical">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/ll_webview_container"></FrameLayout>
-                <ProgressBar
-                    android:id="@+id/pb_web_load"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:background="@drawable/progress_bar_states"
-                    android:max="100" />
-            </FrameLayout>
+        <FrameLayout
+            android:id="@+id/ll_webview_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></FrameLayout>
 
-
-    <!--</android.support.v4.widget.NestedScrollView>-->
+        <ProgressBar
+            android:id="@+id/pb_web_load"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@drawable/progress_bar_states"
+            android:max="100" />
+    </FrameLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

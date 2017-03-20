@@ -143,6 +143,11 @@ public class FuLiFragment extends Fragment {
         return rootView;
     }
 
+    public void ScrollToTop(){
+        Log.d(Constants.NORMALTAG,"scroll");
+        recyclerView.scrollToPosition(0);
+    }
+
     /**
      * 初始化下拉刷新
      */

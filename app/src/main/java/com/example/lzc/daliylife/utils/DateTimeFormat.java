@@ -23,5 +23,17 @@ public class DateTimeFormat {
         return finalDateTime;
     }
 
-    ;
+    public static String formatDateTime2(String dateTime) {
+        String finalDateTime = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat finalSdf=new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = sdf.parse(dateTime.substring(0,8));
+            finalDateTime = finalSdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            finalDateTime = dateTime;
+        }
+        return finalDateTime;
+    }
 }

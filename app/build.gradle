@@ -18,6 +18,12 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
 //        exclude 'META-INF/maven/com.belerweb/pinyin4j/pom.xml'
@@ -45,5 +51,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.tapadoo.android:alerter:1.0.6'
-
+    compile files('libs/BaiduLBS_Android.jar')
 }

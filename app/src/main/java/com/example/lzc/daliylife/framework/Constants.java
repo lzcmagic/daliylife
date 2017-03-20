@@ -27,4 +27,7 @@ public class Constants {
     public static final String LOTTERY_PL5="排列5";
     public static final String LOTTERY_QXC="七星彩";
     public static final String LOTTERY_QLC="七乐彩";
+    public static final String WECHATKEY="c131ac22ca6b6737c4703356c952ec26";
+    public static final String WECHATAI="http://v.juhe.cn/weixin/";
+    public static final String BAIDULOCATIONKEY="E9RwL3aIqL9d1GztdA70jGeNOkz1As3r";
 }

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.entity.LocationEntity;
 import com.example.lzc.daliylife.entity.MovieEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.fragments.DaliyEventsFragment;
@@ -30,6 +29,7 @@ import com.example.lzc.daliylife.fragments.GankFragment;
 import com.example.lzc.daliylife.fragments.OtherFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
 import com.example.lzc.daliylife.framework.Constants;
+import com.example.lzc.daliylife.utils.BaiduMapUtil;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.utils.ProgressSubscriber;
 import com.example.lzc.daliylife.utils.SubscriberOnNextListener;
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * 初始化抽屉
+     *
      * @param mToolbar
      */
     public void initDrawerLayout(final Toolbar mToolbar) {
@@ -125,9 +126,11 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 mPDialog.show();
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                //请求位置
+                BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
                     @Override
-                    public void run() {
+                    public void sendLocation(final LocationEntity entity) {
+                        Log.d(Constants.NORMALTAG, entity.toString());
                         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
 
                             @Override
@@ -166,10 +169,9 @@ public class MainActivity extends AppCompatActivity
                                     weatherTemp.setText("");
                                 }
                             }
-                        }, Constants.WEATHERKEY, "无锡", "江苏");
+                        }, Constants.WEATHERKEY, entity.getCity().replace("市", ""), entity.getProvince());
                     }
-                },1000);
-
+                });
             }
         });
     }

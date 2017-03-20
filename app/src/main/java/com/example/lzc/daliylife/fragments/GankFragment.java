@@ -2,12 +2,14 @@ package com.example.lzc.daliylife.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.example.lzc.daliylife.fragments.fuli.FuLiFragment;
 import com.example.lzc.daliylife.fragments.fuli.IOSFragment;
 import com.example.lzc.daliylife.fragments.fuli.QianDuanFragment;
 import com.example.lzc.daliylife.fragments.fuli.TuoZhanFragment;
+import com.example.lzc.daliylife.framework.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,18 +45,77 @@ public class GankFragment extends Fragment {
     private NewsFragmentAdapter newsFragmentAdapter;
     @BindView(toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.fab_top)
+    FloatingActionButton mFabButton;
+    private int CurrentPageNumber = 1;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mRootView = inflater.inflate(R.layout.news, null);
         mUnbinder = ButterKnife.bind(this, mRootView);
+        mToolbar.setTitle(getResources().getString(R.string.toolbar_news));
         newsFragmentAdapter = new NewsFragmentAdapter(getChildFragmentManager());
         viewPager.setAdapter(newsFragmentAdapter);
-        mToolbar.setTitle(getResources().getString(R.string.toolbar_news));
-        ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                CurrentPageNumber = position + 1;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
-        ((MainActivity)getActivity()).initDrawerLayout(mToolbar);
+        ((MainActivity) getActivity()).initDrawerLayout(mToolbar);
         initTabs();
+        mFabButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(Constants.NORMALTAG,CurrentPageNumber+"");
+                switch (CurrentPageNumber) {
+                    case 1: {
+                        Log.d(Constants.NORMALTAG, "FuLiFragment");
+                        Fragment item = newsFragmentAdapter.getItem(0);
+                        ((FuLiFragment) item).ScrollToTop();
+                        break;
+                    }
+                    case 2: {
+                        Log.d(Constants.NORMALTAG, "AndroidFragment");
+                        Fragment item = newsFragmentAdapter.getItem(1);
+                        ((AndroidFragment) item).ScrollToTop();
+                        break;
+                    }
+                    case 3: {
+                        Log.d(Constants.NORMALTAG, "IOSFragment");
+                        Fragment item = newsFragmentAdapter.getItem(2);
+                        ((IOSFragment) item).ScrollToTop();
+                        break;
+                    }
+                    case 4: {
+                        Log.d(Constants.NORMALTAG, "QianDuanFragment");
+                        Fragment item = newsFragmentAdapter.getItem(3);
+                        ((QianDuanFragment) item).ScrollToTop();
+                        break;
+                    }
+                    case 5: {
+                        Log.d(Constants.NORMALTAG, "TuoZhanFragment");
+                        Fragment item = newsFragmentAdapter.getItem(4);
+                        ((TuoZhanFragment) item).ScrollToTop();
+                        break;
+                    }
+                }
+
+            }
+        });
         return mRootView;
     }
 

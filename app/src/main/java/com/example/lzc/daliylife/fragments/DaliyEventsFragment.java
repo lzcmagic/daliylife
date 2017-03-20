@@ -2,7 +2,6 @@ package com.example.lzc.daliylife.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -70,6 +69,7 @@ public class DaliyEventsFragment extends Fragment {
         mUnbind = ButterKnife.bind(this, mRootView);
         initDatePickerDialog();
         initProgressDialog();
+        mProgressDialog.show();
         initDate(null);
         initFab();
         mToolbar.setTitle(getResources().getString(R.string.toolbar_daliy));
@@ -126,11 +126,6 @@ public class DaliyEventsFragment extends Fragment {
         Log.d(Constants.NORMALTAG,"initDate: "+date);
         HttpMethods.getInstance(Constants.LAOHUANGLIAPI)
                 .getDayLHL(new Subscriber<LaoHuangLiEntity>() {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        mProgressDialog.show();
-                    }
 
                     @Override
                     public void onCompleted() {

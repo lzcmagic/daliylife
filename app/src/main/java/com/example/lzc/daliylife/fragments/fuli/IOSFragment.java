@@ -6,10 +6,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,6 +114,10 @@ public class IOSFragment extends Fragment {
         return rootView;
     }
 
+    public void ScrollToTop(){
+        Log.d(Constants.NORMALTAG,"scroll");
+        mRecyclerView.scrollToPosition(0);
+    }
     /**
      * 初始化下拉刷新控件
      */

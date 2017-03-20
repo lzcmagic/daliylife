@@ -52,8 +52,21 @@
             android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.FuLiDetailActivity"
-            android:theme="@style/AppTheme.FullScreen"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.FullScreen"></activity>
+        <activity
+            android:name=".activity.WeChartDetailInfo"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+
+        <!--key:开发者申请的Key-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="E9RwL3aIqL9d1GztdA70jGeNOkz1As3r" />
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
     </application>
 
 </manifest>

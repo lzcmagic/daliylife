@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -17,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.activity.GankDetailInfo;
 import com.example.lzc.daliylife.entity.gankentity.AndroidEntity;
@@ -140,10 +137,15 @@ public class AndroidFragment extends Fragment {
                         //加载数据
                         initData();
                     }
-                },500);
+                },1000);
 
             }
         });
+    }
+
+    public void ScrollToTop(){
+        Log.d(Constants.NORMALTAG,"scroll");
+        mRecyclerView.scrollToPosition(0);
     }
 
     /**

@@ -3,6 +3,7 @@ package com.example.lzc.daliylife.framework;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.lzc.daliylife.entity.LocationEntity;
 import com.tencent.smtt.sdk.QbSdk;
 
 /**
@@ -11,6 +12,7 @@ import com.tencent.smtt.sdk.QbSdk;
 
 public class ApplWork extends Application {
     public static Context ApplWorkContext;
+    public static LocationEntity CurrentLocation;
     @Override
     public void onCreate() {
         super.onCreate();

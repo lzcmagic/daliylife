@@ -6,10 +6,10 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +55,7 @@ public class TuoZhanFragment extends Fragment {
     private TuoZhanFragment.MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private int LastVisiblePosition;
-    private boolean IsFirstLoad=true;
+    private boolean IsFirstLoad = true;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,6 +113,11 @@ public class TuoZhanFragment extends Fragment {
         return rootView;
     }
 
+    public void ScrollToTop() {
+        Log.d(Constants.NORMALTAG, "scroll");
+        mRecyclerView.scrollToPosition(0);
+    }
+
     /**
      * 初始化下拉刷新控件
      */
@@ -136,7 +141,7 @@ public class TuoZhanFragment extends Fragment {
                         //加载数据
                         initData();
                     }
-                },500);
+                }, 500);
             }
         });
     }
@@ -152,9 +157,9 @@ public class TuoZhanFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser&&IsFirstLoad){
+        if (isVisibleToUser && IsFirstLoad) {
             initData();
-            IsFirstLoad=false;
+            IsFirstLoad = false;
         }
     }
 
@@ -303,7 +308,7 @@ public class TuoZhanFragment extends Fragment {
                 mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
                 mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
                 mImage = (RatioImageView) itemView.findViewById(R.id.iv_android_image);
-                mImage.setOriginalSize(70,40);
+                mImage.setOriginalSize(70, 40);
             }
         }
 
