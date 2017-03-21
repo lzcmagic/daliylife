@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,9 +108,6 @@ public class FuLiFragment extends Fragment {
                 int[] positions = mStaggeredLayoutManager.findLastVisibleItemPositions(new int[2]);
                 isBottom = mFuLiAdapter.getItemCount() - Number >= positions[1];
                 LastVisiblePosition = positions[1] > positions[0] ? positions[1] : positions[0];
-                Log.d(Constants.NORMALTAG, positions[0] +
-                        "  " + positions[1] +
-                        "  " + mFuLiAdapter.getItemCount());
             }
         });
         mFuLiAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
@@ -127,25 +123,21 @@ public class FuLiFragment extends Fragment {
                                 FuLiDetailActivity.TRANSIT_PIC);
 
                 if (android.os.Build.VERSION.SDK_INT > 20) {
-                   startActivity(intent, options.toBundle());
+                    startActivity(intent, options.toBundle());
                 } else {
-                   startActivity(intent);
+                    startActivity(intent);
                 }
-//                try {
-//                    ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-//                } catch (Exception e) {
-//                    //避免4.4系统
-//                    e.printStackTrace();
-//                    startActivity(intent);
-//                }
             }
         });
         return rootView;
     }
 
-    public void ScrollToTop(){
-        Log.d(Constants.NORMALTAG,"scroll");
+    public void ScrollToTop() {
         recyclerView.scrollToPosition(0);
+    }
+
+    private void cache(){
+
     }
 
     /**
@@ -237,7 +229,7 @@ public class FuLiFragment extends Fragment {
         }, "福利", Number, Page);
     }
 
-    private class FuLiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    class FuLiAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
@@ -318,15 +310,14 @@ public class FuLiFragment extends Fragment {
 
 
         class MyHolder extends RecyclerView.ViewHolder {
-            //            @BindView(R.id.tv_fuli_desc)
+            @BindView(R.id.tv_fuli_desc)
             TextView fuliText;
-            //            @BindView(R.id.iv_fuli_image)
+            @BindView(R.id.iv_fuli_image)
             RatioImageView fuliImage;
 
             public MyHolder(View itemView) {
                 super(itemView);
-                fuliText = (TextView) itemView.findViewById(R.id.tv_fuli_desc);
-                fuliImage = (RatioImageView) itemView.findViewById(R.id.iv_fuli_image);
+                ButterKnife.bind(this,itemView);
                 //4:5
                 fuliImage.setOriginalSize(40, 50);
 //                ButterKnife.bind(this,itemView);
@@ -335,13 +326,14 @@ public class FuLiFragment extends Fragment {
 
         class LoadMoreHolder extends RecyclerView.ViewHolder {
 
-            private ProgressBar mProgress;
-            private TextView mText;
+            @BindView(R.id.pb_load)
+             ProgressBar mProgress;
+            @BindView(R.id.tv_load)
+             TextView mText;
 
             public LoadMoreHolder(View itemView) {
                 super(itemView);
-                mProgress = (ProgressBar) itemView.findViewById(R.id.pb_load);
-                mText = (TextView) itemView.findViewById(R.id.tv_load);
+                ButterKnife.bind(this,itemView);
             }
         }
     }

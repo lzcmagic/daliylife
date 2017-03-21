@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +113,6 @@ public class TuoZhanFragment extends Fragment {
     }
 
     public void ScrollToTop() {
-        Log.d(Constants.NORMALTAG, "scroll");
         mRecyclerView.scrollToPosition(0);
     }
 
@@ -204,7 +202,7 @@ public class TuoZhanFragment extends Fragment {
         }, "拓展资源", Number, Page);
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+     class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
@@ -297,29 +295,31 @@ public class TuoZhanFragment extends Fragment {
 
         class NormalHolder extends RecyclerView.ViewHolder {
 
+            @BindView(R.id.tv_android_title)
             TextView mTitle;
+            @BindView(R.id.tv_android_user)
             TextView mUser;
+            @BindView(R.id.tv_android_date)
             TextView mDate;
+            @BindView(R.id.iv_android_image)
             RatioImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
-                mTitle = (TextView) itemView.findViewById(R.id.tv_android_title);
-                mUser = (TextView) itemView.findViewById(R.id.tv_android_user);
-                mDate = (TextView) itemView.findViewById(R.id.tv_android_date);
-                mImage = (RatioImageView) itemView.findViewById(R.id.iv_android_image);
+                ButterKnife.bind(this,itemView);
                 mImage.setOriginalSize(70, 40);
             }
         }
 
         class FooterHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.pb_load)
             ProgressBar mProgress;
+            @BindView(R.id.tv_load)
             TextView mText;
 
             public FooterHolder(View itemView) {
                 super(itemView);
-                mProgress = (ProgressBar) itemView.findViewById(R.id.pb_load);
-                mText = (TextView) itemView.findViewById(R.id.tv_load);
+                ButterKnife.bind(this,itemView);
             }
         }
     }

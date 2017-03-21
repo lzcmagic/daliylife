@@ -8,7 +8,8 @@ public class Constants {
     public static final String FragmentTagNews="gank";
     public static final String FragmentTagWeChart="wechart";
     public static final String FragmentTagDaliy="daliy";
-    public static final String FragmentTagLottery="daliy";
+    public static final String FragmentTagLottery="lottery";
+    public static final String FragmentTagAbout="about";
     public static final String NewsFragmentTagHot="news_hot";
     public static final String NewsFragmentTagSport="news_sport";
     public static final String NewsFragmentTagHouse="news_house";
@@ -30,4 +31,5 @@ public class Constants {
     public static final String WECHATKEY="c131ac22ca6b6737c4703356c952ec26";
     public static final String WECHATAI="http://v.juhe.cn/weixin/";
     public static final String BAIDULOCATIONKEY="E9RwL3aIqL9d1GztdA70jGeNOkz1As3r";
+    public static final String UMNEGKEY="58d0a10bb27b0a6f6c000ee3";
 }

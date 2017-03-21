@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +85,6 @@ public class OtherFragment extends Fragment {
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerView.setAdapter(mAdapter);
-        Log.d("lzccc", "onCreate");
         IsXiaLaRefresh = false;
         mRefreshLayout.post(new Runnable() {
             @Override
@@ -132,7 +130,6 @@ public class OtherFragment extends Fragment {
 
                 @Override
                 public void onNext(LotteryEntity lotteryEntity) {
-                    Log.d(Constants.NORMALTAG, lotteryEntity.toString());
                     String name = lotteryEntity.getResult().getName();
                     if (name.equals(Constants.LOTTERY_SSQ)) {
                         LotteryMaps.put(0, lotteryEntity);
@@ -154,7 +151,7 @@ public class OtherFragment extends Fragment {
         }
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
+     class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
 
         private LayoutInflater mInflater;
         private OnRecyclerViewItemClickListener mOnItemClickListener;
@@ -177,7 +174,6 @@ public class OtherFragment extends Fragment {
         @Override
         public void onBindViewHolder(final MyAdapter.MyHolder viewHolder, final int i) {
             LotteryEntity lotteryEntity = LotteryMaps.get(i);
-            Log.d(Constants.NORMALTAG, lotteryEntity.toString());
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -339,17 +335,18 @@ public class OtherFragment extends Fragment {
 
         class MyHolder extends RecyclerView.ViewHolder {
 
+            @BindView(R.id.tv_lottery_title)
             TextView mTitleText;
+            @BindView(R.id.tv_lottery_sub_title)
             TextView mSubTitleText;
+            @BindView(R.id.tv_lottery_date)
             TextView mDateText;
+            @BindView(R.id.ll_lottery_container)
             LinearLayout mLayout;
 
             public MyHolder(View itemView) {
                 super(itemView);
-                mTitleText = (TextView) itemView.findViewById(R.id.tv_lottery_title);
-                mSubTitleText = (TextView) itemView.findViewById(R.id.tv_lottery_sub_title);
-                mDateText = (TextView) itemView.findViewById(R.id.tv_lottery_date);
-                mLayout = (LinearLayout) itemView.findViewById(R.id.ll_lottery_container);
+                ButterKnife.bind(this,itemView);
             }
         }
     }

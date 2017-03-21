@@ -58,39 +58,99 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tv_suit"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    tools:text="sdfa\nsafasdf\n" />
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_avoid"
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:src="@mipmap/logo_yi" />
+
+                    <TextView
+                        android:id="@+id/tv_suit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="3dp"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        tools:text="sdfa\nsafasdf\n" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    tools:text="sdfa\nsafasdf\n" />
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:src="@mipmap/logo_ji" />
+
+                    <TextView
+                        android:id="@+id/tv_avoid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        tools:text="sdfa\nsafasdf\n" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_jishen"
+            <LinearLayout
+                android:id="@+id/ll_jishen"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ll_avoid_suit"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_xiongshen"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="吉星:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_jishen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_jishen" />
+                android:layout_below="@id/ll_jishen"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="凶煞:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_xiongshen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+
+                    />
+            </LinearLayout>
+
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 

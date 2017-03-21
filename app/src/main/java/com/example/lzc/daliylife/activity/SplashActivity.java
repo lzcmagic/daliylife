@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.TextView;
@@ -20,6 +19,7 @@ import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utils.BaiduMapUtil;
 import com.example.lzc.daliylife.utils.HttpMethods;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,6 @@ public class SplashActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == READ_PHONE_STATE) {
             for (int i = 0; i < permissionList.size(); i++) {
-                Log.d(Constants.NORMALTAG, permissions[i] + " " + grantResults[i]);
                 if (permissions[i].equals(permissionList.get(i)) &&
                         grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     //同意了读取手机状态权限
@@ -102,9 +101,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
     private void IntentMainActivity() {
         if (CurrentWeather != null) {
-            Log.d(Constants.NORMALTAG, CurrentWeather.toString());
             WeatherEntity.Result result = CurrentWeather.getresult().get(0);
             WeatherEntity.Result.Future future = CurrentWeather.getresult().get(0).getfuture().get(0);
             MainActivity.actionStart(getApplicationContext(), result.getWeather(), result.getTemperature(), future.getTemperature());
@@ -118,6 +123,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         int permissionReadPhone = ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE);
         if (permissionReadPhone != PackageManager.PERMISSION_GRANTED) {
 

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,7 +48,7 @@ public class WeChartDetailInfo extends AppCompatActivity {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_gank_detail_info);
         ButterKnife.bind(this);
-        mToolbar.setTitle(R.string.toolbar_news);
+        mToolbar.setTitle(R.string.toolbar_wechart);
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -56,7 +56,6 @@ public class WeChartDetailInfo extends AppCompatActivity {
         source = getIntent().getStringExtra("source");
         url = getIntent().getStringExtra("url");
         initWebView();
-        Log.d("click", url);
     }
 
     @Override
@@ -82,6 +81,7 @@ public class WeChartDetailInfo extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         mWebView.onPause();
     }
 
@@ -103,6 +103,7 @@ public class WeChartDetailInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         mWebView.onResume();
         mWebView.loadUrl(url);
     }
@@ -170,7 +171,6 @@ public class WeChartDetailInfo extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView webView, int i, String s, String s1) {
                 super.onReceivedError(webView, i, s, s1);
-                Log.i("click", "网页加载失败  " + i + "    " + s + "    " + s1);
             }
         });
     }

@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.example.lzc.daliylife.fragments.fuli.FuLiFragment;
 import com.example.lzc.daliylife.fragments.fuli.IOSFragment;
 import com.example.lzc.daliylife.fragments.fuli.QianDuanFragment;
 import com.example.lzc.daliylife.fragments.fuli.TuoZhanFragment;
-import com.example.lzc.daliylife.framework.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,34 +78,28 @@ public class GankFragment extends Fragment {
         mFabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(Constants.NORMALTAG,CurrentPageNumber+"");
                 switch (CurrentPageNumber) {
                     case 1: {
-                        Log.d(Constants.NORMALTAG, "FuLiFragment");
                         Fragment item = newsFragmentAdapter.getItem(0);
                         ((FuLiFragment) item).ScrollToTop();
                         break;
                     }
                     case 2: {
-                        Log.d(Constants.NORMALTAG, "AndroidFragment");
                         Fragment item = newsFragmentAdapter.getItem(1);
                         ((AndroidFragment) item).ScrollToTop();
                         break;
                     }
                     case 3: {
-                        Log.d(Constants.NORMALTAG, "IOSFragment");
                         Fragment item = newsFragmentAdapter.getItem(2);
                         ((IOSFragment) item).ScrollToTop();
                         break;
                     }
                     case 4: {
-                        Log.d(Constants.NORMALTAG, "QianDuanFragment");
                         Fragment item = newsFragmentAdapter.getItem(3);
                         ((QianDuanFragment) item).ScrollToTop();
                         break;
                     }
                     case 5: {
-                        Log.d(Constants.NORMALTAG, "TuoZhanFragment");
                         Fragment item = newsFragmentAdapter.getItem(4);
                         ((TuoZhanFragment) item).ScrollToTop();
                         break;

@@ -13,27 +13,38 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.entity.LocationEntity;
-import com.example.lzc.daliylife.entity.MovieEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
+import com.example.lzc.daliylife.fragments.AboutUs;
 import com.example.lzc.daliylife.fragments.DaliyEventsFragment;
 import com.example.lzc.daliylife.fragments.GankFragment;
 import com.example.lzc.daliylife.fragments.OtherFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
 import com.example.lzc.daliylife.framework.Constants;
+import com.example.lzc.daliylife.normalUtil.T;
 import com.example.lzc.daliylife.utils.BaiduMapUtil;
 import com.example.lzc.daliylife.utils.HttpMethods;
-import com.example.lzc.daliylife.utils.ProgressSubscriber;
-import com.example.lzc.daliylife.utils.SubscriberOnNextListener;
 import com.example.lzc.daliylife.utils.WeatherToIcon;
+import com.tapadoo.alerter.Alerter;
+import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.shareboard.SnsPlatform;
+import com.umeng.socialize.utils.Log;
+import com.umeng.socialize.utils.ShareBoardlistener;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +60,7 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)
-    public DrawerLayout drawerLayout;
+    DrawerLayout drawerLayout;
     @BindView(R.id.frame_cont)
     FrameLayout container;
     private String CurrentWeather;
@@ -57,11 +68,18 @@ public class MainActivity extends AppCompatActivity
     private String CurrentTemperature;
     private ProgressDialog mPDialog;
 
+    private UMShareListener mShareListener;
+    private ShareAction mShareAction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        if (savedInstanceState == null) {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new GankFragment());
+            transaction.commit();
+        }
         initProgressDialog();
         CurrentWeather = getIntent().getStringExtra("weather");
         CurrentWeatherText = getIntent().getStringExtra("weatherText");
@@ -74,9 +92,134 @@ public class MainActivity extends AppCompatActivity
         navView.getMenu().getItem(0).setChecked(true);
 
         initNavHeadView();
-        if (savedInstanceState == null) {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.frame_cont, new GankFragment());
-            transaction.commit();
+
+
+        mShareListener = new CustomShareListener(this);
+        /*增加自定义按钮的分享面板*/
+        mShareAction = new ShareAction(MainActivity.this).setDisplayList(
+                SHARE_MEDIA.WEIXIN,
+                SHARE_MEDIA.WEIXIN_CIRCLE,
+                SHARE_MEDIA.WEIXIN_FAVORITE,
+                SHARE_MEDIA.SINA,
+                SHARE_MEDIA.QQ,
+                SHARE_MEDIA.QZONE,
+                SHARE_MEDIA.MORE)
+                .addButton("umeng_sharebutton_copy",
+                        "umeng_sharebutton_copy",
+                        "umeng_socialize_copy",
+                        "umeng_socialize_copy")
+                .addButton("umeng_sharebutton_copyurl",
+                        "umeng_sharebutton_copyurl",
+                        "umeng_socialize_copyurl",
+                        "umeng_socialize_copyurl")
+                .setShareboardclickCallback(new ShareBoardlistener() {
+                    @Override
+                    public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+                        if (snsPlatform.mShowWord.equals("umeng_sharebutton_copy")) {
+                            Toast.makeText(MainActivity.this, "复制文本按钮", Toast.LENGTH_LONG).show();
+                        } else if (snsPlatform.mShowWord.equals("umeng_sharebutton_copyurl")) {
+                            Toast.makeText(MainActivity.this, "复制链接按钮", Toast.LENGTH_LONG).show();
+                        } else {
+                            if (share_media == SHARE_MEDIA.QQ ||
+                                    share_media == SHARE_MEDIA.QZONE) {
+                                UMImage image = new UMImage(MainActivity.this, R.mipmap.lottery_dlt);
+                                new ShareAction(MainActivity.this).withMedia(image)
+                                        .setPlatform(share_media)
+                                        .setCallback(mShareListener)
+                                        .share();
+                            } else {
+                                new ShareAction(MainActivity.this).withText("体验一下休闲时光App吧")
+                                        .setPlatform(share_media)
+                                        .setCallback(mShareListener)
+                                        .share();
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /** attention to this below ,must add this**/
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
+    private static class CustomShareListener implements UMShareListener {
+
+        private WeakReference<MainActivity> mActivity;
+
+        private CustomShareListener(MainActivity activity) {
+            mActivity = new WeakReference(activity);
+        }
+
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+
+            if (platform.name().equals("WEIXIN_FAVORITE")) {
+                T.showShort(platform + " 收藏成功");
+            } else {
+                if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                        && platform != SHARE_MEDIA.EMAIL
+                        && platform != SHARE_MEDIA.FLICKR
+                        && platform != SHARE_MEDIA.FOURSQUARE
+                        && platform != SHARE_MEDIA.TUMBLR
+                        && platform != SHARE_MEDIA.POCKET
+                        && platform != SHARE_MEDIA.PINTEREST
+
+                        && platform != SHARE_MEDIA.INSTAGRAM
+                        && platform != SHARE_MEDIA.GOOGLEPLUS
+                        && platform != SHARE_MEDIA.YNOTE
+                        && platform != SHARE_MEDIA.EVERNOTE) {
+                    Alerter.create(mActivity.get())
+                            .setTitle("提示")
+                            .setText("分享成功")
+                            .setBackgroundColor(R.color.colorAccent)
+                            .setIcon(R.mipmap.xiaolian)
+                            .setDuration(500)
+                            .show();
+                }
+
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            if (platform != SHARE_MEDIA.MORE && platform != SHARE_MEDIA.SMS
+                    && platform != SHARE_MEDIA.EMAIL
+                    && platform != SHARE_MEDIA.FLICKR
+                    && platform != SHARE_MEDIA.FOURSQUARE
+                    && platform != SHARE_MEDIA.TUMBLR
+                    && platform != SHARE_MEDIA.POCKET
+                    && platform != SHARE_MEDIA.PINTEREST
+
+                    && platform != SHARE_MEDIA.INSTAGRAM
+                    && platform != SHARE_MEDIA.GOOGLEPLUS
+                    && platform != SHARE_MEDIA.YNOTE
+                    && platform != SHARE_MEDIA.EVERNOTE) {
+                Alerter.create(mActivity.get())
+                        .setTitle("提示")
+                        .setText("分享失败")
+                        .setBackgroundColor(android.R.color.holo_red_dark)
+                        .setIcon(R.mipmap.kulian)
+                        .setDuration(500)
+                        .show();
+                if (t != null) {
+                    Log.d("throw", "throw:" + t.getMessage());
+                }
+            }
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            T.showShort(platform + " 取消分享");
         }
     }
 
@@ -130,7 +273,6 @@ public class MainActivity extends AppCompatActivity
                 BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
                     @Override
                     public void sendLocation(final LocationEntity entity) {
-                        Log.d(Constants.NORMALTAG, entity.toString());
                         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
 
                             @Override
@@ -193,14 +335,24 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -217,29 +369,17 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.daliy) {
             mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);
         } else if (id == R.id.nav_share) {
-
+            mShareAction.open();
         } else if (id == R.id.nav_about) {
-
+            mTransaction.replace(R.id.frame_cont, new AboutUs(), Constants.FragmentTagAbout);
         } else {
 
         }
         mTransaction.commit();
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-
-    private void getMovie() {
-        HttpMethods.getInstance(Constants.DOUBANAPI).getTopMovie(new ProgressSubscriber<MovieEntity>(new SubscriberOnNextListener() {
-            @Override
-            public void onNext(Object o) {
-                if (o instanceof MovieEntity) {
-                    Log.d(Constants.NORMALTAG, ((MovieEntity) o).toString());
-                    // resultTV.setText(((MovieEntity) o).toString());
-                }
-            }
-        }), 0, 10);
-    }
 
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">便捷生活</string>
+    <string name="app_name">休闲时光</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -11,6 +11,7 @@
     <string name="toolbar_lottery">彩票信息</string>
     <string name="toolbar_car">车辆违章</string>
     <string name="toolbar_daliy">老黄历</string>
+    <string name="toolbar_about">关于我们</string>
     <string name="load_more">加载中...</string>
     <string name="load_finish">暂无更多</string>
     <string name="load_data_abnormal">数据加载异常</string>

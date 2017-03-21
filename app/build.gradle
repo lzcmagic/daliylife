@@ -10,10 +10,14 @@ android {
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
+        ndk {
+            // 设置支持的SO库架构
+            abiFilters 'armeabi' , 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true//混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -52,4 +56,16 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.tapadoo.android:alerter:1.0.6'
     compile files('libs/BaiduLBS_Android.jar')
+    compile files('libs/SocialSDK_QQ_Simplify.jar')
+    compile files('libs/SocialSDK_Sina_Simplify.jar')
+    compile files('libs/SocialSDK_WeChat_Simplify.jar')
+    compile files('libs/umeng_shareboard_widget.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/umeng_social_net.jar')
+    compile files('libs/umeng_social_shareboard.jar')
+    compile files('libs/umeng_social_shareview.jar')
+    compile files('libs/umeng_social_tool.jar')
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.tencent.bugly:crashreport:latest.release'
+    compile 'com.tencent.bugly:nativecrashreport:latest.release'
 }

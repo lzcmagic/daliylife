@@ -11,7 +11,6 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,10 +18,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.lzc.daliylife.R;
-import com.example.lzc.daliylife.framework.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.tapadoo.alerter.Alerter;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -73,14 +72,12 @@ public class FuLiDetailActivity extends AppCompatActivity {
         mAttacher.setOnDoubleTapListener(new GestureDetector.OnDoubleTapListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-                Log.d(Constants.NORMALTAG, "onSingleTapConfirmed: " + e.getAction());
                 FuLiDetailActivity.this.finish();
                 return false;
             }
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                Log.d(Constants.NORMALTAG, "onDoubleTap: " + e.getAction());
                 float x = e.getX();
                 float y = e.getY();
                 float scale = mAttacher.getScale();
@@ -96,20 +93,30 @@ public class FuLiDetailActivity extends AppCompatActivity {
 
             @Override
             public boolean onDoubleTapEvent(MotionEvent e) {
-                Log.d(Constants.NORMALTAG, "onDoubleTapEvent: " + e.getAction());
                 return false;
             }
         });
         mAttacher.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d(Constants.NORMALTAG, "setOnLongClickListener: ");
                 //保存图片
                 mChooseDialog.show();
                 return false;
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     /**
@@ -157,7 +164,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
                     Alerter.create(FuLiDetailActivity.this)
                             .setTitle("提示")
                             .setText("操作失败")
-                            .setBackgroundColor(android.R.color.holo_orange_dark)
+                            .setBackgroundColor(android.R.color.holo_red_dark)
                             .setIcon(R.mipmap.kulian)
                             .setDuration(500)
                             .show();
@@ -198,7 +205,6 @@ public class FuLiDetailActivity extends AppCompatActivity {
     private void parseIntent() {
         url = getIntent().getStringExtra("url");
         date = getIntent().getStringExtra("date");
-        Log.d(Constants.NORMALTAG, url);
     }
 
     /**

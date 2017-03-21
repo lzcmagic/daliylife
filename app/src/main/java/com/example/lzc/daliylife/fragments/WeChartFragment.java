@@ -197,7 +197,7 @@ public class WeChartFragment extends Fragment {
         }, Page, Number, "json",Constants.WECHATKEY);
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+     class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private LayoutInflater mInflater;
         private int LOAD_MORE = 1;
@@ -283,31 +283,32 @@ public class WeChartFragment extends Fragment {
 
         class NormalHolder extends RecyclerView.ViewHolder {
 
+            @BindView(R.id.tv_wechart_title)
             TextView mTitle;
+            @BindView(R.id.tv_wechart_source)
             TextView mSourece;
+            @BindView(R.id.tv_wechart_date)
             TextView mDate;
+            @BindView(R.id.iv_wechart_image)
             RatioImageView mImage;
 
             public NormalHolder(View itemView) {
                 super(itemView);
-
-                mTitle = (TextView) itemView.findViewById(R.id.tv_wechart_title);
-                mSourece = (TextView) itemView.findViewById(R.id.tv_wechart_source);
-                mDate = (TextView) itemView.findViewById(R.id.tv_wechart_date);
-                mImage = (RatioImageView) itemView.findViewById(R.id.iv_wechart_image);
+                ButterKnife.bind(this,itemView);
                 //比例7:4
                 mImage.setOriginalSize(70, 40);
             }
         }
 
         class FooterHolder extends RecyclerView.ViewHolder {
+            @BindView(R.id.pb_load)
             ProgressBar mProgress;
+            @BindView(R.id.tv_load)
             TextView mText;
 
             public FooterHolder(View itemView) {
                 super(itemView);
-                mProgress = (ProgressBar) itemView.findViewById(R.id.pb_load);
-                mText = (TextView) itemView.findViewById(R.id.tv_load);
+                ButterKnife.bind(this,itemView);
             }
         }
     }

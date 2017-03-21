@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +19,7 @@ import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +58,6 @@ public class GankDetailInfo extends AppCompatActivity {
         user = getIntent().getStringExtra("user");
         url = getIntent().getStringExtra("url");
         initWebView();
-        Log.d("click", url);
     }
 
     @Override
@@ -81,10 +80,13 @@ public class GankDetailInfo extends AppCompatActivity {
     }
 
 
+
+
     @Override
     protected void onPause() {
         super.onPause();
         mWebView.onPause();
+        MobclickAgent.onPause(this);
     }
 
     @Override
@@ -105,6 +107,7 @@ public class GankDetailInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         mWebView.onResume();
         mWebView.loadUrl(url);
     }
@@ -174,7 +177,6 @@ public class GankDetailInfo extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView webView, int i, String s, String s1) {
                 super.onReceivedError(webView, i, s, s1);
-                Log.i("click", "网页加载失败  " + i + "    " + s + "    " + s1);
             }
         });
     }

@@ -7,10 +7,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,8 +24,7 @@ import com.example.lzc.daliylife.entity.LotteryEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.DensityUtils;
 import com.example.lzc.daliylife.views.RatioImageView;
-
-import org.w3c.dom.Text;
+import com.umeng.analytics.MobclickAgent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -77,11 +74,11 @@ public class LotteryDetailInfo extends AppCompatActivity {
         BigDecimal bdpool = new BigDecimal(pool);
         descText.setText(Html.fromHtml("<font color=\"#515151\">"+"本期销量:"+
                 "</font>"+"<font color=\"#c62828\">"+bd.toPlainString()+"</font>"+
-                "</font>"+"<font color=\"#515151\">"+"\n奖池滚存:"+"</font>"+
-                "</font>"+"<font color=\"#c62828\">"+bdpool.toPlainString()+"</font>"));
+                "</br>"+
+                "<font color=\"#515151\">"+"奖池滚存:"+"</font>"+
+                "<font color=\"#c62828\">"+bdpool.toPlainString()+"</font>"));
         mAdapter = new MyAdapter();
         mGirdView.setAdapter(mAdapter);
-        Log.d(Constants.NORMALTAG, CurrentLottery.toString());
     }
 
     @Override
@@ -94,6 +91,18 @@ public class LotteryDetailInfo extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
     private class MyAdapter extends BaseAdapter {

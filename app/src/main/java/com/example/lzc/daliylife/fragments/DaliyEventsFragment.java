@@ -5,10 +5,8 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,7 +121,6 @@ public class DaliyEventsFragment extends Fragment {
             int day = calendar.get(Calendar.DAY_OF_MONTH);
             date = year +"-"+ (month > 9 ? month+"" : "0" + month) + "-"+(day > 9 ? "" + day : "0" + day);
         }
-        Log.d(Constants.NORMALTAG,"initDate: "+date);
         HttpMethods.getInstance(Constants.LAOHUANGLIAPI)
                 .getDayLHL(new Subscriber<LaoHuangLiEntity>() {
 
@@ -134,14 +131,11 @@ public class DaliyEventsFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        TextView view=new TextView(DaliyEventsFragment.this.getActivity());
-                        Snackbar.make(view,"日期解析错误",Snackbar.LENGTH_SHORT).show();
                         mProgressDialog.dismiss();
                     }
 
                     @Override
                     public void onNext(LaoHuangLiEntity laoHuangLiEntity) {
-                        Log.d(Constants.NORMALTAG,"onNext");
                         LaoHuangLiEntity.Result result = laoHuangLiEntity.getResult();
                         StringBuffer sb_avoid = new StringBuffer();
                         StringBuffer sb_suit = new StringBuffer();
@@ -198,7 +192,6 @@ public class DaliyEventsFragment extends Fragment {
                     DateDefault.set(Calendar.YEAR, year);
                     DateDefault.set(Calendar.MONTH, monthOfYear);
                     DateDefault.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    Log.d(Constants.NORMALTAG,year+""+monthOfYear+""+dayOfMonth);
                     loadDate(DateDefault);
                     isFirstSelect=false;
                 }
@@ -210,7 +203,6 @@ public class DaliyEventsFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        Log.d(Constants.NORMALTAG, isVisibleToUser + "");
     }
 
     @Override
