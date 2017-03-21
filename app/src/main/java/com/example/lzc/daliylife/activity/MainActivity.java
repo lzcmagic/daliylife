@@ -104,14 +104,14 @@ public class MainActivity extends AppCompatActivity
                 SHARE_MEDIA.QQ,
                 SHARE_MEDIA.QZONE,
                 SHARE_MEDIA.MORE)
-                .addButton("umeng_sharebutton_copy",
-                        "umeng_sharebutton_copy",
-                        "umeng_socialize_copy",
-                        "umeng_socialize_copy")
-                .addButton("umeng_sharebutton_copyurl",
-                        "umeng_sharebutton_copyurl",
-                        "umeng_socialize_copyurl",
-                        "umeng_socialize_copyurl")
+//                .addButton("umeng_sharebutton_copy",
+//                        "umeng_sharebutton_copy",
+//                        "umeng_socialize_copy",
+//                        "umeng_socialize_copy")
+//                .addButton("umeng_sharebutton_copyurl",
+//                        "umeng_sharebutton_copyurl",
+//                        "umeng_socialize_copyurl",
+//                        "umeng_socialize_copyurl")
                 .setShareboardclickCallback(new ShareBoardlistener() {
                     @Override
                     public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
