@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
@@ -36,8 +37,10 @@ public class SplashActivity extends AppCompatActivity {
     ScaleAnimation scaleAnimation;
     private WeatherEntity CurrentWeather;
     private static int READ_PHONE_STATE = 1;
-    @BindView(R.id.tv_wel)
-    TextView textView;
+//    @BindView(R.id.tv_wel)
+//    TextView textVi1ew;
+    @BindView(R.id.iv_splash)
+    ImageView mImage;
     private List<String> permissionList = new ArrayList<>();
     private LocationEntity LocationEntity;
 
@@ -106,6 +109,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
+        BaiduMapUtil.getInstance().UnregisterListener();
     }
 
     private void IntentMainActivity() {
@@ -157,13 +161,13 @@ public class SplashActivity extends AppCompatActivity {
         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
             @Override
             public void onCompleted() {
-                textView.startAnimation(scaleAnimation);
+                mImage.startAnimation(scaleAnimation);
             }
 
             @Override
             public void onError(Throwable e) {
                 CurrentWeather = null;
-                textView.startAnimation(scaleAnimation);
+                mImage.startAnimation(scaleAnimation);
             }
 
             @Override
@@ -173,10 +177,11 @@ public class SplashActivity extends AppCompatActivity {
         }, Constants.WEATHERKEY, LocationEntity.getCity().replace("市", ""), LocationEntity.getProvince());
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        textView.clearAnimation();
+        mImage.clearAnimation();
         BaiduMapUtil.getInstance().stopLocation();
     }
 }

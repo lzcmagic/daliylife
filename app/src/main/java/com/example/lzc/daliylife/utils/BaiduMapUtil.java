@@ -39,17 +39,17 @@ public class BaiduMapUtil {
     }
 
     public static BaiduMapUtil getInstance() {
-        if (instance == null) {
-            return instance = new BaiduMapUtil();
-        }
-        return instance;
+//        if (instance == null) {
+//            return instance =
+//        }
+        return instance=new BaiduMapUtil();
     }
 
     public void startLocation(SendLocation sendLocation) {
         this.sendLocation=sendLocation;
-        if (mLocationClient.isStarted()){
-            mLocationClient.stop();
-        }
+//        if (mLocationClient.isStarted()){
+//            mLocationClient.stop();
+//        }
         Log.d(Constants.NORMALTAG,"start");
         mLocationClient.start();
     }
@@ -61,6 +61,7 @@ public class BaiduMapUtil {
     public void UnregisterListener() {
         if (myListener != null)
             mLocationClient.unRegisterLocationListener(myListener);
+        Log.d(Constants.NORMALTAG,"unregister");
     }
 
 
@@ -72,7 +73,7 @@ public class BaiduMapUtil {
         option.setCoorType("bd09ll");
         //可选，默认gcj02，设置返回的定位结果坐标系
         int span = 1000;
-        option.setScanSpan(10000);
+        option.setScanSpan(0);
         //可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);
         //可选，设置是否需要地址信息，默认不需要
