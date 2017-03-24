@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.lzc.daliylife.R;
 import com.example.lzc.daliylife.entity.LocationEntity;
@@ -61,7 +60,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initAnimation() {
         scaleAnimation = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(2000);
+        scaleAnimation.setDuration(1500);
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -92,14 +91,14 @@ public class SplashActivity extends AppCompatActivity {
                 } else {
                     T.showShort("权限" + (i + 1) + "申请未通过，程序运行时功能可能不会正常运行");
                 }
-                BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
-                    @Override
-                    public void sendLocation(LocationEntity entity) {
-                        LocationEntity = entity;
-                        loadData();
-                    }
-                });
             }
+            BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
+                @Override
+                public void sendLocation(LocationEntity entity) {
+                    LocationEntity = entity;
+                    loadData();
+                }
+            });
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }

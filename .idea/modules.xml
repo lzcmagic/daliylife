@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/XiuXianShiGuang.iml" filepath="$PROJECT_DIR$/XiuXianShiGuang.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/daliylife.iml" filepath="$PROJECT_DIR$/daliylife.iml" />
     </modules>
