@@ -31,7 +31,7 @@ public class ApplWork extends Application {
         ApplWorkContext=getApplicationContext();
         //友盟分享
         //TODO:记得关闭
-        Config.DEBUG = false;
+        Config.DEBUG = true;
         UMShareAPI.get(this);
         CrashReport.initCrashReport(this,"fe650da1ba",false);
         //tencent webview

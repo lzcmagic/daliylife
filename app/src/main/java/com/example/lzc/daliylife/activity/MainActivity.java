@@ -30,7 +30,7 @@ import com.example.lzc.daliylife.fragments.OtherFragment;
 import com.example.lzc.daliylife.fragments.WeChartFragment;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
-import com.example.lzc.daliylife.utils.BaiduMapUtil;
+import com.example.lzc.daliylife.utils.AMapUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.example.lzc.daliylife.utils.WeatherToIcon;
 import com.tapadoo.alerter.Alerter;
@@ -269,10 +269,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 mPDialog.show();
-                //请求位置
-                BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
+                AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
                     @Override
-                    public void sendLocation(final LocationEntity entity) {
+                    public void sendLocation(LocationEntity entity) {
                         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
 
                             @Override
@@ -314,6 +313,13 @@ public class MainActivity extends AppCompatActivity
                         }, Constants.WEATHERKEY, entity.getCity().replace("市", ""), entity.getProvince());
                     }
                 });
+                //请求位置
+//                BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
+//                    @Override
+//                    public void sendLocation(final LocationEntity entity) {
+//
+//                    }
+//                });
             }
         });
     }

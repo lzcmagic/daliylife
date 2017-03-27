@@ -18,7 +18,7 @@ import com.example.lzc.daliylife.entity.LocationEntity;
 import com.example.lzc.daliylife.entity.WeatherEntity;
 import com.example.lzc.daliylife.framework.Constants;
 import com.example.lzc.daliylife.normalUtil.T;
-import com.example.lzc.daliylife.utils.BaiduMapUtil;
+import com.example.lzc.daliylife.utils.AMapUtils;
 import com.example.lzc.daliylife.utils.HttpMethods;
 import com.umeng.analytics.MobclickAgent;
 
@@ -94,10 +94,11 @@ public class SplashActivity extends AppCompatActivity {
                     T.showShort("权限" + (i + 1) + "申请未通过，程序运行时功能可能不会正常运行");
                 }
             }
-            BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
+            AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
                 @Override
                 public void sendLocation(LocationEntity entity) {
                     LocationEntity = entity;
+                    Log.d("lzcc","startLocation: "+entity.toString());
                     loadData();
                 }
             });
@@ -110,7 +111,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         MobclickAgent.onPause(this);
-        BaiduMapUtil.getInstance().UnregisterListener();
     }
 
     private void IntentMainActivity() {
@@ -148,12 +148,12 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         } else {
-            //权限通过 开始定位服务
-            BaiduMapUtil.getInstance().startLocation(new BaiduMapUtil.SendLocation() {
+
+            AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
                 @Override
                 public void sendLocation(LocationEntity entity) {
                     LocationEntity = entity;
-                    Log.d("lzcc","startLocation");
+                    Log.d("lzcc","startLocation: "+entity.toString());
                     loadData();
                 }
             });
@@ -188,6 +188,6 @@ public class SplashActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         mImage.clearAnimation();
-        BaiduMapUtil.getInstance().stopLocation();
+//        BaiduMapUtil.getInstance().stopLocation();
     }
 }

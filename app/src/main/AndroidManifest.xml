@@ -23,6 +23,9 @@
     <!-- 访问网络，网络定位需要上网-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_LOGS" />
+    <!--用于申请获取蓝牙信息进行室内定位-->
+    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
 
 
 
@@ -102,32 +105,16 @@
             android:excludeFromRecents="true"
             />
 
-        <!--key:开发者申请的Key-->
+        <!--key:高德开发者申请的Key-->
         <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="E9RwL3aIqL9d1GztdA70jGeNOkz1As3r" />
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote"></service>
+            android:name="com.amap.api.v2.apikey"
+
+            android:value="e4a513ab1bb2115275d543c088c52078"/>
+        <service android:name="com.amap.api.location.APSService">
+
+        </service>
 
 
-        <!--&lt;!&ndash; 配置APP ID &ndash;&gt;-->
-        <!--<meta-data-->
-            <!--android:name="BUGLY_APPID"-->
-            <!--android:value="fe650da1ba" />-->
-        <!--&lt;!&ndash; 配置APP版本号 &ndash;&gt;-->
-        <!--<meta-data-->
-            <!--android:name="BUGLY_APP_VERSION"-->
-            <!--android:value="1.0" />-->
-        <!--&lt;!&ndash; 配置APP渠道号 &ndash;&gt;-->
-        <!--<meta-data-->
-            <!--android:name="BUGLY_APP_CHANNEL"-->
-            <!--android:value="Xiuxianshiguang" />-->
-        <!--&lt;!&ndash; 配置Bugly调试模式（true或者false）&ndash;&gt;-->
-        <!--<meta-data-->
-            <!--android:name="BUGLY_ENABLE_DEBUG"-->
-            <!--android:value="false" />-->
 
     </application>
 
