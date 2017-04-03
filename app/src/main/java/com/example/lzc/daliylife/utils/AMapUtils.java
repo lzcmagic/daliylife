@@ -25,7 +25,7 @@ public class AMapUtils {
     //声明定位回调监听器
     public AMapLocationListener mLocationListener ;
     private static AMapUtils instance;
-    private SendLocation mSendLocation;
+    public SendLocation mSendLocation;
 
     public AMapUtils() {
         initLocationOptions(ApplWork.ApplWorkContext);
