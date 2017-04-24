@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/gank_copy"
+        android:icon="@mipmap/logo_icon"
+        android:title="复制链接"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/gank_qq"
+        android:icon="@mipmap/logo_icon"
+        android:title="分享到QQ"
+        app:showAsAction="never"></item>
+    <item
+        android:id="@+id/gank_space"
+        android:icon="@mipmap/logo_icon"
+        android:title="分享到空间"
+        app:showAsAction="never"></item>
+</menu>

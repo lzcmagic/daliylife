@@ -1,5 +1,6 @@
 package com.example.lzc.daliylife.activity;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -9,17 +10,27 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.normalUtil.T;
 import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
+import com.umeng.socialize.utils.Log;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +61,7 @@ public class WeChartDetailInfo extends AppCompatActivity {
         ButterKnife.bind(this);
         mToolbar.setTitle(R.string.toolbar_wechart);
         setSupportActionBar(mToolbar);
+        mToolbar.setOnMenuItemClickListener(onMenuItemClick);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         title = getIntent().getStringExtra("title");
@@ -77,6 +89,89 @@ public class WeChartDetailInfo extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onClickCopy() {
+        // 从API11开始android推荐使用android.content.ClipboardManager
+        // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(url);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_gank, menu);
+        return true;
+    }
+
+
+    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.gank_copy: {
+                    onClickCopy();
+                    T.showShort("复制成功");
+                    break;
+                }
+                case R.id.gank_qq: {
+                    UMImage image = new UMImage(WeChartDetailInfo.this, R.mipmap.logo_icon);
+                    UMWeb umWeb = new UMWeb(url, title, "来自休闲时光", image);
+                    new ShareAction(WeChartDetailInfo.this)
+                            .withMedia(umWeb)
+                            .setPlatform(SHARE_MEDIA.QQ)
+                            .setCallback(new WeChartDetailInfo.CustomShareListener(WeChartDetailInfo.this))
+                            .share();
+                    break;
+                }
+                case R.id.gank_space: {
+                    UMImage image = new UMImage(WeChartDetailInfo.this, R.mipmap.logo_icon);
+                    UMWeb umWeb = new UMWeb(url, title, "来自休闲时光", image);
+                    new ShareAction(WeChartDetailInfo.this)
+                            .withMedia(umWeb)
+                            .setPlatform(SHARE_MEDIA.QZONE)
+                            .setCallback(new WeChartDetailInfo.CustomShareListener(WeChartDetailInfo.this))
+                            .share();
+                    break;
+                }
+            }
+
+            return true;
+        }
+    };
+
+    private static class CustomShareListener implements UMShareListener {
+
+        private WeakReference<WeChartDetailInfo> mActivity;
+
+        private CustomShareListener(WeChartDetailInfo activity) {
+            mActivity = new WeakReference(activity);
+        }
+
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+
+            T.showShort("分享成功");
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+            T.showShort("分享失败");
+            if (t != null) {
+                Log.d("throw", "throw:" + t.getMessage());
+            }
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+            T.showShort(platform + " 取消分享");
+        }
+    }
 
     @Override
     protected void onPause() {
