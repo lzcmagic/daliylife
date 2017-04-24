@@ -167,7 +167,7 @@ public class WeChartFragment extends Fragment {
                     mRefreshLayout.setRefreshing(false);
                 }
                 IsDataRefresh = false;
-                if (WechatList.size() < Number) {
+                if (WechatList.size()%Number>0) {
                     //加载完毕，(正好加载到第十条)
                     IsRefreshFinish = true;
                 }

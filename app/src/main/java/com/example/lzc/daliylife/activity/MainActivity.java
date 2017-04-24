@@ -40,6 +40,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.umeng.socialize.shareboard.SnsPlatform;
 import com.umeng.socialize.utils.Log;
 import com.umeng.socialize.utils.ShareBoardlistener;
@@ -122,8 +123,12 @@ public class MainActivity extends AppCompatActivity
                         } else {
                             if (share_media == SHARE_MEDIA.QQ ||
                                     share_media == SHARE_MEDIA.QZONE) {
-                                UMImage image = new UMImage(MainActivity.this, R.mipmap.lottery_dlt);
-                                new ShareAction(MainActivity.this).withMedia(image)
+                                UMImage image = new UMImage(MainActivity.this, R.mipmap.logo_icon);
+                                UMWeb  web = new UMWeb("http://fusion.qq.com/cgi-bin/qzapps/unified_jump?actionFlag=0&appid=52442571&params=pname%3Dcom.example.lzc.daliylife%26versioncode%3D4%26channelid%3D%26actionflag%3D0&from=mqq");
+                                web.setTitle("休闲时光");//标题
+                                web.setThumb(image);  //缩略图
+                                web.setDescription("妹纸,干货应有尽有~~~");//描述
+                                new ShareAction(MainActivity.this).withMedia(web)
                                         .setPlatform(share_media)
                                         .setCallback(mShareListener)
                                         .share();
