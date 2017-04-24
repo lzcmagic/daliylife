@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,12 +79,12 @@ public class FuLiFragment extends Fragment {
         mFuLiAdapter = new FuLiAdapter();
         recyclerView.setAdapter(mFuLiAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            boolean isBottom = false;
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 int position = recyclerView.getVerticalScrollbarPosition();
+                Log.d("lzc","refresh: "+IsRefreshFinish);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mFuLiAdapter.getItemCount() == LastVisiblePosition + 1 &&
                         !IsRefreshFinish) {
@@ -105,9 +106,9 @@ public class FuLiFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int[] positions = mStaggeredLayoutManager.findLastVisibleItemPositions(new int[2]);
-                isBottom = mFuLiAdapter.getItemCount() - Number >= positions[1];
-                LastVisiblePosition = positions[1] > positions[0] ? positions[1] : positions[0];
+                int[] into=new int[mStaggeredLayoutManager.getSpanCount()];
+                 mStaggeredLayoutManager.findLastVisibleItemPositions(into);
+                LastVisiblePosition =findMax(into);
             }
         });
         mFuLiAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
@@ -130,6 +131,16 @@ public class FuLiFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    private int findMax(int[] lastPositions) {
+        int max = lastPositions[0];
+        for (int value : lastPositions) {
+            if (value > max) {
+                max = value;
+            }
+        }
+        return max;
     }
 
     public void ScrollToTop() {
@@ -199,7 +210,8 @@ public class FuLiFragment extends Fragment {
                     mRefreshLayout.setRefreshing(false);
                 }
                 IsDataRefresh = false;
-                if (FuLiLists.size() < Number) {
+                Log.d("lzc","size: "+FuLiLists.size());
+                if (FuLiLists.size()%Number>0) {
                     //加载完毕，(正好加载到第十条)
                     IsRefreshFinish = true;
                 }
