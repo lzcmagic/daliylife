@@ -107,7 +107,7 @@ public class FuLiFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int[] into=new int[mStaggeredLayoutManager.getSpanCount()];
-                 mStaggeredLayoutManager.findLastVisibleItemPositions(into);
+                 mStaggeredLayoutManager.findLastVisibleItemPositions(into); 
                 LastVisiblePosition =findMax(into);
             }
         });
