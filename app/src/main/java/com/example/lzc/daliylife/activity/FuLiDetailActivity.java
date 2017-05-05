@@ -9,15 +9,17 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.example.lzc.daliylife.R;
+import com.example.lzc.daliylife.framework.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.tapadoo.alerter.Alerter;
@@ -41,15 +43,17 @@ public class FuLiDetailActivity extends AppCompatActivity {
     private String date;
     @BindView(R.id.aiv_fuli_detail)
     ImageView mImageView;
+    @BindView(R.id.fuliContainer)
+    CoordinatorLayout mLayout;
     PhotoViewAttacher mAttacher;
     AlertDialog mChooseDialog;
     private ProgressDialog mProgressDialog;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuli_detail);
         ButterKnife.bind(this);
+
         parseIntent();
         initChooseDialog();
         initProgressDialog();
@@ -57,10 +61,20 @@ public class FuLiDetailActivity extends AppCompatActivity {
         Picasso.with(this).load(url).into(mImageView, new Callback() {
             @Override
             public void onSuccess() {
-                RelativeLayout.LayoutParams params= (RelativeLayout.LayoutParams) mImageView.getLayoutParams();
-                params.topMargin=20;
+                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mImageView.getLayoutParams();
+                params.topMargin = 20;
                 mImageView.setLayoutParams(params);
                 mProgressDialog.dismiss();
+                if (Constants.IsFirstInDetail) {
+                    Constants.IsFirstInDetail = false;
+                    Snackbar.make(mLayout, "双击放大图片，长按可保存图片.", 4000).setAction("知道了", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    }).setActionTextColor(getResources().getColor(R.color.colorPrimary)).show();
+                }
+
             }
 
             @Override
@@ -123,7 +137,7 @@ public class FuLiDetailActivity extends AppCompatActivity {
      * 初始化等待框
      */
     private void initProgressDialog() {
-        mProgressDialog=new ProgressDialog(this);
+        mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getResources().getString(R.string.load_more));
     }
 
@@ -174,7 +188,8 @@ public class FuLiDetailActivity extends AppCompatActivity {
 
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         mAttacher.cleanup();
     }

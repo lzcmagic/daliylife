@@ -6,6 +6,7 @@ package com.example.lzc.daliylife.framework;
 
 public class Constants {
     public static final String FragmentTagNews="gank";
+    public static boolean IsFirstInDetail=true;
     public static final String FragmentTagWeChart="wechart";
     public static final String FragmentTagDaliy="daliy";
     public static final String FragmentTagLottery="lottery";
