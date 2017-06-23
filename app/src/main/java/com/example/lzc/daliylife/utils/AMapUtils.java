@@ -98,6 +98,7 @@ public class AMapUtils {
                 if (mLocationClient.isStarted())
                     mLocationClient.stopLocation();
             }
+            mSendLocation.sendLocation(null);
         }
     }
     public interface SendLocation{

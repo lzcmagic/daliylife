@@ -37,7 +37,7 @@ public class SplashActivity extends AppCompatActivity {
     ScaleAnimation scaleAnimation;
     private WeatherEntity CurrentWeather;
     private static int READ_PHONE_STATE = 1;
-//    @BindView(R.id.tv_wel)
+    //    @BindView(R.id.tv_wel)
 //    TextView textVi1ew;
     @BindView(R.id.iv_splash)
     ImageView mImage;
@@ -66,18 +66,18 @@ public class SplashActivity extends AppCompatActivity {
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                Log.d("lzcc","onAnimationStart");
+                Log.d("lzcc", "onAnimationStart");
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Log.d("lzcc","onAnimationEnd");
+                Log.d("lzcc", "onAnimationEnd");
                 IntentMainActivity();
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-                Log.d("lzcc","onAnimationRepeat");
+                Log.d("lzcc", "onAnimationRepeat");
             }
         });
     }
@@ -98,7 +98,7 @@ public class SplashActivity extends AppCompatActivity {
                 @Override
                 public void sendLocation(LocationEntity entity) {
                     LocationEntity = entity;
-                    Log.d("lzcc","startLocation: "+entity.toString());
+                    Log.d("lzcc", "startLocation: " + entity.toString());
                     loadData();
                 }
             });
@@ -129,7 +129,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
-        Log.d("lzcc","onResume");
+        Log.d("lzcc", "onResume");
         int permissionReadPhone = ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE);
         if (permissionReadPhone != PackageManager.PERMISSION_GRANTED) {
 
@@ -152,9 +152,13 @@ public class SplashActivity extends AppCompatActivity {
             AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
                 @Override
                 public void sendLocation(LocationEntity entity) {
-                    LocationEntity = entity;
-                    Log.d("lzcc","startLocation: "+entity.toString());
-                    loadData();
+                    if (entity != null) {
+                        LocationEntity = entity;
+                        Log.d("lzcc", "startLocation: " + entity.toString());
+                        loadData();
+                    } else {
+                        mImage.startAnimation(scaleAnimation);
+                    }
                 }
             });
         }
@@ -164,20 +168,20 @@ public class SplashActivity extends AppCompatActivity {
         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
             @Override
             public void onCompleted() {
-                Log.d("lzcc","onCompleted");
+                Log.d("lzcc", "onCompleted");
                 mImage.startAnimation(scaleAnimation);
             }
 
             @Override
             public void onError(Throwable e) {
                 CurrentWeather = null;
-                Log.d("lzcc","onError");
+                Log.d("lzcc", "onError");
                 mImage.startAnimation(scaleAnimation);
             }
 
             @Override
             public void onNext(WeatherEntity weatherEntity) {
-                Log.d("lzcc","onNext");
+                Log.d("lzcc", "onNext");
                 CurrentWeather = weatherEntity;
             }
         }, Constants.WEATHERKEY, LocationEntity.getCity().replace("市", ""), LocationEntity.getProvince());

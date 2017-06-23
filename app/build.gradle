@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 android {
-    signingConfigs {
-        config {
-            keyAlias 'androiddebugkey'
-            keyPassword 'android'
-            storeFile file('F:/debug.keystore')
-            storePassword 'android'
-        }
-    }
+//    signingConfigs {
+//        config {
+//            keyAlias 'androiddebugkey'
+//            keyPassword 'android'
+//            storeFile file('F:/debug.keystore')
+//            storePassword 'android'
+//        }
+//    }
     compileSdkVersion 24
     buildToolsVersion "24.0.3"
     defaultConfig {
@@ -21,16 +21,16 @@ android {
             // 设置支持的SO库架构
             abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
-        signingConfig signingConfigs.config
+//        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false//混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
         debug {
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.config
         }
     }
     sourceSets {
