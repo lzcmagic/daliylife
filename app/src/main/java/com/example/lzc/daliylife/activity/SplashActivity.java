@@ -61,7 +61,7 @@ public class SplashActivity extends AppCompatActivity {
      */
     private void initAnimation() {
         scaleAnimation = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(1500);
+        scaleAnimation.setDuration(3000);
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -89,23 +89,30 @@ public class SplashActivity extends AppCompatActivity {
                 if (permissions[i].equals(permissionList.get(i)) &&
                         grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     //同意了读取手机状态权限
-
+                    startLocationAndIntent()
                 } else {
                     T.showShort("权限" + (i + 1) + "申请未通过，程序运行时功能可能不会正常运行");
                 }
             }
-            AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
-                @Override
-                public void sendLocation(LocationEntity entity) {
-                    LocationEntity = entity;
-                    Log.d("lzcc", "startLocation: " + entity.toString());
-                    loadData();
-                }
-            });
+
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+
+    private void startLocationAndIntent(){
+        AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
+            @Override
+            public void sendLocation(LocationEntity entity) {
+                if (entity != null) {
+                    LocationEntity = entity;
+                    Log.d("lzcc", "startLocation: " + entity.toString());
+                    loadData();
+                }
+            }
+        });
+        mImage.startAnimation(scaleAnimation);
+    }
 
     @Override
     protected void onPause() {
@@ -124,6 +131,7 @@ public class SplashActivity extends AppCompatActivity {
         }
         finish();
     }
+
 
     @Override
     protected void onResume() {
@@ -148,19 +156,7 @@ public class SplashActivity extends AppCompatActivity {
             }
 
         } else {
-
-            AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
-                @Override
-                public void sendLocation(LocationEntity entity) {
-                    if (entity != null) {
-                        LocationEntity = entity;
-                        Log.d("lzcc", "startLocation: " + entity.toString());
-                        loadData();
-                    } else {
-                        mImage.startAnimation(scaleAnimation);
-                    }
-                }
-            });
+            startLocationAndIntent()
         }
     }
 
@@ -169,14 +165,12 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onCompleted() {
                 Log.d("lzcc", "onCompleted");
-                mImage.startAnimation(scaleAnimation);
             }
 
             @Override
             public void onError(Throwable e) {
                 CurrentWeather = null;
                 Log.d("lzcc", "onError");
-                mImage.startAnimation(scaleAnimation);
             }
 
             @Override
