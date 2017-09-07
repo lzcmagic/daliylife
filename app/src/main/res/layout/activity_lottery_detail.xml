@@ -29,7 +29,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <com.example.lzc.daliylife.views.RatioImageView
+            <com.lzc.daliylife.views.RatioImageView
                 android:id="@+id/iv_lottery_detail_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp" />

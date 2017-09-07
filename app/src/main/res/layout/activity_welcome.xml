@@ -1,21 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#F5FFF7"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5FFF7">
 
     <ImageView
         android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/splash_bg"/>
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/tv_wel"-->
-        <!--android:text="welcome"-->
-        <!--android:background="@mipmap/splash_bg"-->
-        <!--android:gravity="center"-->
-        <!--android:textSize="16sp"/>-->
+        android:contentDescription="@null"
+        android:src="@mipmap/splash_bg" />
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

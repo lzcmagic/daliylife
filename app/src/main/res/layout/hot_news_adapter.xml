@@ -21,7 +21,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <com.example.lzc.daliylife.views.RatioImageView
+            <com.lzc.daliylife.views.RatioImageView
                 android:id="@+id/iv_fuli_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

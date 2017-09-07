@@ -24,7 +24,7 @@
             android:paddingBottom="6dp"
             android:layout_marginRight="40dp"
             tools:text="2017年伊始，你需要尝试的25个Android第三方库"/>
-        <com.example.lzc.daliylife.views.RatioImageView
+        <com.lzc.daliylife.views.RatioImageView
             android:id="@+id/iv_android_image"
             android:layout_below="@id/tv_android_title"
             android:scaleType="fitXY"

@@ -19,7 +19,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout
+    <com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout
         android:id="@+id/spl_wechart"
         android:layout_width="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -32,7 +32,7 @@
             >
 
         </android.support.v7.widget.RecyclerView>
-    </com.example.lzc.daliylife.views.ScrollChildSwipeRefreshLayout>
+    </com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

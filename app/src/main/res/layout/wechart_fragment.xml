@@ -25,7 +25,7 @@
             android:textColor="@color/colorPrimary"
             tools:text="2017年伊始，你需要尝试的25个Android第三方库" />
 
-        <com.example.lzc.daliylife.views.RatioImageView
+        <com.lzc.daliylife.views.RatioImageView
             android:id="@+id/iv_wechart_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
