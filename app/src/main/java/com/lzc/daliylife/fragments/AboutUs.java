@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.*;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.framework.ApplWork;
 
@@ -23,19 +24,21 @@ import butterknife.Unbinder;
  * Created by lzc on 2017/3/21.
  */
 
-public class AboutUs extends Fragment {
+public class AboutUs extends BaseFragment {
 
-    Unbinder unbinder;
     @BindView(R.id.tb_about_us)
     Toolbar mToolbar;
     @BindView(R.id.tv_about)
     TextView mText;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_about_us, container, false);
-        unbinder = ButterKnife.bind(this, view);
+    public int getResId() {
+        return R.layout.activity_about_us;
+    }
+
+    @Override
+    public void initUI() {
         mToolbar.setTitle(getResources().getString(R.string.toolbar_about));
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
@@ -54,13 +57,5 @@ public class AboutUs extends Fragment {
         }else{
             mText.setVisibility(View.INVISIBLE);
         }
-        return view;
-
-}
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }

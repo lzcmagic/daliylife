@@ -119,50 +119,7 @@ public class Result {
     String used;
     String who;
 
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(this._id);
-//        dest.writeString(this.createdAt);
-//        dest.writeString(this.desc);
-//        dest.writeStringList(this.images);
-//        dest.writeString(this.publishedAt);
-//        dest.writeString(this.source);
-//        dest.writeString(this.type);
-//        dest.writeString(this.url);
-//        dest.writeString(this.used);
-//        dest.writeString(this.who);
-//    }
-
     public Result() {
     }
 
-//    protected Result(Parcel in) {
-//        this._id = in.readString();
-//        this.createdAt = in.readString();
-//        this.desc = in.readString();
-//        this.images = in.createStringArrayList();
-//        this.publishedAt = in.readString();
-//        this.source = in.readString();
-//        this.type = in.readString();
-//        this.url = in.readString();
-//        this.used = in.readString();
-//        this.who = in.readString();
-//    }
-
-//    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
-//        @Override
-//        public Result createFromParcel(Parcel source) {
-//            return new Result(source);
-//        }
-//
-//        @Override
-//        public Result[] newArray(int size) {
-//            return new Result[size];
-//        }
-//    };
 }

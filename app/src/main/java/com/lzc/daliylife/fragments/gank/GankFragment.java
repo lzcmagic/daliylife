@@ -1,7 +1,6 @@
-package com.lzc.daliylife.fragments;
+package com.lzc.daliylife.fragments.gank;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,24 +8,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.BaseFragment;
+import com.lzc.daliylife.fragments.gank.welfare.WelfareFragment;
 import com.lzc.daliylife.main.MainActivity;
-import com.lzc.daliylife.fragments.fuli.AndroidFragment;
-import com.lzc.daliylife.fragments.fuli.FuLiFragment;
-import com.lzc.daliylife.fragments.fuli.IOSFragment;
-import com.lzc.daliylife.fragments.fuli.QianDuanFragment;
-import com.lzc.daliylife.fragments.fuli.TuoZhanFragment;
+import com.lzc.daliylife.fragments.gank.android.AndroidFragment;
+import com.lzc.daliylife.fragments.gank.ios.IOSFragment;
+import com.lzc.daliylife.fragments.gank.web.QianDuanFragment;
+import com.lzc.daliylife.fragments.gank.expand.TuoZhanFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 import static com.lzc.daliylife.R.id.toolbar;
 
@@ -34,8 +30,7 @@ import static com.lzc.daliylife.R.id.toolbar;
  * Created by lzc on 2016/12/5.
  */
 
-public class GankFragment extends Fragment {
-    Unbinder mUnbinder;
+public class GankFragment extends BaseFragment {
     @BindView(R.id.news_viewPager)
     ViewPager viewPager;
     @BindView(R.id.tabs)
@@ -56,12 +51,13 @@ public class GankFragment extends Fragment {
         return fragment;
     }
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View mRootView = inflater.inflate(R.layout.news, null);
-        mUnbinder = ButterKnife.bind(this, mRootView);
+    public int getResId() {
+        return R.layout.news;
+    }
+
+    @Override
+    public void initUI() {
         mToolbar.setTitle(getResources().getString(R.string.toolbar_news));
         newsFragmentAdapter = new NewsFragmentAdapter(getChildFragmentManager());
         viewPager.setAdapter(newsFragmentAdapter);
@@ -91,7 +87,7 @@ public class GankFragment extends Fragment {
                 switch (CurrentPageNumber) {
                     case 1: {
                         Fragment item = newsFragmentAdapter.getItem(0);
-                        ((FuLiFragment) item).ScrollToTop();
+                        ((WelfareFragment) item).ScrollToTop();
                         break;
                     }
                     case 2: {
@@ -118,7 +114,6 @@ public class GankFragment extends Fragment {
 
             }
         });
-        return mRootView;
     }
 
     private void initTabs() {
@@ -133,7 +128,7 @@ public class GankFragment extends Fragment {
         public NewsFragmentAdapter(FragmentManager fm) {
             super(fm);
             fragments = new ArrayList<>();
-            fragments.add(new FuLiFragment());
+            fragments.add(new WelfareFragment());
             fragments.add(new AndroidFragment());
             fragments.add(new IOSFragment());
             fragments.add(new QianDuanFragment());
@@ -162,9 +157,4 @@ public class GankFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

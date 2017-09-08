@@ -70,7 +70,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.SView
      */
     private void initAnimation() {
         scaleAnimation = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(3000);
+        scaleAnimation.setDuration(2400);
         scaleAnimation.setFillAfter(true);
         scaleAnimation.setInterpolator(new LinearInterpolator());
         scaleAnimation.setAnimationListener(new Animation.AnimationListener() {

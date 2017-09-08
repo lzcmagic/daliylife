@@ -18,11 +18,12 @@ import android.widget.TextView;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.activity.LotteryDetailInfo;
+import com.lzc.daliylife.base.BaseFragment;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.entity.LotteryEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.normalUtil.DensityUtils;
-import com.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
+import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.utils.HttpMethods;
 import com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
@@ -39,8 +40,7 @@ import rx.Subscriber;
  * Created by lzc on 2017/3/10.
  */
 
-public class OtherFragment extends Fragment {
-    private Unbinder mBind;
+public class OtherFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.rv_lotttery)
@@ -66,16 +66,19 @@ public class OtherFragment extends Fragment {
         LotteryMaps = new HashMap<>();
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View viewRoot = inflater.inflate(R.layout.lottery_fragment, null);
-        mBind = ButterKnife.bind(this, viewRoot);
+    public int getResId() {
+        return R.layout.lottery_fragment;
+    }
+
+    @Override
+    public void initUI() {
         mToolbar.setTitle(getResources().getString(R.string.toolbar_lottery));
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
         ((MainActivity) getActivity()).initDrawerLayout(mToolbar);
-        initSwpeRefreshLayout();
+        initSwipeRefreshLayout();
         mAdapter = new MyAdapter();
         mAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
@@ -93,7 +96,6 @@ public class OtherFragment extends Fragment {
             }
         });
         initData();
-        return viewRoot;
     }
 
     /**
@@ -167,17 +169,16 @@ public class OtherFragment extends Fragment {
         @Override
         public MyAdapter.MyHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view = mInflater.inflate(R.layout.adapter_lottery, viewGroup, false);
-            MyHolder holder = new MyHolder(view);
-            return holder;
+            return new MyHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final MyAdapter.MyHolder viewHolder, final int i) {
+        public void onBindViewHolder(final MyAdapter.MyHolder viewHolder,int i) {
             LotteryEntity lotteryEntity = LotteryMaps.get(i);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnItemClickListener.onItemClick(viewHolder, i);
+                    mOnItemClickListener.onItemClick(viewHolder, viewHolder.getAdapterPosition());
                 }
             });
             LotteryEntity.Result result = lotteryEntity.getResult();
@@ -351,7 +352,8 @@ public class OtherFragment extends Fragment {
         }
     }
 
-    private void initSwpeRefreshLayout() {
+    @SuppressWarnings("deprecation")
+    private void initSwipeRefreshLayout() {
         mRefreshLayout.setScrollUpChild(mRecyclerView);
         mRefreshLayout.setColorSchemeColors(
                 getResources().getColor(android.R.color.darker_gray),
@@ -374,9 +376,4 @@ public class OtherFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mBind.unbind();
-    }
 }

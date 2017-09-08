@@ -21,7 +21,7 @@ import com.lzc.daliylife.activity.WeChartDetailInfo;
 import com.lzc.daliylife.entity.WechatEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.normalUtil.T;
-import com.lzc.daliylife.utillistener.OnRecyclerViewItemClickListener;
+import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.utils.DateTimeFormat;
 import com.lzc.daliylife.utils.GlideUtils;
 import com.lzc.daliylife.utils.HttpMethods;

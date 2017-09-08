@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -14,43 +13,30 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.BaseActivity;
-import com.lzc.daliylife.entity.LocationEntity;
-import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.fragments.AboutUs;
 import com.lzc.daliylife.fragments.DaliyEventsFragment;
-import com.lzc.daliylife.fragments.GankFragment;
+import com.lzc.daliylife.fragments.gank.GankFragment;
 import com.lzc.daliylife.fragments.OtherFragment;
 import com.lzc.daliylife.fragments.WeChartFragment;
 import com.lzc.daliylife.framework.Constants;
-import com.lzc.daliylife.utils.AMapUtils;
 import com.lzc.daliylife.utils.ActivityUtils;
-import com.lzc.daliylife.utils.HttpMethods;
 import com.lzc.daliylife.utils.WeatherToIcon;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
-import com.umeng.socialize.shareboard.SnsPlatform;
-import com.umeng.socialize.utils.ShareBoardlistener;
 
 import butterknife.BindView;
-import rx.Subscriber;
 
 /**
  * 主页
  */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MainContract.MView {
+                    MainContract.MView {
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)

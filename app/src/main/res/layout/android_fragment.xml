@@ -5,63 +5,67 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    app:cardCornerRadius="6dp"
     app:cardBackgroundColor="@color/cardViewBg"
+    app:cardCornerRadius="6dp"
     app:cardElevation="5dp">
+
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_height="wrap_content">
+        android:paddingRight="10dp">
+
         <TextView
             android:id="@+id/tv_android_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimary"
-            android:paddingTop="6dp"
-            android:lines="1"
-            android:ellipsize="end"
-            android:paddingBottom="6dp"
             android:layout_marginRight="40dp"
-            tools:text="2017年伊始，你需要尝试的25个Android第三方库"/>
+            android:ellipsize="end"
+            android:lines="1"
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:textColor="@color/colorPrimary"
+            tools:text="2017年伊始，你需要尝试的25个Android第三方库" />
+
         <com.lzc.daliylife.views.RatioImageView
             android:id="@+id/iv_android_image"
-            android:layout_below="@id/tv_android_title"
-            android:scaleType="fitXY"
-            android:adjustViewBounds="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_android_title"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY" />
+
         <TextView
+            android:id="@+id/tv_android_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="6dp"
+            android:layout_below="@id/iv_android_image"
             android:paddingBottom="6dp"
+            android:paddingTop="6dp"
             android:textColor="@color/colorPrimaryDark"
-            tools:text="发布者: admin"
-            android:id="@+id/tv_android_user"
-            android:layout_below="@id/iv_android_image"/>
+            tools:text="发布者: admin" />
 
         <ImageView
             android:id="@+id/iv_android_more"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:background="@mipmap/more_right"
-            android:layout_alignParentRight="true"
             android:layout_alignBottom="@id/tv_android_user"
+            android:layout_alignParentRight="true"
             android:layout_marginBottom="5dp"
-           />
+            android:background="@mipmap/more_right" />
+
         <TextView
+            android:id="@+id/tv_android_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_android_date"
-            tools:text="03-14 13:17"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_below="@id/iv_android_image"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
             android:layout_alignBottom="@id/tv_android_user"
+            android:layout_below="@id/iv_android_image"
+            android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/iv_android_more"
-            android:layout_marginRight="10dp"/>
+            android:paddingBottom="6dp"
+            android:paddingTop="6dp"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="03-14 13:17" />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

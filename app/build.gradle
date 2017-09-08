@@ -30,7 +30,6 @@ android {
             keyAlias properties['keyAlias']
         }
     }
-
     buildTypes {
         release {
             minifyEnabled false//混淆
@@ -47,8 +46,13 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
-//    productFlavors {
-//    }
+    productFlavors {
+        lzc {
+            minSdkVersion 14
+            signingConfig signingConfigs.release
+            versionNameSuffix '-release'
+        }
+    }
 }
 
 dependencies {
@@ -84,4 +88,5 @@ dependencies {
     //bugly
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
+
 }

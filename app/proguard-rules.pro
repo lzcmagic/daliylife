@@ -389,3 +389,4 @@
 -dontwarn android.support.**
 #禁止优化泛型
 -keepattributes Signature
+

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#037365</color>
     <color name="colorPrimaryDark">#00303F</color>
-    <color name="colorAccent">#BEA32E</color>
+    <color name="colorAccent">#263149</color>
     <color name="colorNaviPress">#037365</color>
     <color name="colorNaviNormal">#515151</color>
     <color name="cardViewBg">#FFFFFF</color>
