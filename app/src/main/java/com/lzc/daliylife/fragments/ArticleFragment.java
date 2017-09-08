@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.BaseFragment;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.activity.WeChartDetailInfo;
 import com.lzc.daliylife.entity.WechatEntity;
@@ -40,9 +41,7 @@ import rx.Subscriber;
  * Created by lzc on 2016/12/5.
  */
 
-public class WeChartFragment extends Fragment {
-    public View mRootView;
-    Unbinder mUnbinder;
+public class ArticleFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.rv_wechat)
@@ -51,7 +50,7 @@ public class WeChartFragment extends Fragment {
     private boolean IsDataRefresh;
     private int Number = 10;
     private int Page = 1;
-    private WeChartFragment.MyAdapter mAdapter;
+    private ArticleFragment.MyAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     @BindView(R.id.spl_wechart)
     ScrollChildSwipeRefreshLayout mRefreshLayout;
@@ -64,11 +63,14 @@ public class WeChartFragment extends Fragment {
         WechatList = new ArrayList<>();
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.wechart, null);
-        mUnbinder = ButterKnife.bind(this, mRootView);
+    public int getResId() {
+        return R.layout.wechart;
+    }
+
+    @Override
+    public void initUI() {
         mToolbar.setTitle(getResources().getString(R.string.toolbar_wechart));
         ((MainActivity) getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
@@ -116,7 +118,6 @@ public class WeChartFragment extends Fragment {
             }
         });
         initData();
-        return mRootView;
     }
 
 
@@ -214,7 +215,7 @@ public class WeChartFragment extends Fragment {
          * @param mOnitemClickListener
          */
         public void setOnitemClickListener(OnRecyclerViewItemClickListener mOnitemClickListener) {
-            WeChartFragment.MyAdapter.this.mOnitemClickListener = mOnitemClickListener;
+            ArticleFragment.MyAdapter.this.mOnitemClickListener = mOnitemClickListener;
 
         }
 
@@ -222,16 +223,16 @@ public class WeChartFragment extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == LOAD_MORE) {
                 View view = mInflater.inflate(R.layout.load_more_layout, parent, false);
-                WeChartFragment.MyAdapter.FooterHolder holder = new WeChartFragment.MyAdapter.FooterHolder(view);
+                ArticleFragment.MyAdapter.FooterHolder holder = new ArticleFragment.MyAdapter.FooterHolder(view);
                 return holder;
 
             } else if (viewType == LOAD_FINISH) {
                 View view = mInflater.inflate(R.layout.wechart_fragment, parent, false);
-                WeChartFragment.MyAdapter.NormalHolder holder = new WeChartFragment.MyAdapter.NormalHolder(view);
+                ArticleFragment.MyAdapter.NormalHolder holder = new ArticleFragment.MyAdapter.NormalHolder(view);
                 return holder;
             } else {
                 View view = mInflater.inflate(R.layout.wechart_fragment, parent, false);
-                WeChartFragment.MyAdapter.NormalHolder holder = new WeChartFragment.MyAdapter.NormalHolder(view);
+                ArticleFragment.MyAdapter.NormalHolder holder = new ArticleFragment.MyAdapter.NormalHolder(view);
                 return holder;
             }
         }
@@ -248,7 +249,7 @@ public class WeChartFragment extends Fragment {
         @Override
         public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
-            if (holder instanceof WeChartFragment.MyAdapter.NormalHolder) {
+            if (holder instanceof ArticleFragment.MyAdapter.NormalHolder) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -261,10 +262,10 @@ public class WeChartFragment extends Fragment {
                 String date = result.getId().split("_")[1];
                 ((NormalHolder) holder).mDate.setText(DateTimeFormat.formatDateTime2(date));
                 String firstImg = result.getFirstImg();
-                GlideUtils.loadGankRatioImage(WeChartFragment.this,
+                GlideUtils.loadGankRatioImage(ArticleFragment.this,
                         firstImg, ((NormalHolder) holder).mImage);
 
-            } else if (holder instanceof WeChartFragment.MyAdapter.FooterHolder) {
+            } else if (holder instanceof ArticleFragment.MyAdapter.FooterHolder) {
                 if (IsRefreshFinish) {
                     ((FooterHolder) holder).mProgress.setVisibility(View.GONE);
                     ((FooterHolder) holder).mText.setText(getResources().getString(R.string.load_finish));
@@ -313,9 +314,4 @@ public class WeChartFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbinder.unbind();
-    }
 }

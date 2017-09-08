@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.BaseFragment;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.lzc.daliylife.framework.Constants;
@@ -32,11 +33,10 @@ import static com.lzc.daliylife.R.id.fab_select_date;
 
 /**
  * Created by lzc on 2016/12/5.
+ *
  */
 
-public class DaliyEventsFragment extends Fragment {
-    View mRootView;
-    Unbinder mUnbind;
+public class DaliyEventsFragment extends BaseFragment {
     @BindView(R.id.tv_normal_date)
     TextView NormalDate;
     @BindView(R.id.tv_lunar_date)
@@ -60,11 +60,14 @@ public class DaliyEventsFragment extends Fragment {
     private DatePickerDialog mDatePickerDialog;
     boolean isFirstSelect=true;
     private ProgressDialog mProgressDialog;
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRootView = inflater.inflate(R.layout.daliy, null);
-        mUnbind = ButterKnife.bind(this, mRootView);
+    public int getResId() {
+        return R.layout.daliy;
+    }
+
+    @Override
+    public void initUI() {
         initDatePickerDialog();
         initProgressDialog();
         mProgressDialog.show();
@@ -74,7 +77,6 @@ public class DaliyEventsFragment extends Fragment {
         ((MainActivity)getActivity()).setSupportActionBar(mToolbar);
         //绑定DrawerLayout
         ((MainActivity)getActivity()).initDrawerLayout(mToolbar);
-        return mRootView;
     }
 
     /**
@@ -220,9 +222,4 @@ public class DaliyEventsFragment extends Fragment {
         super.onPause();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        mUnbind.unbind();
-    }
 }

@@ -19,10 +19,10 @@ import android.widget.TextView;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.BaseActivity;
 import com.lzc.daliylife.fragments.AboutUs;
+import com.lzc.daliylife.fragments.ArticleFragment;
 import com.lzc.daliylife.fragments.DaliyEventsFragment;
+import com.lzc.daliylife.fragments.LotteryFragment;
 import com.lzc.daliylife.fragments.gank.GankFragment;
-import com.lzc.daliylife.fragments.OtherFragment;
-import com.lzc.daliylife.fragments.WeChartFragment;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.utils.ActivityUtils;
 import com.lzc.daliylife.utils.WeatherToIcon;
@@ -194,10 +194,10 @@ public class MainActivity extends BaseActivity
                 mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
                 break;
             case R.id.wechart:
-                mTransaction.replace(R.id.frame_cont, new WeChartFragment(), Constants.FragmentTagWeChart);
+                mTransaction.replace(R.id.frame_cont, new ArticleFragment(), Constants.FragmentTagWeChart);
                 break;
             case R.id.car:
-                mTransaction.replace(R.id.frame_cont, new OtherFragment(), Constants.FragmentTagLottery);
+                mTransaction.replace(R.id.frame_cont, new LotteryFragment(), Constants.FragmentTagLottery);
                 break;
             case R.id.daliy:
                 mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);

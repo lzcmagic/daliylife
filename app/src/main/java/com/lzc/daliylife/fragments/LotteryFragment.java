@@ -40,7 +40,7 @@ import rx.Subscriber;
  * Created by lzc on 2017/3/10.
  */
 
-public class OtherFragment extends BaseFragment {
+public class LotteryFragment extends BaseFragment {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.rv_lotttery)
