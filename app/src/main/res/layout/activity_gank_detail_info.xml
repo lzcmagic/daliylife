@@ -31,7 +31,7 @@
         <FrameLayout
             android:id="@+id/ll_webview_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></FrameLayout>
+            android:layout_height="match_parent"/>
 
         <ProgressBar
             android:id="@+id/pb_web_load"

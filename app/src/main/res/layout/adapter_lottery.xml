@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:layout_marginTop="10dp"
+    android:layout_margin="10dp"
     app:cardBackgroundColor="@color/cardViewBg"
     app:cardCornerRadius="5dp"
     app:cardElevation="6dp"
@@ -17,7 +15,8 @@
 
     <com.lzc.daliylife.views.LotteryLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <TextView
             android:id="@+id/tv_lottery_title"
@@ -59,7 +58,7 @@
                 android:id="@+id/ll_lottery_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="horizontal"/>
         </HorizontalScrollView>
 
         <ImageView

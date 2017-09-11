@@ -6,11 +6,12 @@ import android.util.Log;
 import com.lzc.daliylife.entity.LocationEntity;
 import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.framework.Constants;
+import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.normalUtil.L;
 import com.lzc.daliylife.utils.AMapUtils;
-import com.lzc.daliylife.utils.HttpMethods;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lzc on 2017/9/7.
@@ -28,12 +29,15 @@ public class SplashPresenter implements SplashContract.SPresenter {
 
     @Override
     public void attachView(FragmentActivity fmActivity) {
-        this.mActivity= (SplashActivity) fmActivity;
+        this.mActivity = (SplashActivity) fmActivity;
     }
 
     @Override
     public void detachView() {
-        this.mActivity=null;
+        if (disposable != null)
+            disposable.dispose();
+        this.mActivity = null;
+
     }
 
     @Override
@@ -56,13 +60,19 @@ public class SplashPresenter implements SplashContract.SPresenter {
         mView.startAnimation();
     }
 
-
+    private Disposable disposable;
 
     private void loadData(LocationEntity LocationEntity) {
-        HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
+        HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Observer<WeatherEntity>() {
             @Override
-            public void onCompleted() {
-                Log.d("lzcc", "onCompleted");
+            public void onSubscribe(Disposable d) {
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(WeatherEntity value) {
+                L.d("onNext");
+                mWeather = value;
             }
 
             @Override
@@ -72,9 +82,8 @@ public class SplashPresenter implements SplashContract.SPresenter {
             }
 
             @Override
-            public void onNext(WeatherEntity weatherEntity) {
-                L.d("onNext");
-                mWeather = weatherEntity;
+            public void onComplete() {
+                Log.d("lzcc", "onCompleted");
             }
         }, Constants.WEATHERKEY, LocationEntity.getCity().replace("市", ""), LocationEntity.getProvince());
     }

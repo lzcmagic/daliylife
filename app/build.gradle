@@ -39,6 +39,7 @@ android {
         debug {
             minifyEnabled false//混淆
             signingConfig signingConfigs.debug
+            versionNameSuffix '-debug'
         }
     }
     sourceSets {
@@ -48,9 +49,7 @@ android {
     }
     productFlavors {
         lzc {
-            minSdkVersion 14
             signingConfig signingConfigs.release
-            versionNameSuffix '-release'
         }
     }
 }
@@ -62,19 +61,22 @@ dependencies {
     compile "com.android.support:appcompat-v7:${rootProject.ext.dependencies.support}"
     compile "com.android.support:cardview-v7:${rootProject.ext.dependencies.support}"
     compile "com.android.support:design:${rootProject.ext.dependencies.support}"
-    //retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
+
+    //Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.squareup.okio:okio:1.13.0'
     //gson
     compile 'com.google.code.gson:gson:2.8.0'
+    //rxjava2
+    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     //butterknife
     compile "com.jakewharton:butterknife:${rootProject.ext.dependencies.butterknife}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.dependencies.butterknife}"
-    //rxjava
-    compile 'io.reactivex:rxjava:1.2.2'
-    compile 'io.reactivex:rxandroid:1.2.1'
     //glide
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //picasso
@@ -88,5 +90,7 @@ dependencies {
     //bugly
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    //浏览器支持
+    compile 'com.android.support:customtabs:25.3.1'
 
 }

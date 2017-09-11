@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 
 /**
  * Created by lzc on 2017/4/6.
+ *
  */
 
 public class LotteryLayout extends RelativeLayout {

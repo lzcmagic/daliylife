@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.support.annotation.NonNull;
+import android.support.customtabs.CustomTabsClient;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,17 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.about.AboutUs;
+import com.lzc.daliylife.article.ArticleFragment;
 import com.lzc.daliylife.base.BaseActivity;
-import com.lzc.daliylife.fragments.AboutUs;
-import com.lzc.daliylife.fragments.ArticleFragment;
-import com.lzc.daliylife.fragments.DaliyEventsFragment;
-import com.lzc.daliylife.fragments.LotteryFragment;
-import com.lzc.daliylife.fragments.gank.GankFragment;
+import com.lzc.daliylife.calender.DaliyEventsFragment;
 import com.lzc.daliylife.framework.Constants;
+import com.lzc.daliylife.gank.GankFragment;
+import com.lzc.daliylife.lottery.LotteryFragment;
 import com.lzc.daliylife.utils.ActivityUtils;
 import com.lzc.daliylife.utils.WeatherToIcon;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
 
 import butterknife.BindView;
 
@@ -41,44 +42,56 @@ public class MainActivity extends BaseActivity
     NavigationView navView;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
-    private ImageView weatherIconImg;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private ProgressDialog mPDialog;
 
-    private ShareAction mShareAction;
 
     private MainPresenter mainPresenter;
 
     @Override
     protected void onStart() {
         super.onStart();
-        GankFragment gankFragment =
-                (GankFragment) getSupportFragmentManager().findFragmentById(R.id.frame_cont);
-        if (gankFragment==null){
-            gankFragment=GankFragment.newInstance();
+        Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.frame_cont);
+        if (fragmentById==null){
+            GankFragment gankFragment = GankFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     gankFragment, R.id.frame_cont);
         }
 
+        //初始化chrome
+        CustomTabsClient.connectAndInitialize(this, "com.android.chrome");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void initUI() {
         /*增加自定义按钮的分享面板*/
         mainPresenter.initWeather();
-        mShareAction = new CustomerShareAction(this);
         initProgressDialog();
         navView.setNavigationItemSelectedListener(this);
         ColorStateList stateList = getResources().getColorStateList(R.color.navigation_menu_item_color);
         navView.setItemIconTintList(stateList);
         navView.setItemTextColor(stateList);
         navView.getMenu().getItem(0).setChecked(true);
-        weatherIconImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainPresenter.refreshWeather();
-            }
-        });
+
+        initToolBar();
+
+
+    }
+
+    private void initToolBar() {
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitle(getResources().getString(R.string.toolbar_news));
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawerLayout.addDrawerListener(toggle);
+            toggle.syncState();
+        }
+
+
     }
 
     @Override
@@ -93,17 +106,9 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /** attention to this below ,must add this**/
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    @Override
     public void showWeather(String weather, String weatherText, String temperature) {
         View headerView = navView.getHeaderView(0);
-        weatherIconImg = (ImageView) headerView.findViewById(R.id.imageView);
+        ImageView weatherIconImg = (ImageView) headerView.findViewById(R.id.imageView);
         final TextView weatherView = (TextView) headerView.findViewById(R.id.weather);
         final TextView weatherTextView = (TextView) headerView.findViewById(R.id.weather_text);
         final TextView weatherTemp = (TextView) headerView.findViewById(R.id.weather_temp);
@@ -126,6 +131,12 @@ public class MainActivity extends BaseActivity
             //获取天气信息失败
             weatherTemp.setText("");
         }
+        weatherIconImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mainPresenter.refreshWeather();
+            }
+        });
 
     }
 
@@ -143,17 +154,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * 初始化抽屉
-     *
-     * @param mToolbar toolbar
-     */
-    public void initDrawerLayout(final Toolbar mToolbar) {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-    }
 
     private void initProgressDialog() {
         mPDialog = new ProgressDialog(this);
@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity
     /**
      * intent
      *
-     * @param context
+     * @param context 上下文
      */
     public static void actionStart(Context context, String weather, String weatherText, String temperature) {
         Intent intent = new Intent();
@@ -186,29 +186,32 @@ public class MainActivity extends BaseActivity
 
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction mTransaction =
                 getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()) {
-            case R.id.news:
+            case R.id.gank:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_news));
                 mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
                 break;
             case R.id.wechart:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_wechart));
                 mTransaction.replace(R.id.frame_cont, new ArticleFragment(), Constants.FragmentTagWeChart);
                 break;
-            case R.id.car:
+            case R.id.lottery:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_lottery));
                 mTransaction.replace(R.id.frame_cont, new LotteryFragment(), Constants.FragmentTagLottery);
                 break;
             case R.id.daliy:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_daliy));
                 mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);
                 break;
-            case R.id.nav_share:
-                mShareAction.open();
-                break;
             case R.id.nav_about:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_about));
                 mTransaction.replace(R.id.frame_cont, new AboutUs(), Constants.FragmentTagAbout);
                 break;
             default: {
+                toolbar.setTitle(getResources().getString(R.string.toolbar_news));
                 mTransaction.replace(R.id.frame_cont, new GankFragment(), Constants.FragmentTagNews);
                 break;
             }

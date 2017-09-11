@@ -5,15 +5,10 @@
         android:id="@+id/gank_copy"
         android:icon="@mipmap/logo_icon"
         android:title="复制链接"
-        app:showAsAction="never"></item>
+        app:showAsAction="never"/>
     <item
-        android:id="@+id/gank_qq"
+        android:id="@+id/gank_share"
         android:icon="@mipmap/logo_icon"
-        android:title="分享到QQ"
-        app:showAsAction="never"></item>
-    <item
-        android:id="@+id/gank_space"
-        android:icon="@mipmap/logo_icon"
-        android:title="分享到空间"
-        app:showAsAction="never"></item>
+        android:title="分享"
+        app:showAsAction="never"/>
 </menu>

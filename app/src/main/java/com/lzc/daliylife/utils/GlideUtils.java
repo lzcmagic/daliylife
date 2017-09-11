@@ -23,12 +23,9 @@ public class GlideUtils {
      */
     public static void loadGankRatioImage(Fragment fragment, String url, ImageView view){
         Glide.with(fragment)
-                //加载500像素的图片
                 .load(url)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.mipmap.loading)
-                .centerCrop()
                 .placeholder(R.mipmap.icon_gb_dengdai)
                 .error(R.mipmap.fail_load)
                 .into(view);
@@ -44,7 +41,6 @@ public class GlideUtils {
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.mipmap.loading)
-                .centerCrop()
                 .placeholder(R.mipmap.icon_gb_dengdai)
                 .error(R.mipmap.fail_load)
                 .into(view);

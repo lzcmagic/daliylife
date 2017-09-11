@@ -1,19 +1,19 @@
 package com.lzc.daliylife.main;
 
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 
 import com.lzc.daliylife.entity.LocationEntity;
 import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.framework.Constants;
+import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.utils.AMapUtils;
-import com.lzc.daliylife.utils.HttpMethods;
-import com.lzc.daliylife.utils.WeatherToIcon;
 
-import rx.Subscriber;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lzc on 2017/9/7.
+ *
  */
 
 public class MainPresenter implements MainContract.MPresenter {
@@ -35,8 +35,12 @@ public class MainPresenter implements MainContract.MPresenter {
 
     @Override
     public void detachView() {
+        if (disposable!=null){
+            disposable.dispose();
+        }
         this.mActivity=null;
     }
+    private Disposable disposable;
 
     @Override
     public void refreshWeather() {
@@ -44,16 +48,22 @@ public class MainPresenter implements MainContract.MPresenter {
         AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
             @Override
             public void sendLocation(LocationEntity entity) {
-                HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Subscriber<WeatherEntity>() {
+                HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Observer<WeatherEntity>() {
 
-                    @Override
-                    public void onCompleted() {
-                        mView.hideDialog();
-                    }
 
                     @Override
                     public void onError(Throwable e) {
                         mView.hideDialog();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        mView.hideDialog();
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable=d;
                     }
 
                     @Override

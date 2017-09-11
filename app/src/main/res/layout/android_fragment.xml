@@ -15,6 +15,7 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
+
         <TextView
             android:id="@+id/tv_android_title"
             android:layout_width="wrap_content"
@@ -33,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_android_title"
             android:adjustViewBounds="true"
-            android:scaleType="fitXY" />
+            android:scaleType="fitCenter" />
 
         <TextView
             android:id="@+id/tv_android_user"

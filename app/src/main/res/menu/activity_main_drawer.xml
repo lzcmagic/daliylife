@@ -3,7 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/news"
+            android:id="@+id/gank"
             android:icon="@mipmap/news_normal"
             android:title="Gank干货" />
         <item
@@ -11,7 +11,7 @@
             android:icon="@mipmap/wechat_normal"
             android:title="@string/toolbar_wechart" />
         <item
-            android:id="@+id/car"
+            android:id="@+id/lottery"
             android:icon="@mipmap/lottery"
             android:title="@string/toolbar_lottery" />
         <item
@@ -22,10 +22,6 @@
 
     <item android:title="更多">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@mipmap/share_normal"
-                android:title="分享" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@mipmap/about_normal"

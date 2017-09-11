@@ -13,7 +13,7 @@
             android:id="@+id/tb_lottery_detail"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
@@ -88,6 +88,6 @@
             android:layout_height="match_parent"
 
             android:layout_marginTop="10dp"
-            android:numColumns="3"></GridView>
+            android:numColumns="3"/>
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

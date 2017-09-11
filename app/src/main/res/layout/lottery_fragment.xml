@@ -4,20 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-
-    </android.support.design.widget.AppBarLayout>
 
     <com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout
         android:id="@+id/spl_lottery"
@@ -33,7 +19,7 @@
                 android:id="@+id/rv_lotttery"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="20dp" />
+                android:paddingBottom="20dp" />
         </LinearLayout>
 
     </com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout>
