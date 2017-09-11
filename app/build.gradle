@@ -32,9 +32,26 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false//混淆
+            minifyEnabled true//混淆
             signingConfig signingConfigs.release
+            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def outputFile = output.outputFile
+                    if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                        def fileName = "DaliyLife_V${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
+                        if (project.hasProperty('OUT_PUT_DIR_PARA')) {
+                            File output_dir1 = file("${OUT_PUT_DIR_PARA}");
+                            output.outputFile = new File(output_dir1, fileName)
+                            println "输出文件位置： " + output.outputFile
+                        } else {
+                            output.outputFile = new File(outputFile.parent, fileName)
+                            println "输出文件位置： " + output.outputFile
+                        }
+                    }
+                }
+            }
         }
         debug {
             minifyEnabled false//混淆
@@ -48,8 +65,7 @@ android {
         }
     }
     productFlavors {
-        lzc {
-            signingConfig signingConfigs.release
+        tencent {
         }
     }
 }
@@ -81,7 +97,7 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
-    //photoview
+    //photoview com.github.chrisbanes:PhotoView:latest.release.here
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     //alert
     compile 'com.tapadoo.android:alerter:1.0.6'

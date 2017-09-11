@@ -103,6 +103,7 @@ public class LotteryFragment extends BaseFragment {
      */
     private void initData() {
         LotteryMaps.clear();
+        // TODO: 2017/9/11 这里要改啊
         for (int i = 0; i < lotteryType.length; i++) {
 
             HttpMethods.getInstance(Constants.LOTTERYAPI).getLotteryInfo(new Observer<LotteryEntity>() {

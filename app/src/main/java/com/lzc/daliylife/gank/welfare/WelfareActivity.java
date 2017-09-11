@@ -38,7 +38,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by lzc on 2017/3/17.
- *
  */
 
 public class WelfareActivity extends AppCompatActivity {
@@ -71,12 +70,11 @@ public class WelfareActivity extends AppCompatActivity {
                 mImageView.setLayoutParams(params);
                 mProgressDialog.dismiss();
                 if (Constants.IsFirstInDetail) {
-                    Constants.IsFirstInDetail = false;
                     //noinspection deprecation
                     Snackbar.make(mLayout, "双击放大图片，长按可保存图片.", 4000).setAction("知道了", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
+                            Constants.IsFirstInDetail = false;
                         }
                     }).setActionTextColor(getResources().getColor(R.color.colorPrimary)).show();
                 }
