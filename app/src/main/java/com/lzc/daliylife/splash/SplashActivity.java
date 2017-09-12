@@ -18,6 +18,7 @@ import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.normalUtil.L;
 import com.lzc.daliylife.normalUtil.T;
+import com.lzc.daliylife.utils.SignUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import butterknife.BindView;
 
 /**
  * Created by lzc on 2016/11/14.
+ *
  */
 
 public class SplashActivity extends BaseActivity implements SplashContract.SView {

@@ -23,8 +23,8 @@ public class Constants {
     public static final String GANKMAINAPI="http://gank.io/api/";
     public static final String LOTTERYAPI="http://apicloud.mob.com/lottery/";
     public static final String LOTTERY_SSQ="双色球";
-    public static final String LOTTERY_DLT="大乐透";
-    public static final String LOTTERY_3D="3D";
+    public static final String LOTTERY_DLT="超级大乐透";
+    public static final String LOTTERY_3D="福彩3d";
     public static final String LOTTERY_PL3="排列3";
     public static final String LOTTERY_PL5="排列5";
     public static final String LOTTERY_QXC="七星彩";
@@ -33,4 +33,7 @@ public class Constants {
     public static final String WECHATAI="http://v.juhe.cn/weixin/";
     public static final String BAIDULOCATIONKEY="E9RwL3aIqL9d1GztdA70jGeNOkz1As3r";
     public static final String UMNEGKEY="58d0a10bb27b0a6f6c000ee3";
+    public static final String YIYUANSECRET="bc6aaa899d4e4ec3b4882ce2b64ea35f";
+    public static final String YIYUANAPPID="45984";
+    public static final String YIYUANADDRESS="http://route.showapi.com";
 }

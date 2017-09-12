@@ -3,6 +3,7 @@ package com.lzc.daliylife.http;
 import com.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.lzc.daliylife.entity.LotteryEntity;
 import com.lzc.daliylife.entity.MovieEntity;
+import com.lzc.daliylife.entity.SummaryLotteryEntity;
 import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.entity.WechatEntity;
 import com.lzc.daliylife.entity.gankentity.AndroidEntity;
@@ -11,11 +12,14 @@ import com.lzc.daliylife.entity.gankentity.IOSEntity;
 import com.lzc.daliylife.entity.gankentity.QianDuanEntity;
 import com.lzc.daliylife.entity.gankentity.TuoZhanEntity;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by lzc on 2017/9/8.
@@ -61,4 +65,8 @@ public interface HttpService {
 
     @GET("query")
     Observable<LotteryEntity> getLotteryInfo(@Query("key") String key, @Query("name") String name);
+
+
+    @GET("/{type}")
+    Observable<SummaryLotteryEntity> getYiYuanLotteryInfo(@Path("type") String type, @QueryMap Map<String,String> map);
 }

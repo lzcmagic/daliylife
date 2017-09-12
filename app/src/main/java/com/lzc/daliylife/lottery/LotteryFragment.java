@@ -1,5 +1,6 @@
 package com.lzc.daliylife.lottery;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,14 +18,19 @@ import android.widget.TextView;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.base.BaseFragment;
-import com.lzc.daliylife.entity.LotteryEntity;
+import com.lzc.daliylife.entity.SummaryLotteryEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.normalUtil.DensityUtils;
+import com.lzc.daliylife.normalUtil.T;
+import com.lzc.daliylife.utils.SignUtil;
 import com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -34,6 +40,7 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lzc on 2017/3/10.
+ *
  */
 
 public class LotteryFragment extends BaseFragment {
@@ -41,23 +48,15 @@ public class LotteryFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     @BindView(R.id.spl_lottery)
     ScrollChildSwipeRefreshLayout mRefreshLayout;
-    String lotteryType[] = new String[]{
-            Constants.LOTTERY_SSQ,
-            Constants.LOTTERY_DLT,
-            Constants.LOTTERY_3D,
-            Constants.LOTTERY_PL3,
-            Constants.LOTTERY_PL5,
-            Constants.LOTTERY_QLC,
-            Constants.LOTTERY_QXC};
     private MyAdapter mAdapter;
-    private Map<Integer, LotteryEntity> LotteryMaps;
-    private int CurrentIndex = 0;
     private boolean IsXiaLaRefresh = false;
+    private List<SummaryLotteryEntity.ShowapiResBodyBean.ResultBean> lotteryEntitys;
+    private Disposable disposable;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LotteryMaps = new HashMap<>();
+        lotteryEntitys=new ArrayList<>();
     }
 
 
@@ -73,7 +72,7 @@ public class LotteryFragment extends BaseFragment {
         mAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                LotteryDetailInfo.actionStart(getActivity(), LotteryMaps.get(position));
+                LotteryDetailInfo.actionStart(getActivity(), lotteryEntitys.get(position).getName());
             }
         });
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -88,7 +87,6 @@ public class LotteryFragment extends BaseFragment {
         initData();
     }
 
-    private Disposable disposable;
 
     @Override
     public void onDestroyView() {
@@ -98,66 +96,59 @@ public class LotteryFragment extends BaseFragment {
         }
     }
 
+
     /**
      * 初始化数据
      */
+    @SuppressLint("SimpleDateFormat")
     private void initData() {
-        LotteryMaps.clear();
-        // TODO: 2017/9/11 这里要改啊
-        for (int i = 0; i < lotteryType.length; i++) {
+        lotteryEntitys.clear();
+        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String temp="codessq|dlt|fc3d|pl3|pl5|qlc|qxcshowapi_appid"+Constants.YIYUANAPPID+"showapi_res_gzip0showapi_sign_methodmd5showapi_timestamp"+time;
+        String sign = SignUtil.YiYuanSign(temp);
+        Map<String,String> map=new HashMap<>();
+        map.put("code","ssq|dlt|fc3d|pl3|pl5|qlc|qxc");
+        map.put("showapi_appid",Constants.YIYUANAPPID);
+        map.put("showapi_timestamp",time);
+        map.put("showapi_sign_method","md5");
+        map.put("showapi_res_gzip","0");
+        map.put("showapi_sign",sign);
 
-            HttpMethods.getInstance(Constants.LOTTERYAPI).getLotteryInfo(new Observer<LotteryEntity>() {
+        HttpMethods.getInstance(Constants.YIYUANADDRESS).getYYLotteryInfo(new Observer<SummaryLotteryEntity>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                disposable=d;
+            }
 
-                @Override
-                public void onError(Throwable e) {
+            @Override
+            public void onNext(SummaryLotteryEntity value) {
+                int ret_code = value.getShowapi_res_body().getRet_code();
+                if (ret_code==0){
+                    lotteryEntitys= value.getShowapi_res_body().getResult();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mRefreshLayout.setRefreshing(false);
+                T.toast("数据加载失败");
+            }
+
+            @Override
+            public void onComplete() {
+                if (IsXiaLaRefresh) {
                     mRefreshLayout.setRefreshing(false);
-                }
-
-                @Override
-                public void onComplete() {
-                    CurrentIndex += 1;
-                    //保持最后一次刷新adapter
-                    if (CurrentIndex == lotteryType.length) {
-                        if (IsXiaLaRefresh) {
+                } else {
+                    mRefreshLayout.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
                             mRefreshLayout.setRefreshing(false);
-                        } else {
-                            mRefreshLayout.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mRefreshLayout.setRefreshing(false);
-                                }
-                            }, 1000);
                         }
-                        mAdapter.notifyDataSetChanged();
-                    }
+                    }, 1000);
                 }
-
-                @Override
-                public void onSubscribe(Disposable d) {
-                    disposable=d;
-                }
-
-                @Override
-                public void onNext(LotteryEntity lotteryEntity) {
-                    String name = lotteryEntity.getResult().getName();
-                    if (name.equals(Constants.LOTTERY_SSQ)) {
-                        LotteryMaps.put(0, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_DLT)) {
-                        LotteryMaps.put(1, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_3D)) {
-                        LotteryMaps.put(2, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_PL3)) {
-                        LotteryMaps.put(3, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_PL5)) {
-                        LotteryMaps.put(4, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_QLC)) {
-                        LotteryMaps.put(5, lotteryEntity);
-                    } else if (name.equals(Constants.LOTTERY_QXC)) {
-                        LotteryMaps.put(6, lotteryEntity);
-                    }
-                }
-            }, Constants.WEATHERKEY, lotteryType[i]);
-        }
+                mAdapter.notifyDataSetChanged();
+            }
+        },"44-1",map);
     }
 
      class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyHolder> {
@@ -165,11 +156,11 @@ public class LotteryFragment extends BaseFragment {
         private LayoutInflater mInflater;
         private OnRecyclerViewItemClickListener mOnItemClickListener;
 
-        public void setOnItemClickListener(OnRecyclerViewItemClickListener mOnItemClickListener) {
+        void setOnItemClickListener(OnRecyclerViewItemClickListener mOnItemClickListener) {
             this.mOnItemClickListener = mOnItemClickListener;
         }
 
-        public MyAdapter() {
+        MyAdapter() {
             mInflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
 
@@ -179,166 +170,174 @@ public class LotteryFragment extends BaseFragment {
             return new MyHolder(view);
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         public void onBindViewHolder(final MyAdapter.MyHolder viewHolder,int i) {
-            LotteryEntity lotteryEntity = LotteryMaps.get(i);
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     mOnItemClickListener.onItemClick(viewHolder, viewHolder.getAdapterPosition());
                 }
             });
-            LotteryEntity.Result result = lotteryEntity.getResult();
-            ArrayList<String> lotteryNumber = result.getLotteryNumber();
+
+            SummaryLotteryEntity.ShowapiResBodyBean.ResultBean resultBean = lotteryEntitys.get(i);
+
+            String openCode = resultBean.getOpenCode().replace("+",",").replace(" ","");
+            String[] lotteryNumber = openCode.split(",");
             LinearLayout.LayoutParams params = new LinearLayout.
                     LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             viewHolder.mLayout.removeAllViews();
             params.width = DensityUtils.dp2px(getContext(), 24f);
             params.height = DensityUtils.dp2px(getContext(), 24f);
-            String name = result.getName();
+            String name = resultBean.getName();
             viewHolder.mTitleText.setText(name);
-            if (name.equals(Constants.LOTTERY_SSQ)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+            viewHolder.mSubTitleText.setText( resultBean.getExpect() + "期");
+            switch (name){
+                case Constants.LOTTERY_SSQ:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
+                        if (lotteryNumber.length == j + 1) {
+                            view.setTextColor(getResources().getColor(R.color.lotteryBlue));
+                            view.setBackgroundResource(R.mipmap.lottery_blue);
+                        } else {
+                            view.setTextColor(getResources().getColor(R.color.lotteryRed));
+                            view.setBackgroundResource(R.mipmap.lottery_red);
+                        }
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
                     }
-                    if (lotteryNumber.size() == j + 1) {
-                        view.setTextColor(getResources().getColor(R.color.lotteryBlue));
-                        view.setBackgroundResource(R.mipmap.lottery_blue);
-                    } else {
+                    viewHolder.mDateText.setText("每周二,四,日(21:30)开奖");
+                    break;
+                case Constants.LOTTERY_DLT:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
+                        if (lotteryNumber.length - 1 == j ||
+                                lotteryNumber.length - 2 == j) {
+                            view.setTextColor(getResources().getColor(R.color.lotteryBlue));
+                            view.setBackgroundResource(R.mipmap.lottery_blue);
+                        } else {
+                            view.setTextColor(getResources().getColor(R.color.lotteryRed));
+                            view.setBackgroundResource(R.mipmap.lottery_red);
+                        }
+                        view.setLayoutParams(params);
+                        view.setText(lotteryNumber[j]);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        viewHolder.mLayout.addView(view);
+                    }
+                    viewHolder.mDateText.setText("每周一,三,六(22:00)开奖");
+                    break;
+                case Constants.LOTTERY_3D:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
                         view.setTextColor(getResources().getColor(R.color.lotteryRed));
                         view.setBackgroundResource(R.mipmap.lottery_red);
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
                     }
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每周二,四,日(21:30)开奖");
-                viewHolder.mSubTitleText.setText(result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_DLT)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
-                    }
-                    if (lotteryNumber.size() - 1 == j ||
-                            lotteryNumber.size() - 2 == j) {
-                        view.setTextColor(getResources().getColor(R.color.lotteryBlue));
-                        view.setBackgroundResource(R.mipmap.lottery_blue);
-                    } else {
+                    viewHolder.mDateText.setText("每天21:15开奖");
+                    break;
+                case Constants.LOTTERY_PL3:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
                         view.setTextColor(getResources().getColor(R.color.lotteryRed));
                         view.setBackgroundResource(R.mipmap.lottery_red);
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
                     }
-                    view.setLayoutParams(params);
-                    view.setText(lotteryNumber.get(j));
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每周一,三,六(22:00)开奖");
-                viewHolder.mSubTitleText.setText("20" + result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_3D)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
-                    }
-                    view.setTextColor(getResources().getColor(R.color.lotteryRed));
-                    view.setBackgroundResource(R.mipmap.lottery_red);
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每天21:15开奖");
-                viewHolder.mSubTitleText.setText(result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_PL3)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
-                    }
-                    view.setTextColor(getResources().getColor(R.color.lotteryRed));
-                    view.setBackgroundResource(R.mipmap.lottery_red);
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每天20:30开奖");
-                viewHolder.mSubTitleText.setText("20" + result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_PL5)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
-                    }
-                    view.setTextColor(getResources().getColor(R.color.lotteryRed));
-                    view.setBackgroundResource(R.mipmap.lottery_red);
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每天20:30开奖");
-                viewHolder.mSubTitleText.setText("20" + result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_QLC)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
-                    }
-                    if (lotteryNumber.size() - 1 == j) {
-                        view.setTextColor(getResources().getColor(R.color.lotteryBlue));
-                        view.setBackgroundResource(R.mipmap.lottery_blue);
-                    } else {
+                    viewHolder.mDateText.setText("每天20:30开奖");
+                    break;
+                case Constants.LOTTERY_PL5:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
                         view.setTextColor(getResources().getColor(R.color.lotteryRed));
                         view.setBackgroundResource(R.mipmap.lottery_red);
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
                     }
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
-                }
-                viewHolder.mDateText.setText("每周一,三,五(21:30)开奖");
-                viewHolder.mSubTitleText.setText(result.getPeriod() + "期");
-            } else if (name.equals(Constants.LOTTERY_QXC)) {
-                for (int j = 0; j < lotteryNumber.size(); j++) {
-                    TextView view = new TextView(getContext());
-                    if (j != 0) {
-                        params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                    viewHolder.mDateText.setText("每天20:30开奖");
+                    break;
+                case Constants.LOTTERY_QLC:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
+                        if (lotteryNumber.length - 1 == j) {
+                            view.setTextColor(getResources().getColor(R.color.lotteryBlue));
+                            view.setBackgroundResource(R.mipmap.lottery_blue);
+                        } else {
+                            view.setTextColor(getResources().getColor(R.color.lotteryRed));
+                            view.setBackgroundResource(R.mipmap.lottery_red);
+                        }
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
                     }
-                    view.setTextColor(getResources().getColor(R.color.lotteryRed));
-                    view.setBackgroundResource(R.mipmap.lottery_red);
-                    view.setLayoutParams(params);
-                    view.setTypeface(Typeface.MONOSPACE);
-                    view.setTextSize(14f);
-                    view.setGravity(Gravity.CENTER);
-                    view.setText(lotteryNumber.get(j));
-                    viewHolder.mLayout.addView(view);
+                    viewHolder.mDateText.setText("每周一,三,五(21:30)开奖");
+                    break;
+                case Constants.LOTTERY_QXC:
+                    for (int j = 0; j < lotteryNumber.length; j++) {
+                        TextView view = new TextView(getContext());
+                        if (j != 0) {
+                            params.leftMargin = DensityUtils.dp2px(getContext(), 5f);
+                        }
+                        view.setTextColor(getResources().getColor(R.color.lotteryRed));
+                        view.setBackgroundResource(R.mipmap.lottery_red);
+                        view.setLayoutParams(params);
+                        view.setTypeface(Typeface.MONOSPACE);
+                        view.setTextSize(14f);
+                        view.setGravity(Gravity.CENTER);
+                        view.setText(lotteryNumber[j]);
+                        viewHolder.mLayout.addView(view);
+                    }
+                    viewHolder.mDateText.setText("每周二,五,日(20:30)开奖");
+                    break;
+                default:{
+                    break;
                 }
-                viewHolder.mDateText.setText("每周二,五,日(20:30)开奖");
-                viewHolder.mSubTitleText.setText("20" + result.getPeriod() + "期");
             }
         }
 
         @Override
         public int getItemCount() {
-            return LotteryMaps.size();
+            return lotteryEntitys.size();
         }
 
         class MyHolder extends RecyclerView.ViewHolder {
@@ -352,7 +351,7 @@ public class LotteryFragment extends BaseFragment {
             @BindView(R.id.ll_lottery_container)
             LinearLayout mLayout;
 
-            public MyHolder(View itemView) {
+            MyHolder(View itemView) {
                 super(itemView);
                 ButterKnife.bind(this,itemView);
             }
@@ -369,7 +368,7 @@ public class LotteryFragment extends BaseFragment {
         mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                CurrentIndex = 0;
+//                CurrentIndex = 0;
                 IsXiaLaRefresh = true;
                 mRefreshLayout.postDelayed(new Runnable() {
                     @Override

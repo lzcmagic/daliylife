@@ -6,6 +6,7 @@ import com.lzc.daliylife.BuildConfig;
 import com.lzc.daliylife.entity.LaoHuangLiEntity;
 import com.lzc.daliylife.entity.LotteryEntity;
 import com.lzc.daliylife.entity.MovieEntity;
+import com.lzc.daliylife.entity.SummaryLotteryEntity;
 import com.lzc.daliylife.entity.WeatherEntity;
 import com.lzc.daliylife.entity.WechatEntity;
 import com.lzc.daliylife.entity.gankentity.AndroidEntity;
@@ -14,6 +15,7 @@ import com.lzc.daliylife.entity.gankentity.IOSEntity;
 import com.lzc.daliylife.entity.gankentity.QianDuanEntity;
 import com.lzc.daliylife.entity.gankentity.TuoZhanEntity;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -227,5 +229,13 @@ public class HttpMethods {
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
+    }
+
+    public void getYYLotteryInfo(Observer<SummaryLotteryEntity> observer,String path, Map<String,String> map){
+        httpService.getYiYuanLotteryInfo(path,map)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
     }
 }
