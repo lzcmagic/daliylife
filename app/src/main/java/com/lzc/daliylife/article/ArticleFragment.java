@@ -2,7 +2,6 @@ package com.lzc.daliylife.article;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,7 @@ import android.widget.TextView;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.base.BaseFragment;
-import com.lzc.daliylife.entity.WechatEntity;
+import com.lzc.daliylife.entity.juhe.WechatEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.gank.GankDetailInfo;
 import com.lzc.daliylife.http.HttpMethods;

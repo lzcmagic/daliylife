@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
-import com.lzc.daliylife.entity.LotteryEntity;
+import com.lzc.daliylife.entity.mob.LotteryEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.normalUtil.DensityUtils;

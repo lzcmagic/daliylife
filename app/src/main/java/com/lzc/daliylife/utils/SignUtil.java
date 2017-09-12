@@ -1,6 +1,7 @@
 package com.lzc.daliylife.utils;
 
 import com.lzc.daliylife.framework.Constants;
+import com.lzc.daliylife.normalUtil.L;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -19,6 +20,7 @@ public class SignUtil {
         String temp=sortString+ Constants.YIYUANSECRET.toLowerCase(Locale.getDefault());
         try {
         String s = new String(Hex.encodeHex(DigestUtils.md5(temp.getBytes("utf-8"))));
+            L.d("s: "+s);
             return s.toUpperCase(Locale.getDefault());
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();

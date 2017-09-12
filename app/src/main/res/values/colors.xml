@@ -11,4 +11,5 @@
     <color name="lotteryRed">#c62828</color>
     <color name="lotteryBlue">#1565c0</color>
     <color name="fulidetailBg">#bb000000</color>
+    <color name="preview_picture">#cc212121</color>
 </resources>

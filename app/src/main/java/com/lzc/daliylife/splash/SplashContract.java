@@ -2,7 +2,7 @@ package com.lzc.daliylife.splash;
 
 import com.lzc.daliylife.base.BasePresenter;
 import com.lzc.daliylife.base.BaseView;
-import com.lzc.daliylife.entity.WeatherEntity;
+import com.lzc.daliylife.entity.mob.WeatherEntity;
 
 /**
  * Created by lzc on 2017/9/7.

@@ -1,11 +1,12 @@
 package com.lzc.daliylife.http;
 
-import com.lzc.daliylife.entity.LaoHuangLiEntity;
-import com.lzc.daliylife.entity.LotteryEntity;
+import com.lzc.daliylife.entity.mob.LaoHuangLiEntity;
+import com.lzc.daliylife.entity.mob.LotteryEntity;
 import com.lzc.daliylife.entity.MovieEntity;
-import com.lzc.daliylife.entity.SummaryLotteryEntity;
-import com.lzc.daliylife.entity.WeatherEntity;
-import com.lzc.daliylife.entity.WechatEntity;
+import com.lzc.daliylife.entity.yiyuan.BSQJEntity;
+import com.lzc.daliylife.entity.yiyuan.SummaryLotteryEntity;
+import com.lzc.daliylife.entity.mob.WeatherEntity;
+import com.lzc.daliylife.entity.juhe.WechatEntity;
 import com.lzc.daliylife.entity.gankentity.AndroidEntity;
 import com.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.lzc.daliylife.entity.gankentity.IOSEntity;
@@ -69,4 +70,9 @@ public interface HttpService {
 
     @GET("/{type}")
     Observable<SummaryLotteryEntity> getYiYuanLotteryInfo(@Path("type") String type, @QueryMap Map<String,String> map);
+
+
+    @GET("/{type}")
+    Observable<BSQJEntity> getBSQJInfo(@Path("type") String type, @QueryMap Map<String,String> map);
+
 }

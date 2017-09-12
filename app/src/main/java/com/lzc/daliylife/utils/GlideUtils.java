@@ -40,7 +40,6 @@ public class GlideUtils {
                 .load(url)
                 .asBitmap()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .placeholder(R.mipmap.loading)
                 .placeholder(R.mipmap.icon_gb_dengdai)
                 .error(R.mipmap.fail_load)
                 .into(view);

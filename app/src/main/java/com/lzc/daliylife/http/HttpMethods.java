@@ -3,12 +3,13 @@ package com.lzc.daliylife.http;
 import android.util.Log;
 
 import com.lzc.daliylife.BuildConfig;
-import com.lzc.daliylife.entity.LaoHuangLiEntity;
-import com.lzc.daliylife.entity.LotteryEntity;
+import com.lzc.daliylife.entity.mob.LaoHuangLiEntity;
+import com.lzc.daliylife.entity.mob.LotteryEntity;
 import com.lzc.daliylife.entity.MovieEntity;
-import com.lzc.daliylife.entity.SummaryLotteryEntity;
-import com.lzc.daliylife.entity.WeatherEntity;
-import com.lzc.daliylife.entity.WechatEntity;
+import com.lzc.daliylife.entity.yiyuan.BSQJEntity;
+import com.lzc.daliylife.entity.yiyuan.SummaryLotteryEntity;
+import com.lzc.daliylife.entity.mob.WeatherEntity;
+import com.lzc.daliylife.entity.juhe.WechatEntity;
 import com.lzc.daliylife.entity.gankentity.AndroidEntity;
 import com.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.lzc.daliylife.entity.gankentity.IOSEntity;
@@ -233,6 +234,14 @@ public class HttpMethods {
 
     public void getYYLotteryInfo(Observer<SummaryLotteryEntity> observer,String path, Map<String,String> map){
         httpService.getYiYuanLotteryInfo(path,map)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+    }
+
+    public void getBSQJInfo(Observer<BSQJEntity> observer, String path, Map<String,String> map){
+        httpService.getBSQJInfo(path,map)
                 .subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

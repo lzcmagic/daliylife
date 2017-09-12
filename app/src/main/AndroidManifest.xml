@@ -68,42 +68,11 @@
             android:name=".lottery.LotteryDetailInfo"
             android:theme="@style/AppTheme.NoActionBar" />
 
-
-        <meta-data
-            android:name="UMENG_CHANNEL"
-            android:value="Xiuxianshiguang" />
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="58d0a10bb27b0a6f6c000ee3"/>
-
         <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
+            android:name=".relax.RelaxDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.umeng.qq.tencent.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            android:theme="@style/PreviewPictureTheme" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="tencent1106055064" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.umeng.qq.tencent.AssistActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/Theme.UMDefault" />
 
         <!--key:高德开发者申请的Key-->
         <meta-data

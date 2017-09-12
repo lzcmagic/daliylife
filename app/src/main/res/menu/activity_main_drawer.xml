@@ -22,10 +22,17 @@
 
     <item android:title="更多">
         <menu>
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@mipmap/about_normal"
-                android:title="关于" />
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_relax"
+                    android:icon="@mipmap/share_normal"
+                    android:title="轻松一刻" />
+                <item
+                    android:id="@+id/nav_about"
+                    android:icon="@mipmap/about_normal"
+                    android:title="关于" />
+            </group>
+
         </menu>
     </item>
 

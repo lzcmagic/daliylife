@@ -1,4 +1,4 @@
-package com.lzc.daliylife.entity;
+package com.lzc.daliylife.entity.yiyuan;
 
 import java.util.List;
 

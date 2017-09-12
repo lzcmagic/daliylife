@@ -11,7 +11,7 @@ public class Constants {
     public static final String FragmentTagDaliy="daliy";
     public static final String FragmentTagLottery="lottery";
     public static final String FragmentTagAbout="about";
-    public static final String NewsFragmentTagHot="news_hot";
+    public static final String NewsFragmentTagRelax="relax";
     public static final String NewsFragmentTagSport="news_sport";
     public static final String NewsFragmentTagHouse="news_house";
     public static final String NORMALTAG="lzc";

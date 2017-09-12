@@ -37,15 +37,15 @@ public class WelfareAdapter extends BaseAdapter<FuLiEntity.Result,WelfareAdapter
     }
 
     @Override
-    public void initNormalHolder(FuLiEntity.Result value, BaseViewHolder holder) {
+    public void initNormalHolder(FuLiEntity.Result value, WelfareAdapter.FuliHolder holder) {
 
-        ((FuliHolder) holder).fuliText.setText(value.getDesc());
+         holder.fuliText.setText(value.getDesc());
         Glide.with(mContext)
                 //加载500像素的图片
                 .load(value.getUrl())
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.mipmap.fail_load)
-                .into(((FuliHolder) holder).fuliImage);
+                .into( holder.fuliImage);
     }
 
     class FuliHolder extends BaseViewHolder {

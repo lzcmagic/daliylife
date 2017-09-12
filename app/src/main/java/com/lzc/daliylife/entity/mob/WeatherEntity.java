@@ -1,9 +1,10 @@
-package com.lzc.daliylife.entity;
+package com.lzc.daliylife.entity.mob;
 
 import java.util.ArrayList;
 
 /**
  * Created by lzc on 2017/3/10.
+ *
  */
 
 public class WeatherEntity {

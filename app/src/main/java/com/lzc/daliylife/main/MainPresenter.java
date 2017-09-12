@@ -3,7 +3,7 @@ package com.lzc.daliylife.main;
 import android.support.v4.app.FragmentActivity;
 
 import com.lzc.daliylife.entity.LocationEntity;
-import com.lzc.daliylife.entity.WeatherEntity;
+import com.lzc.daliylife.entity.mob.WeatherEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.utils.AMapUtils;
@@ -24,7 +24,7 @@ public class MainPresenter implements MainContract.MPresenter {
     private String CurrentWeatherText;
     private String CurrentTemperature;
 
-    public MainPresenter(MainContract.MView mView) {
+    MainPresenter(MainContract.MView mView) {
         this.mView = mView;
     }
 

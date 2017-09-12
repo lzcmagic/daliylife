@@ -1,4 +1,4 @@
-package com.lzc.daliylife.entity;
+package com.lzc.daliylife.entity.mob;
 
 import java.io.Serializable;
 import java.util.ArrayList;

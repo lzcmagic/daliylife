@@ -8,6 +8,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <style name="PreviewPictureTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/preview_picture</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+    </style>
+
     <style name="AppTheme.FullScreen" parent="Theme.AppCompat.Light">
         <item name="android:windowFullscreen">true</item>
         <item name="windowNoTitle">true</item>

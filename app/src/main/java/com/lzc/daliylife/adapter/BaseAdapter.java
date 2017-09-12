@@ -130,7 +130,7 @@ public abstract class BaseAdapter<V, T extends BaseViewHolder> extends RecyclerV
      */
     public abstract T getViewHolder(LayoutInflater mInflater, ViewGroup parent);
 
-    public abstract void initNormalHolder(V value,BaseViewHolder holder);
+    public abstract void initNormalHolder(V value,T holder);
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -157,7 +157,7 @@ public abstract class BaseAdapter<V, T extends BaseViewHolder> extends RecyclerV
                     mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
                 }
             });
-            initNormalHolder(mDatas.get(position), holder);
+            initNormalHolder(mDatas.get(position), (T) holder);
         } else {
             if (IsLoadFinish) {
                 ((FooterHolder) holder).mProgress.setVisibility(View.GONE);

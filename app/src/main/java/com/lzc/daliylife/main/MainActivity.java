@@ -14,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import com.lzc.daliylife.calender.DaliyEventsFragment;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.gank.GankFragment;
 import com.lzc.daliylife.lottery.LotteryFragment;
+import com.lzc.daliylife.relax.RelaxFragment;
 import com.lzc.daliylife.utils.ActivityUtils;
 import com.lzc.daliylife.utils.WeatherToIcon;
 
@@ -59,7 +61,6 @@ public class MainActivity extends BaseActivity
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     gankFragment, R.id.frame_cont);
         }
-
         //初始化chrome
         CustomTabsClient.connectAndInitialize(this, "com.android.chrome");
     }
@@ -75,10 +76,7 @@ public class MainActivity extends BaseActivity
         navView.setItemIconTintList(stateList);
         navView.setItemTextColor(stateList);
         navView.getMenu().getItem(0).setChecked(true);
-
         initToolBar();
-
-
     }
 
     private void initToolBar() {
@@ -184,6 +182,10 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -205,6 +207,10 @@ public class MainActivity extends BaseActivity
             case R.id.daliy:
                 toolbar.setTitle(getResources().getString(R.string.toolbar_daliy));
                 mTransaction.replace(R.id.frame_cont, new DaliyEventsFragment(), Constants.FragmentTagDaliy);
+                break;
+            case R.id.nav_relax:
+                toolbar.setTitle(getResources().getString(R.string.toolbar_relax));
+                mTransaction.replace(R.id.frame_cont, new RelaxFragment(), Constants.NewsFragmentTagRelax);
                 break;
             case R.id.nav_about:
                 toolbar.setTitle(getResources().getString(R.string.toolbar_about));

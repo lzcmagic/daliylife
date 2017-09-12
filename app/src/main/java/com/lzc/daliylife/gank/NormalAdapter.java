@@ -57,23 +57,23 @@ public class NormalAdapter extends BaseAdapter<Result,NormalHolder> {
     }
 
     @Override
-    public void initNormalHolder(Result result,BaseViewHolder holder) {
-        ((NormalHolder) holder).mTitle.setText(result.getDesc());
-        ((NormalHolder) holder).mUser.setText("作者: " + result.getWho());
-        ((NormalHolder) holder).mDate.setText(DateTimeFormat
+    public void initNormalHolder(Result result,NormalHolder holder) {
+         holder.mTitle.setText(result.getDesc());
+         holder.mUser.setText("作者: " + result.getWho());
+         holder.mDate.setText(DateTimeFormat
                 .formatDateTime(result.getPublishedAt()));
         if (result.getImages() != null && result.getImages().size() > 0) {
             String images = result.getImages().get(0);
             if (!TextUtils.isEmpty(images)) {
-                ((NormalHolder) holder).mImage.setVisibility(View.VISIBLE);
+                holder.mImage.setVisibility(View.VISIBLE);
                 GlideUtils.loadGankRatioImage(context,
                         images + "?imageView2/0/w/500",
-                        ((NormalHolder) holder).mImage);
+                         holder.mImage);
             } else {
-                ((NormalHolder) holder).mImage.setVisibility(View.GONE);
+                 holder.mImage.setVisibility(View.GONE);
             }
         } else {
-            ((NormalHolder) holder).mImage.setVisibility(View.GONE);
+            holder.mImage.setVisibility(View.GONE);
         }
     }
 

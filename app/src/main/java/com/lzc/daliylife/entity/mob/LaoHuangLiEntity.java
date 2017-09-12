@@ -1,4 +1,4 @@
-package com.lzc.daliylife.entity;
+package com.lzc.daliylife.entity.mob;
 
 /**
  * Created by lzc on 2017/3/10.

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout
+        android:id="@+id/spl_relax"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_relax"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

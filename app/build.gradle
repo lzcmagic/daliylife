@@ -65,7 +65,7 @@ android {
         }
     }
     productFlavors {
-        tencent {
+        lzc {
         }
     }
 }

@@ -14,11 +14,10 @@ import android.widget.ImageView;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.BaseActivity;
-import com.lzc.daliylife.entity.WeatherEntity;
+import com.lzc.daliylife.entity.mob.WeatherEntity;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.normalUtil.L;
 import com.lzc.daliylife.normalUtil.T;
-import com.lzc.daliylife.utils.SignUtil;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -66,10 +66,6 @@
     public <init>(android.content.Context, android.util.AttributeSet);
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
-#保持 Parcelable 不被混淆
--keep class * implements android.os.Parcelable {
-    public static final android.os.Parcelable$Creator;
-}
 -keep public class * extends android.view.View {
     public <init>(android.content.Context);
     public <init>(android.content.Context, android.util.AttributeSet);

@@ -1,4 +1,4 @@
-package com.lzc.daliylife.entity;
+package com.lzc.daliylife.entity.juhe;
 
 import java.util.ArrayList;
 
