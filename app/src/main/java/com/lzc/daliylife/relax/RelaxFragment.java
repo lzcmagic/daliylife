@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.OnRecyclerScrolledListener;
@@ -18,6 +19,7 @@ import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.normalUtil.T;
 import com.lzc.daliylife.utils.SignUtil;
+import com.lzc.daliylife.views.LotteryLayout;
 import com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.text.SimpleDateFormat;
@@ -69,8 +71,8 @@ public class RelaxFragment extends BaseFragment {
         }, mRecyclerView);
         mAdapter.setmOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
-            public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-                Intent intent = new Intent(getActivity(), RelaxDetailActivity.class);
+            public void onItemClick(RecyclerView.ViewHolder holder, final int position) {
+                Intent intent = new Intent(getContext(), RelaxDetailActivity.class);
                 intent.putExtra("url", relaxList.get(position).getVideo_uri());
                 startActivity(intent);
             }

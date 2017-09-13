@@ -11,6 +11,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.BaseAdapter;
 import com.lzc.daliylife.adapter.BaseViewHolder;
+import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.entity.gankentity.FuLiEntity;
 import com.lzc.daliylife.views.RatioImageView;
 
@@ -25,6 +26,7 @@ public class WelfareAdapter extends BaseAdapter<FuLiEntity.Result,WelfareAdapter
 
 
     private Context mContext;
+    private OnRecyclerViewItemClickListener mOnItemClickListener;
     public WelfareAdapter(Context context) {
         super(context);
         this.mContext=context;
@@ -36,8 +38,13 @@ public class WelfareAdapter extends BaseAdapter<FuLiEntity.Result,WelfareAdapter
         return new FuliHolder(view);
     }
 
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
+    }
+
+
     @Override
-    public void initNormalHolder(FuLiEntity.Result value, WelfareAdapter.FuliHolder holder) {
+    public void initNormalHolder(FuLiEntity.Result value, final WelfareAdapter.FuliHolder holder) {
 
          holder.fuliText.setText(value.getDesc());
         Glide.with(mContext)
@@ -46,6 +53,12 @@ public class WelfareAdapter extends BaseAdapter<FuLiEntity.Result,WelfareAdapter
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(R.mipmap.fail_load)
                 .into( holder.fuliImage);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
+            }
+        });
     }
 
     class FuliHolder extends BaseViewHolder {

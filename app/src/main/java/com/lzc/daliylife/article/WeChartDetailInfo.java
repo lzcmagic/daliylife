@@ -4,10 +4,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -21,17 +18,16 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.BaseActivity;
 import com.lzc.daliylife.normalUtil.T;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by lzc on 2017/3/15.
  */
 
-public class WeChartDetailInfo extends AppCompatActivity {
+public class WeChartDetailInfo extends BaseActivity {
 
     @BindView(R.id.tb_gank_detail)
     Toolbar mToolbar;
@@ -43,19 +39,34 @@ public class WeChartDetailInfo extends AppCompatActivity {
     private String url;
     private boolean IsFirstFinish = true;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void setWindowConfig() {
+        super.setWindowConfig();
         getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        setContentView(R.layout.activity_gank_detail_info);
-        ButterKnife.bind(this);
+    }
+
+    @Override
+    public void initUI() {
         mToolbar.setTitle(R.string.toolbar_wechart);
         setSupportActionBar(mToolbar);
         mToolbar.setOnMenuItemClickListener(onMenuItemClick);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         url = getIntent().getStringExtra("url");
         initWebView();
+    }
+
+    @Override
+    public void initPresenter() {
+
+    }
+
+    @Override
+    public int getResId() {
+        return R.layout.activity_gank_detail_info;
     }
 
     @Override
@@ -120,7 +131,6 @@ public class WeChartDetailInfo extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         mWebView.onPause();
     }
 
@@ -142,7 +152,6 @@ public class WeChartDetailInfo extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         mWebView.onResume();
         mWebView.loadUrl(url);
     }

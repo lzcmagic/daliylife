@@ -74,7 +74,7 @@ public class WelfareFragment extends BaseFragment {
                 loadData();
             }
         },recyclerView);
-        mWelfareAdapter.setmOnItemClickListener(new OnRecyclerViewItemClickListener() {
+        mWelfareAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
                 Intent intent = WelfareActivity.newIntent(getContext(),

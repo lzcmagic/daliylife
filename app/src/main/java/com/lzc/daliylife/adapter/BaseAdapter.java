@@ -27,7 +27,7 @@ public abstract class BaseAdapter<V, T extends BaseViewHolder> extends RecyclerV
     private LayoutInflater mInflater;
     private int LOAD_MORE = 1;
     private int LOAD_FINISH = 2;
-    private OnRecyclerViewItemClickListener mOnItemClickListener;
+
     private int LastVisiblePosition = 0;
     private Context mContext;
     private boolean IsLoadFinish;//数据是否全部加载完毕
@@ -38,9 +38,7 @@ public abstract class BaseAdapter<V, T extends BaseViewHolder> extends RecyclerV
         mDatas = new ArrayList<>();
     }
 
-    public void setmOnItemClickListener(OnRecyclerViewItemClickListener listener) {
-        this.mOnItemClickListener = listener;
-    }
+
 
 
     /**
@@ -151,12 +149,6 @@ public abstract class BaseAdapter<V, T extends BaseViewHolder> extends RecyclerV
 
         int viewType = holder.getItemViewType();
         if (viewType == LOAD_FINISH) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
-                }
-            });
             initNormalHolder(mDatas.get(position), (T) holder);
         } else {
             if (IsLoadFinish) {

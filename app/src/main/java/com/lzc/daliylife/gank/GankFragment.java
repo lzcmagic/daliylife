@@ -16,6 +16,8 @@ import com.lzc.daliylife.gank.expand.TuoZhanFragment;
 import com.lzc.daliylife.gank.ios.IOSFragment;
 import com.lzc.daliylife.gank.web.QianDuanFragment;
 import com.lzc.daliylife.gank.welfare.WelfareFragment;
+import com.lzc.daliylife.normalUtil.NetUtils;
+import com.lzc.daliylife.normalUtil.T;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,6 +107,7 @@ public class GankFragment extends BaseFragment {
 
             }
         });
+
     }
 
     private void initTabs() {

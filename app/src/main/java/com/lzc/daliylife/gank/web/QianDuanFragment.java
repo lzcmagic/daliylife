@@ -76,7 +76,7 @@ public class QianDuanFragment extends BaseFragment {
                 loadData();
             }
         },mRecyclerView);
-        mNormalAdapter.setmOnItemClickListener(new OnRecyclerViewItemClickListener() {
+        mNormalAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
                 Result result = QianDuanEntitys.get(position);

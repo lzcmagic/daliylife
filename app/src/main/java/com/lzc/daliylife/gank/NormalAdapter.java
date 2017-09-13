@@ -13,6 +13,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.BaseAdapter;
 import com.lzc.daliylife.adapter.BaseViewHolder;
+import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.entity.gankentity.Result;
 import com.lzc.daliylife.utils.DateTimeFormat;
 import com.lzc.daliylife.utils.GlideUtils;
@@ -26,9 +27,15 @@ public class NormalAdapter extends BaseAdapter<Result,NormalHolder> {
 
     private Context context;
     private int mLastPosition = -1;
+    private OnRecyclerViewItemClickListener mOnItemClickListener;
     public NormalAdapter(Context context) {
         super(context);
         this.context=context;
+    }
+
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 
     @Override
@@ -57,7 +64,7 @@ public class NormalAdapter extends BaseAdapter<Result,NormalHolder> {
     }
 
     @Override
-    public void initNormalHolder(Result result,NormalHolder holder) {
+    public void initNormalHolder(Result result, final NormalHolder holder) {
          holder.mTitle.setText(result.getDesc());
          holder.mUser.setText("作者: " + result.getWho());
          holder.mDate.setText(DateTimeFormat
@@ -75,6 +82,13 @@ public class NormalAdapter extends BaseAdapter<Result,NormalHolder> {
         } else {
             holder.mImage.setVisibility(View.GONE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
+            }
+        });
     }
 
 }

@@ -6,25 +6,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.lzc.daliylife.R;
+import com.lzc.daliylife.base.BaseActivity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.normalUtil.T;
 import com.lzc.daliylife.utils.AUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,14 +30,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 /**
  * Created by lzc on 2017/3/17.
  */
 
-public class WelfareActivity extends AppCompatActivity {
+public class WelfareActivity extends BaseActivity {
     public static final String TRANSIT_PIC = "fuli_picture_detail";
     private String url;
     @BindView(R.id.aiv_fuli_detail)
@@ -52,11 +48,9 @@ public class WelfareActivity extends AppCompatActivity {
     ThreadPoolExecutor poolExecutor;
     private ProgressDialog mProgressDialog;
 
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fuli_detail);
-        ButterKnife.bind(this);
+    public void initUI() {
         poolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();
         parseIntent();
         initChooseDialog();
@@ -122,21 +116,19 @@ public class WelfareActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
+    public void initPresenter() {
+
     }
+
+    @Override
+    public int getResId() {
+        return R.layout.activity_fuli_detail;
+    }
+
+
 
     /**
      * 初始化等待框

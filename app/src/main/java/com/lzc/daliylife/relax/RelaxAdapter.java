@@ -3,22 +3,27 @@ package com.lzc.daliylife.relax;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.BaseAdapter;
 import com.lzc.daliylife.adapter.BaseViewHolder;
+import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.entity.yiyuan.BSQJEntity;
+import com.lzc.daliylife.normalUtil.DensityUtils;
 import com.lzc.daliylife.utils.GlideUtils;
 
 import java.util.HashMap;
@@ -26,6 +31,10 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 
 import butterknife.BindView;
+
+import static android.media.MediaMetadataRetriever.OPTION_CLOSEST;
+import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
+import static android.media.MediaMetadataRetriever.OPTION_NEXT_SYNC;
 
 /**
  * Created by lzc on 2017/9/12.
@@ -36,12 +45,23 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
 
     private int mLastPosition = 2;//从第三个开始
     private Context context;
-    private Map<String, Bitmap> bitmapMaps;
+    private Map<String, RelaxBitmap> bitmapMaps;
+    private OnRecyclerViewItemClickListener mOnItemClickListener;
+    private float ratio;
+    private int WindowWidth;
 
-    public RelaxAdapter(Context context) {
+    RelaxAdapter(Context context) {
         super(context);
         this.context = context;
         bitmapMaps = new HashMap<>();
+        WindowManager wm= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowWidth = wm.getDefaultDisplay().getWidth();
+        int height= DensityUtils.dp2px(context,260);
+        ratio=height/(float)WindowWidth;
+    }
+
+    void setmOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 
 
@@ -53,8 +73,6 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
 
     private void addAnimation(RecyclerView.ViewHolder holder) {
         if (holder.getLayoutPosition() > mLastPosition) {
-            //ObjectAnimator.ofFloat(holder.itemView,
-//            "translationX", holder.itemView.getRootView().getWidth(), 0)
             ObjectAnimator scaleX = ObjectAnimator.ofFloat(holder.itemView, "scaleX", 0.9f, 1f);
 
             scaleX.setDuration(500).start();
@@ -73,25 +91,32 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
     }
 
     @Override
-    public void initNormalHolder(BSQJEntity.ShowapiResBodyBean.PagebeanBean.ContentlistBean value, BSQJHolder holder) {
+    public void initNormalHolder(BSQJEntity.ShowapiResBodyBean.PagebeanBean.ContentlistBean value, final BSQJHolder holder) {
 
         GlideUtils.loadGankRatioImage(context, value.getProfile_image(), holder.imageView);
         holder.name.setText(value.getName());
         holder.time.setText(value.getCreate_time());
         holder.title.setText(value.getText().replace("\n",""));
         if (bitmapMaps.containsKey(value.getVideo_uri())) {
-            holder.thumbnails.setImageBitmap(bitmapMaps.get(value.getVideo_uri()));
+            holder.thumbnails.setImageBitmap(bitmapMaps.get(value.getVideo_uri()).getBitmap());
         } else {
             new ThumbTask(holder.thumbnails).executeOnExecutor(Executors.newCachedThreadPool(), value.getVideo_uri());
         }
+        holder.thumbnails_play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
+            }
+        });
+
     }
 
-    private class ThumbTask extends AsyncTask<String, Integer, Bitmap> {
+    private class ThumbTask extends AsyncTask<String, Integer, RelaxBitmap> {
 
         private ImageView imageView;
 
         private String key;
-        public ThumbTask(ImageView imageView) {
+        ThumbTask(ImageView imageView) {
             this.imageView = imageView;
         }
 
@@ -102,22 +127,26 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
         }
 
         @Override
-        protected Bitmap doInBackground(String... params) {
+        protected RelaxBitmap doInBackground(String... params) {
             String url = params[0];
             this.key=url;
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             //获取网络视频
             retriever.setDataSource(url, new HashMap<String, String>());
-            Bitmap bitmap = retriever.getFrameAtTime();
+            String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT); // 视频高度
+            String width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH); // 视频宽度
+
+            Bitmap bitmap = retriever.getFrameAtTime(10000,OPTION_NEXT_SYNC);//截取第秒的图片
             retriever.release();
-            return bitmap;
+            Bitmap imageCrop = DensityUtils.ImageCrop(bitmap, ratio,WindowWidth,DensityUtils.dp2px(context,260));
+            return new RelaxBitmap(imageCrop,Float.parseFloat(width),Float.parseFloat(height));
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap) {
+        protected void onPostExecute(RelaxBitmap bitmap) {
             super.onPostExecute(bitmap);
             bitmapMaps.put(key,bitmap);
-            imageView.setImageBitmap(bitmap);
+            imageView.setImageBitmap(bitmap.getBitmap());
         }
     }
 

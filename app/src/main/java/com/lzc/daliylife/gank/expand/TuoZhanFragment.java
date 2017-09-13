@@ -76,7 +76,7 @@ public class TuoZhanFragment extends BaseFragment {
                 loadData();
             }
         },mRecyclerView);
-        mNormalAdapter.setmOnItemClickListener(new OnRecyclerViewItemClickListener() {
+        mNormalAdapter.setOnItemClickListener(new OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(RecyclerView.ViewHolder holder, int position) {
 

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lzc.daliylife.normalUtil.L;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -21,6 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setWindowConfig();
         setContentView(getResId());
         bind = ButterKnife.bind(this);
         initPresenter();
@@ -28,6 +28,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         L.d("onCreate");
     }
 
+    protected void setWindowConfig(){}
 
     public abstract void initUI();
 
@@ -51,14 +52,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        MobclickAgent.onResume(this);
         L.d("onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        MobclickAgent.onPause(this);
         L.d("onPause");
     }
 

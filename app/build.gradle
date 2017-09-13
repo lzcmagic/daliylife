@@ -100,8 +100,6 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     //alert
     compile 'com.tapadoo.android:alerter:1.0.6'
-    //umeng
-    compile 'com.umeng.analytics:analytics:latest.integration'
     //bugly
     compile 'com.tencent.bugly:crashreport:latest.release'
     compile 'com.tencent.bugly:nativecrashreport:latest.release'

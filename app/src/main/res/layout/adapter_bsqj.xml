@@ -63,7 +63,7 @@
         <!--android:layout_height="match_parent"-->
         <!--android:visibility="gone" />-->
 
-        <com.lzc.daliylife.views.LotteryLayout
+        <FrameLayout
             android:id="@+id/fl_thumbnails_container"
             android:layout_width="match_parent"
             android:layout_height="260dp"
@@ -76,16 +76,17 @@
                 android:layout_height="match_parent"
                 android:background="@color/colorAccent"
                 android:contentDescription="@null"
-                android:scaleType="fitCenter" />
+
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/ib_thumbnails_play"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_centerInParent="true"
+                android:layout_gravity="center"
                 android:background="@mipmap/thumbnail_play"
                 android:contentDescription="@null" />
-        </com.lzc.daliylife.views.LotteryLayout>
+        </FrameLayout>
 
 
         <!--</FrameLayout>-->
