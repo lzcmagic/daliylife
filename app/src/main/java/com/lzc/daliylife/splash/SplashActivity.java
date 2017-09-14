@@ -14,6 +14,7 @@ import android.widget.ImageView;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.BaseActivity;
+import com.lzc.daliylife.entity.LocationEntity;
 import com.lzc.daliylife.entity.mob.WeatherEntity;
 import com.lzc.daliylife.main.MainActivity;
 import com.lzc.daliylife.normalUtil.L;
@@ -119,14 +120,18 @@ public class SplashActivity extends BaseActivity implements SplashContract.SView
 
 
     @Override
-    public void startIntent(WeatherEntity weatherEntity) {
+    public void startIntent(WeatherEntity weatherEntity,LocationEntity locationEntity) {
         if (weatherEntity != null) {
             WeatherEntity.Result result = weatherEntity.getresult().get(0);
             WeatherEntity.Result.Future future = weatherEntity.getresult().get(0).getfuture().get(0);
-            MainActivity.actionStart(this, result.getWeather(), result.getTemperature(), future.getTemperature());
+            MainActivity.actionStart(this,
+                    result.getWeather(),
+                    result.getTemperature(),
+                    future.getTemperature(),
+                    locationEntity.getDistrict());
         } else {
             T.showLong("天气信息获取失败");
-            MainActivity.actionStart(this, null, null, null);
+            MainActivity.actionStart(this, null, null, null,null);
         }
         finish();
     }

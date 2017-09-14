@@ -4,6 +4,7 @@ import com.lzc.daliylife.R;
 
 /**
  * Created by lzc on 2017/3/18.
+ *
  */
 
 public class WeatherToIcon {

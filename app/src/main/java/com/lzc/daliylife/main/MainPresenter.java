@@ -20,9 +20,6 @@ public class MainPresenter implements MainContract.MPresenter {
 
     private MainActivity mActivity;
     private MainContract.MView mView;
-    private String CurrentWeather;
-    private String CurrentWeatherText;
-    private String CurrentTemperature;
 
     MainPresenter(MainContract.MView mView) {
         this.mView = mView;
@@ -47,7 +44,7 @@ public class MainPresenter implements MainContract.MPresenter {
         mView.showDialog();
         AMapUtils.getInstance().startLocation(new AMapUtils.SendLocation() {
             @Override
-            public void sendLocation(LocationEntity entity) {
+            public void sendLocation(final LocationEntity entity) {
                 HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Observer<WeatherEntity>() {
 
 
@@ -72,7 +69,7 @@ public class MainPresenter implements MainContract.MPresenter {
                         String weatherInfo = result.getWeather();
                         String temperatureInfo = result.getTemperature();
                         String weatherTempInfo = result.getfuture().get(0).getTemperature();
-                        mView.showWeather(weatherInfo,temperatureInfo,weatherTempInfo);
+                        mView.showWeather(weatherInfo,temperatureInfo,weatherTempInfo,entity.getDistrict());
                     }
                 }, Constants.WEATHERKEY, entity.getCity().replace("市", ""), entity.getProvince());
             }
@@ -81,9 +78,10 @@ public class MainPresenter implements MainContract.MPresenter {
 
     @Override
     public void initWeather() {
-        CurrentWeather = mActivity.getIntent().getStringExtra("weather");
-        CurrentWeatherText =mActivity. getIntent().getStringExtra("weatherText");
-        CurrentTemperature = mActivity.getIntent().getStringExtra("temperature");
-        mView.showWeather(CurrentWeather,CurrentWeatherText,CurrentTemperature);
+        String currentWeather = mActivity.getIntent().getStringExtra("weather");
+        String currentWeatherText = mActivity.getIntent().getStringExtra("weatherText");
+        String currentTemperature = mActivity.getIntent().getStringExtra("temperature");
+        String district = mActivity.getIntent().getStringExtra("district");
+        mView.showWeather(currentWeather, currentWeatherText, currentTemperature,district);
     }
 }

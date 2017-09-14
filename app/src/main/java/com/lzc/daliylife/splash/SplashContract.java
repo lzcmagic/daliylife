@@ -2,10 +2,12 @@ package com.lzc.daliylife.splash;
 
 import com.lzc.daliylife.base.BasePresenter;
 import com.lzc.daliylife.base.BaseView;
+import com.lzc.daliylife.entity.LocationEntity;
 import com.lzc.daliylife.entity.mob.WeatherEntity;
 
 /**
  * Created by lzc on 2017/9/7.
+ *
  */
 
 public interface SplashContract {
@@ -18,7 +20,7 @@ public interface SplashContract {
     }
 
     interface SView extends BaseView {
-        void startIntent(WeatherEntity weatherEntity);
+        void startIntent(WeatherEntity weatherEntity,LocationEntity locationEntity);
         void startAnimation();
 
 

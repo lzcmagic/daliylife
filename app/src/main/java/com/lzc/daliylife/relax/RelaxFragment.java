@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.OnRecyclerScrolledListener;
@@ -18,8 +16,6 @@ import com.lzc.daliylife.entity.yiyuan.BSQJEntity;
 import com.lzc.daliylife.framework.Constants;
 import com.lzc.daliylife.http.HttpMethods;
 import com.lzc.daliylife.normalUtil.T;
-import com.lzc.daliylife.utils.SignUtil;
-import com.lzc.daliylife.views.LotteryLayout;
 import com.lzc.daliylife.views.ScrollChildSwipeRefreshLayout;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +31,7 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lzc on 2016/12/5.
+ *
  */
 
 public class RelaxFragment extends BaseFragment {

@@ -12,6 +12,16 @@ public class LocationEntity {
     //经度
     private String posLng;
 
+    private String district;
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
     @Override
     public String toString() {
         return "LocationEntity{" +

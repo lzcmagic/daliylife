@@ -22,6 +22,8 @@ public class SplashPresenter implements SplashContract.SPresenter {
     private SplashActivity mActivity;
     private SplashContract.SView mView;
     private WeatherEntity mWeather;
+    private Disposable disposable;
+    private LocationEntity locationEntity;
 
     public SplashPresenter(SplashContract.SView mView) {
         this.mView = mView;
@@ -42,7 +44,7 @@ public class SplashPresenter implements SplashContract.SPresenter {
 
     @Override
     public void initIntent() {
-        mView.startIntent(mWeather);
+        mView.startIntent(mWeather,locationEntity);
     }
 
 
@@ -52,6 +54,7 @@ public class SplashPresenter implements SplashContract.SPresenter {
             @Override
             public void sendLocation(LocationEntity entity) {
                 if (entity != null) {
+                    locationEntity=entity;
                     L.d("startLocation: " + entity.toString());
                     loadData(entity);
                 }
@@ -60,7 +63,7 @@ public class SplashPresenter implements SplashContract.SPresenter {
         mView.startAnimation();
     }
 
-    private Disposable disposable;
+
 
     private void loadData(LocationEntity LocationEntity) {
         HttpMethods.getInstance(Constants.WEATHERAPI).getWeekWeather(new Observer<WeatherEntity>() {

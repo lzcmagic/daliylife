@@ -1,5 +1,6 @@
 package com.lzc.daliylife.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -15,19 +16,16 @@ import java.util.Date;
 
 /**
  * Created by lzc on 2017/3/27.
+ *
  */
 
 public class AMapUtils {
     //声明AMapLocationClient类对象
     private AMapLocationClient mLocationClient = null;
-    //声明AMapLocationClientOption对象
-    private AMapLocationClientOption mLocationOption = null;
-    //声明定位回调监听器
-    private AMapLocationListener mLocationListener ;
     private static AMapUtils instance;
     private SendLocation mSendLocation;
 
-    public AMapUtils() {
+    private AMapUtils() {
         initLocationOptions(ApplWork.ApplWorkContext);
     }
 
@@ -44,8 +42,8 @@ public class AMapUtils {
     }
     private void initLocationOptions(Context context) {
         mLocationClient = new AMapLocationClient(context);
-        mLocationListener = new MyAMapLocationListener();
-        mLocationOption = new AMapLocationClientOption();
+        AMapLocationListener mLocationListener = new MyAMapLocationListener();
+        AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
@@ -71,7 +69,7 @@ public class AMapUtils {
                     aMapLocation.getCountry();//国家信息
                     String province = aMapLocation.getProvince();//省信息
                     String city = aMapLocation.getCity();//城市信息
-                    aMapLocation.getDistrict();//城区信息
+                    String district = aMapLocation.getDistrict();//城区信息
                     aMapLocation.getStreet();//街道信息
                     aMapLocation.getStreetNum();//街道门牌号信息
                     aMapLocation.getCityCode();//城市编码
@@ -80,7 +78,7 @@ public class AMapUtils {
                     aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
                     aMapLocation.getFloor();//获取当前室内定位的楼层
                     //获取定位时间
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(aMapLocation.getTime());
                     df.format(date);
                     LocationEntity locationEntity=new LocationEntity();
@@ -88,6 +86,7 @@ public class AMapUtils {
                     locationEntity.setPosLng(String.valueOf(longitude));
                     locationEntity.setPosLat(String.valueOf(latitude));
                     locationEntity.setCity(city);
+                    locationEntity.setDistrict(district);
                     mSendLocation.sendLocation(locationEntity);
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。

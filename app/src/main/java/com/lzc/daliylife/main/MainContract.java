@@ -18,7 +18,7 @@ public interface MainContract {
 
     interface MView extends BaseView {
 
-        void showWeather(String weather,String weatherText,String temperature);
+        void showWeather(String weather,String weatherText,String temperature,String district);
 
 
         void showDialog();

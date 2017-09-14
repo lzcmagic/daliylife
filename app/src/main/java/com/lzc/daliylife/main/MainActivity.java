@@ -1,5 +1,7 @@
 package com.lzc.daliylife.main;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +19,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +42,7 @@ import butterknife.BindView;
  */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    MainContract.MView {
+        MainContract.MView {
     @BindView(R.id.nav_view)
     NavigationView navView;
     @BindView(R.id.drawer_layout)
@@ -56,7 +59,7 @@ public class MainActivity extends BaseActivity
     protected void onStart() {
         super.onStart();
         Fragment fragmentById = getSupportFragmentManager().findFragmentById(R.id.frame_cont);
-        if (fragmentById==null){
+        if (fragmentById == null) {
             GankFragment gankFragment = GankFragment.newInstance();
             ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),
                     gankFragment, R.id.frame_cont);
@@ -98,22 +101,37 @@ public class MainActivity extends BaseActivity
         mainPresenter.attachView(this);
     }
 
+    ObjectAnimator objectAnimator;
+
     @Override
     public int getResId() {
         return R.layout.activity_main;
     }
 
     @Override
-    public void showWeather(String weather, String weatherText, String temperature) {
+    public void showWeather(String weather, String weatherText, String temperature,String district) {
         View headerView = navView.getHeaderView(0);
         ImageView weatherIconImg = (ImageView) headerView.findViewById(R.id.imageView);
         final TextView weatherView = (TextView) headerView.findViewById(R.id.weather);
         final TextView weatherTextView = (TextView) headerView.findViewById(R.id.weather_text);
         final TextView weatherTemp = (TextView) headerView.findViewById(R.id.weather_temp);
+        TextView districtText= (TextView) headerView.findViewById(R.id.tv_header_district);
         if (!TextUtils.isEmpty(weather)) {
             weatherView.setText(weather);
             weatherIconImg.setImageResource(WeatherToIcon.Weather2Icon(weather));
+            objectAnimator = ObjectAnimator.ofFloat(weatherIconImg, "translationX", 0.0f, 50f, 0.0f);
+            objectAnimator.setDuration(2000);
+            objectAnimator.setInterpolator(new LinearInterpolator());
+            objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            objectAnimator.setRepeatMode(ValueAnimator.RESTART);
+            objectAnimator.start();
         } else {
+            weatherIconImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mainPresenter.refreshWeather();
+                }
+            });
             //获取天气信息失败
             weatherView.setText("天气信息获取失败,点击图标重试");
         }
@@ -129,12 +147,12 @@ public class MainActivity extends BaseActivity
             //获取天气信息失败
             weatherTemp.setText("");
         }
-        weatherIconImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mainPresenter.refreshWeather();
-            }
-        });
+        if (!TextUtils.isEmpty(district)) {
+            districtText.setText(district);
+        } else {
+            //获取天气信息失败
+            districtText.setText("");
+        }
 
     }
 
@@ -163,13 +181,18 @@ public class MainActivity extends BaseActivity
      *
      * @param context 上下文
      */
-    public static void actionStart(Context context, String weather, String weatherText, String temperature) {
+    public static void actionStart(Context context,
+                                   String weather,
+                                   String weatherText,
+                                   String temperature,
+                                   String district) {
         Intent intent = new Intent();
         intent.setClass(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("weather", weather);
         intent.putExtra("weatherText", weatherText);
         intent.putExtra("temperature", temperature);
+        intent.putExtra("district",district);
         context.startActivity(intent);
     }
 
@@ -231,7 +254,10 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mainPresenter.detachView();
+        if (mainPresenter != null) {
+            mainPresenter.detachView();
+        }
+        objectAnimator.cancel();
     }
 
 
