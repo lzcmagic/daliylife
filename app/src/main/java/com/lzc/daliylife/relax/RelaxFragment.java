@@ -84,6 +84,8 @@ public class RelaxFragment extends BaseFragment {
                 R.drawable.divider_mileage));
         mAdapter.notifyDataSetChanged();
         initRefreshLayout();
+
+
     }
 
 

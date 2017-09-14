@@ -3,21 +3,17 @@ package com.lzc.daliylife.relax;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.BaseAdapter;
 import com.lzc.daliylife.adapter.BaseViewHolder;
@@ -32,8 +28,6 @@ import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 
-import static android.media.MediaMetadataRetriever.OPTION_CLOSEST;
-import static android.media.MediaMetadataRetriever.OPTION_CLOSEST_SYNC;
 import static android.media.MediaMetadataRetriever.OPTION_NEXT_SYNC;
 
 /**
@@ -108,7 +102,6 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
                 mOnItemClickListener.onItemClick(holder, holder.getAdapterPosition());
             }
         });
-
     }
 
     private class ThumbTask extends AsyncTask<String, Integer, RelaxBitmap> {

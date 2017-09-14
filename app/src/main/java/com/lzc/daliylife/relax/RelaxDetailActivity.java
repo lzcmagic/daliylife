@@ -2,24 +2,19 @@ package com.lzc.daliylife.relax;
 
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.BaseActivity;
-import com.lzc.daliylife.normalUtil.DensityUtils;
 
 import java.util.HashMap;
 
 import butterknife.BindView;
-
-import static android.media.MediaMetadataRetriever.OPTION_NEXT_SYNC;
 
 /**
  * Created by lzc on 2017/9/12.

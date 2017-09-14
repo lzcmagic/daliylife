@@ -72,6 +72,7 @@ public class AndroidFragment extends BaseFragment {
                 if (IsDataRefresh){
                     return;
                 }
+                Page++;
                 loadData();
             }
         },mRecyclerView);
@@ -143,7 +144,7 @@ public class AndroidFragment extends BaseFragment {
      * 加载更多数据
      */
     private void loadData() {
-        Page++;
+
         initData();
     }
 

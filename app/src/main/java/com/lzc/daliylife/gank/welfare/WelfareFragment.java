@@ -71,6 +71,7 @@ public class WelfareFragment extends BaseFragment {
                 if (IsDataRefresh){
                     return;
                 }
+                Page++;
                 loadData();
             }
         },recyclerView);
@@ -159,7 +160,6 @@ public class WelfareFragment extends BaseFragment {
      * 加载数据
      */
     private void loadData() {
-        Page++;
         initFuLiData();
     }
 
