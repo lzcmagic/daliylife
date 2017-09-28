@@ -61,7 +61,7 @@ public class AMapUtils {
             if (aMapLocation != null) {
                 if (aMapLocation.getErrorCode() == 0) {
                     //可在其中解析amapLocation获取相应内容。
-                    //aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+//                    aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
                     double latitude = aMapLocation.getLatitude();//获取纬度
                     double longitude = aMapLocation.getLongitude();//获取经度
                     aMapLocation.getAccuracy();//获取精度信息
@@ -77,6 +77,7 @@ public class AMapUtils {
                     aMapLocation.getAoiName();//获取当前定位点的AOI信息
                     aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
                     aMapLocation.getFloor();//获取当前室内定位的楼层
+                    Log.d("map", "onLocationChanged: "+aMapLocation.toString());
                     //获取定位时间
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(aMapLocation.getTime());

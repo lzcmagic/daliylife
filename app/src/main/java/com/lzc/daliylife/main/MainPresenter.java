@@ -36,6 +36,8 @@ public class MainPresenter implements MainContract.MPresenter {
             disposable.dispose();
         }
         this.mActivity=null;
+
+        
     }
     private Disposable disposable;
 

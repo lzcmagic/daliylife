@@ -96,7 +96,6 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     //picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
-    //photoview com.github.chrisbanes:PhotoView:latest.release.here
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     //alert
     compile 'com.tapadoo.android:alerter:1.0.6'
@@ -105,5 +104,4 @@ dependencies {
     compile 'com.tencent.bugly:nativecrashreport:latest.release'
     //浏览器支持
     compile 'com.android.support:customtabs:25.3.1'
-    compile files('libs/commons-codec-1.10.jar')
 }
