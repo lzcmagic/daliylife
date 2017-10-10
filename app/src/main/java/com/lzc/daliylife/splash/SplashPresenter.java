@@ -15,30 +15,28 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * Created by lzc on 2017/9/7.
+ *
  */
 
-public class SplashPresenter implements SplashContract.SPresenter {
+class SplashPresenter implements SplashContract.SPresenter {
 
-    private SplashActivity mActivity;
     private SplashContract.SView mView;
     private WeatherEntity mWeather;
     private Disposable disposable;
     private LocationEntity locationEntity;
 
-    public SplashPresenter(SplashContract.SView mView) {
+    SplashPresenter(SplashContract.SView mView) {
         this.mView = mView;
     }
 
     @Override
     public void attachView(FragmentActivity fmActivity) {
-        this.mActivity = (SplashActivity) fmActivity;
     }
 
     @Override
     public void detachView() {
         if (disposable != null)
             disposable.dispose();
-        this.mActivity = null;
 
     }
 

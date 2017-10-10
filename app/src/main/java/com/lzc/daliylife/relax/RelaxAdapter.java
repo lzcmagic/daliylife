@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,10 +49,10 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
         super(context);
         this.context = context;
         bitmapMaps = new HashMap<>();
-        WindowManager wm= (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         WindowWidth = wm.getDefaultDisplay().getWidth();
-        int height= DensityUtils.dp2px(context,260);
-        ratio=height/(float)WindowWidth;
+        int height = DensityUtils.dp2px(context, 260);
+        ratio = height / (float) WindowWidth;
     }
 
     void setmOnItemClickListener(OnRecyclerViewItemClickListener listener) {
@@ -90,7 +91,9 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
         GlideUtils.loadGankRatioImage(context, value.getProfile_image(), holder.imageView);
         holder.name.setText(value.getName());
         holder.time.setText(value.getCreate_time());
-        holder.title.setText(value.getText().replace("\n",""));
+        if (!TextUtils.isEmpty(value.getText())) {
+            holder.title.setText(value.getText().replace("\n", ""));
+        }
         if (bitmapMaps.containsKey(value.getVideo_uri())) {
             holder.thumbnails.setImageBitmap(bitmapMaps.get(value.getVideo_uri()).getBitmap());
         } else {
@@ -109,6 +112,7 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
         private ImageView imageView;
 
         private String key;
+
         ThumbTask(ImageView imageView) {
             this.imageView = imageView;
         }
@@ -122,23 +126,23 @@ public class RelaxAdapter extends BaseAdapter<BSQJEntity.ShowapiResBodyBean.Page
         @Override
         protected RelaxBitmap doInBackground(String... params) {
             String url = params[0];
-            this.key=url;
+            this.key = url;
             MediaMetadataRetriever retriever = new MediaMetadataRetriever();
             //获取网络视频
             retriever.setDataSource(url, new HashMap<String, String>());
             String height = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT); // 视频高度
             String width = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH); // 视频宽度
 
-            Bitmap bitmap = retriever.getFrameAtTime(10000,OPTION_NEXT_SYNC);//截取第秒的图片
+            Bitmap bitmap = retriever.getFrameAtTime(10000, OPTION_NEXT_SYNC);//截取第秒的图片
             retriever.release();
-            Bitmap imageCrop = DensityUtils.ImageCrop(bitmap, ratio,WindowWidth,DensityUtils.dp2px(context,260));
-            return new RelaxBitmap(imageCrop,Float.parseFloat(width),Float.parseFloat(height));
+            Bitmap imageCrop = DensityUtils.ImageCrop(bitmap, ratio, WindowWidth, DensityUtils.dp2px(context, 260));
+            return new RelaxBitmap(imageCrop, Float.parseFloat(width), Float.parseFloat(height));
         }
 
         @Override
         protected void onPostExecute(RelaxBitmap bitmap) {
             super.onPostExecute(bitmap);
-            bitmapMaps.put(key,bitmap);
+            bitmapMaps.put(key, bitmap);
             imageView.setImageBitmap(bitmap.getBitmap());
         }
     }

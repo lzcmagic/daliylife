@@ -29,17 +29,18 @@ public class AMapUtils {
         initLocationOptions(ApplWork.ApplWorkContext);
     }
 
-    public static AMapUtils getInstance(){
-        if (instance==null){
-            return instance=new AMapUtils();
+    public static AMapUtils getInstance() {
+        if (instance == null) {
+            return instance = new AMapUtils();
         }
         return instance;
     }
 
-    public void startLocation(SendLocation sendLocation){
-        this.mSendLocation=sendLocation;
+    public void startLocation(SendLocation sendLocation) {
+        this.mSendLocation = sendLocation;
         mLocationClient.startLocation();
     }
+
     private void initLocationOptions(Context context) {
         mLocationClient = new AMapLocationClient(context);
         AMapLocationListener mLocationListener = new MyAMapLocationListener();
@@ -49,6 +50,7 @@ public class AMapUtils {
         mLocationOption.setNeedAddress(true);
         //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
         mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setOnceLocation(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
         mLocationClient.setLocationListener(mLocationListener);
@@ -77,12 +79,12 @@ public class AMapUtils {
                     aMapLocation.getAoiName();//获取当前定位点的AOI信息
                     aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
                     aMapLocation.getFloor();//获取当前室内定位的楼层
-                    Log.d("map", "onLocationChanged: "+aMapLocation.toString());
+                    Log.d("map", "onLocationChanged: " + aMapLocation.toString());
                     //获取定位时间
                     @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                     Date date = new Date(aMapLocation.getTime());
                     df.format(date);
-                    LocationEntity locationEntity=new LocationEntity();
+                    LocationEntity locationEntity = new LocationEntity();
                     locationEntity.setProvince(province);
                     locationEntity.setPosLng(String.valueOf(longitude));
                     locationEntity.setPosLat(String.valueOf(latitude));
@@ -90,18 +92,24 @@ public class AMapUtils {
                     locationEntity.setDistrict(district);
                     mSendLocation.sendLocation(locationEntity);
                 } else {
+                    mSendLocation.sendLocation(null);
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError", "location Error, ErrCode:"
                             + aMapLocation.getErrorCode() + ", errInfo:"
                             + aMapLocation.getErrorInfo());
                 }
-                if (mLocationClient.isStarted())
-                    mLocationClient.stopLocation();
+
+            } else {
+                mSendLocation.sendLocation(null);
             }
-            mSendLocation.sendLocation(null);
+            if (mLocationClient.isStarted()){
+
+                mLocationClient.stopLocation();
+            }
         }
     }
-    public interface SendLocation{
+
+    public interface SendLocation {
         void sendLocation(LocationEntity entity);
     }
 }
