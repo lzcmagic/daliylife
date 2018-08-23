@@ -9,7 +9,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.adapter.OnRecyclerScrolledListener;
@@ -121,14 +120,15 @@ public class WelfareFragment extends BaseFragment {
                 if (!IsDataRefresh) {
                     Page = 1;
                     IsDataRefresh = true;
-                    new Handler().postDelayed(new Runnable() {
+                    new Handler().post(new Runnable() {
                         @Override
                         public void run() {
                             FuLiLists.clear();
+                            mWelfareAdapter.notifyDataSetChanged();
                             //加载数据
                             loadData();
                         }
-                    }, 500);
+                    });
                 }
 
             }
@@ -187,7 +187,6 @@ public class WelfareFragment extends BaseFragment {
                     mRefreshLayout.setRefreshing(false);
                 }
                 IsDataRefresh = false;
-                Log.d("lzc","size: "+FuLiLists.size());
                 if (FuLiLists.size()<Number) {
                     //加载完毕，(正好加载到第十条)
                     mWelfareAdapter.stopLoadData();
@@ -204,9 +203,7 @@ public class WelfareFragment extends BaseFragment {
             public void onNext(FuLiEntity fuLiEntity) {
                 ArrayList<FuLiEntity.Result> results = fuLiEntity.getResults();
                 if (results != null && results.size() > 0) {
-                    for (FuLiEntity.Result result : results) {
-                        FuLiLists.add(result);
-                    }
+                    FuLiLists.addAll(results);
                 }
             }
         }, "福利", Number, Page);

@@ -122,15 +122,16 @@ public class AndroidFragment extends BaseFragment {
 
                 Page = 1;
                 IsDataRefresh = true;
-                new Handler().postDelayed(new Runnable() {
+                new Handler().post(new Runnable() {
                     @Override
                     public void run() {
                         //初始化
                         AndroidEntitys.clear();
+                        mNormalAdapter.notifyDataSetChanged();
                         //加载数据
                         initData();
                     }
-                }, 500);
+                });
 
             }
         });

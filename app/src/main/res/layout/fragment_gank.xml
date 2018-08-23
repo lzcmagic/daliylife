@@ -31,5 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+
+        app:layout_behavior="com.lzc.daliylife.utils.ScrollAwareFABBehaviorDefault"
         android:src="@mipmap/logo_up" />
 </android.support.design.widget.CoordinatorLayout>
