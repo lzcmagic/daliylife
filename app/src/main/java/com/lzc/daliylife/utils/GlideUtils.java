@@ -6,6 +6,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.lzc.daliylife.R;
 
 /**
@@ -22,12 +23,14 @@ public class GlideUtils {
      * 自适应宽度加载图片。保持图片的长宽比例不变，通过修改imageView的高度来完全显示图片。
      */
     public static void loadGankRatioImage(Fragment fragment, String url, ImageView view){
-        Glide.with(fragment)
-                .load(url)
-                .asBitmap()
+        RequestOptions options =new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.mipmap.icon_gb_dengdai)
-                .error(R.mipmap.fail_load)
+                .error(R.mipmap.fail_load);
+        Glide.with(fragment)
+                .asBitmap()
+                .load(url)
+                .apply(options)
                 .into(view);
     }
 
@@ -35,13 +38,14 @@ public class GlideUtils {
      * 自适应宽度加载图片。保持图片的长宽比例不变，通过修改imageView的高度来完全显示图片。
      */
     public static void loadGankRatioImage(Context context, String url, ImageView view){
-        Glide.with(context)
-                //加载500像素的图片
-                .load(url)
-                .asBitmap()
+        RequestOptions options =new RequestOptions()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .placeholder(R.mipmap.icon_gb_dengdai)
-                .error(R.mipmap.fail_load)
+                .error(R.mipmap.fail_load);
+        Glide.with(context)
+                .asBitmap()
+                .load(url)
+                .apply(options)
                 .into(view);
     }
 }

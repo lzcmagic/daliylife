@@ -1,6 +1,5 @@
 package com.lzc.daliylife.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -13,6 +12,7 @@ import com.lzc.daliylife.framework.ApplWork;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by lzc on 2017/3/27.
@@ -41,6 +41,10 @@ public class AMapUtils {
         mLocationClient.startLocation();
     }
 
+    public void stopLocation(){
+        mLocationClient.stopLocation();
+    }
+
     private void initLocationOptions(Context context) {
         mLocationClient = new AMapLocationClient(context);
         AMapLocationListener mLocationListener = new MyAMapLocationListener();
@@ -49,7 +53,7 @@ public class AMapUtils {
         //设置是否返回地址信息（默认返回地址信息）
         mLocationOption.setNeedAddress(true);
         //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
-        mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setHttpTimeOut(8000);
         mLocationOption.setOnceLocation(true);
         //给定位客户端对象设置定位参数
         mLocationClient.setLocationOption(mLocationOption);
@@ -81,7 +85,7 @@ public class AMapUtils {
                     aMapLocation.getFloor();//获取当前室内定位的楼层
                     Log.d("map", "onLocationChanged: " + aMapLocation.toString());
                     //获取定位时间
-                    @SuppressLint("SimpleDateFormat") SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     Date date = new Date(aMapLocation.getTime());
                     df.format(date);
                     LocationEntity locationEntity = new LocationEntity();
@@ -103,7 +107,6 @@ public class AMapUtils {
                 mSendLocation.sendLocation(null);
             }
             if (mLocationClient.isStarted()){
-
                 mLocationClient.stopLocation();
             }
         }

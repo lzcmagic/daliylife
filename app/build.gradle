@@ -1,22 +1,21 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.jakewharton.butterknife'
+//apply plugin: 'com.jakewharton.butterknife'
 
-def getDate() {
+static def getDate() {
     def date = new Date()
-    def formattedDate = date.format('yyyyMMddHHmm')
+    def formattedDate = date.format('yyyyMMddHHmmss')
     return formattedDate
 }
 android {
     Properties properties = new Properties()
     properties.load(new FileInputStream(rootProject.file("lzcdev.properties")))
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.lzc.daliylife"
         minSdkVersion rootProject.ext.defaultConfig.minSdkVersion
         targetSdkVersion rootProject.ext.defaultConfig.targetSdkVersion
         versionCode rootProject.ext.defaultConfig.versionCode
-        versionName APP_VERSION
+        versionName rootProject.ext.defaultConfig.versionName
         ndk {
             // 设置支持的SO库架构
             abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -43,28 +42,9 @@ android {
             signingConfig signingConfigs.release
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def outputFile = output.outputFile
-                    if ("true".equals(IS_JENKINS)) {
-                        def timeNow = JENKINS_TIME
-                        outDirectory = 'G:/'
-                        def newName = 'yj-android-v' +
-                                APP_VERSION + '-' + variant.productFlavors[0].name + timeNow + '.apk'
-                        output.outputFile = new File(outputFile.parent, newName)
-                    }else{
-                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                            def fileName = "DaliyLife_V${defaultConfig.versionName}_${variant.productFlavors[0].name}.apk"
-                            if (project.hasProperty('OUT_PUT_DIR_PARA')) {
-                                File output_dir1 = file("${OUT_PUT_DIR_PARA}");
-                                output.outputFile = new File(output_dir1, fileName)
-                                println "输出文件位置： " + output.outputFile
-                            } else {
-                                output.outputFile = new File(outputFile.parent, fileName)
-                                println "输出文件位置： " + output.outputFile
-                            }
-                        }
-                    }
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "${variant.name}-${variant.versionName}-${getDate()}.apk"
                 }
             }
         }
@@ -79,44 +59,53 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    flavorDimensions "api", "mode"
     productFlavors {
+
         lzc {
+            dimension "mode"
+        }
+        lzcc{
+            dimension "api"
         }
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    testImplementation 'junit:junit:4.12'
     //support
-    compile "com.android.support:appcompat-v7:${rootProject.ext.dependencies.support}"
-    compile "com.android.support:cardview-v7:${rootProject.ext.dependencies.support}"
-    compile "com.android.support:design:${rootProject.ext.dependencies.support}"
-    //Retrofit
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    compile 'com.squareup.okio:okio:1.13.0'
-    //gson
-    compile 'com.google.code.gson:gson:2.8.0'
-    //rxjava2
-    compile 'io.reactivex.rxjava2:rxjava:2.0.1'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    //butterknife
-    compile "com.jakewharton:butterknife:${rootProject.ext.dependencies.butterknife}"
-    annotationProcessor "com.jakewharton:butterknife-compiler:${rootProject.ext.dependencies.butterknife}"
-    //glide
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    //picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.github.chrisbanes.photoview:library:1.2.4'
-    //alert
-    compile 'com.tapadoo.android:alerter:1.0.6'
-    //bugly
-    compile 'com.tencent.bugly:crashreport:latest.release'
-    compile 'com.tencent.bugly:nativecrashreport:latest.release'
+    implementation rootProject.ext.dependencies['appcompact-v7']
+    implementation rootProject.ext.dependencies['cardView']
+    implementation rootProject.ext.dependencies['design']
     //浏览器支持
-    compile 'com.android.support:customtabs:25.3.1'
+    implementation rootProject.ext.dependencies['customtabs']
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+    implementation 'com.squareup.okio:okio:1.14.0'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.4'
+    //rxjava2
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    //butterknife
+    implementation rootProject.ext.dependencies['butterKnife']
+    annotationProcessor rootProject.ext.dependencies['butterknife-compiler']
+    //glide
+    implementation ("com.github.bumptech.glide:glide:4.6.1") {
+        exclude group: "com.android.support"
+    }
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.chrisbanes.photoview:library:1.2.4'
+    //alert
+    implementation 'com.tapadoo.android:alerter:1.0.6'
+    //bugly
+    implementation 'com.tencent.bugly:crashreport:2.6.6.1'
+    implementation 'com.tencent.bugly:nativecrashreport:3.3.1'
 }

@@ -13,6 +13,7 @@ import com.lzc.daliylife.adapter.BaseAdapter;
 import com.lzc.daliylife.adapter.BaseViewHolder;
 import com.lzc.daliylife.adapter.OnRecyclerViewItemClickListener;
 import com.lzc.daliylife.entity.gankentity.FuLiEntity;
+import com.lzc.daliylife.utils.GlideUtils;
 import com.lzc.daliylife.views.RatioImageView;
 
 import butterknife.BindView;
@@ -47,12 +48,7 @@ public class WelfareAdapter extends BaseAdapter<FuLiEntity.Result,WelfareAdapter
     public void initNormalHolder(FuLiEntity.Result value, final WelfareAdapter.FuliHolder holder) {
 
          holder.fuliText.setText(value.getDesc());
-        Glide.with(mContext)
-                //加载500像素的图片
-                .load(value.getUrl())
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .error(R.mipmap.fail_load)
-                .into( holder.fuliImage);
+        GlideUtils.loadGankRatioImage(mContext,value.getUrl(),holder.fuliImage);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

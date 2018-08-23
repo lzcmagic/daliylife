@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -100,10 +101,9 @@ public class LotteryFragment extends BaseFragment {
     /**
      * 初始化数据
      */
-    @SuppressLint("SimpleDateFormat")
     private void initData() {
         lotteryEntitys.clear();
-        String time = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String time = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(new Date());
         String temp="codessq|dlt|fc3d|pl3|pl5|qlc|qxcshowapi_appid"+Constants.YIYUANAPPID+"showapi_res_gzip0showapi_sign_methodmd5showapi_timestamp"+time;
         String sign = SignUtil.YiYuanSign(temp);
         Map<String,String> map=new HashMap<>();
@@ -125,6 +125,7 @@ public class LotteryFragment extends BaseFragment {
                 int ret_code = value.getShowapi_res_body().getRet_code();
                 if (ret_code==0){
                     lotteryEntitys= value.getShowapi_res_body().getResult();
+                    if (lotteryEntitys==null)lotteryEntitys=new ArrayList<>();
                 }
             }
 

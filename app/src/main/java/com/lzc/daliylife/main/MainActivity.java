@@ -109,13 +109,13 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showWeather(String weather, String weatherText, String temperature,String district) {
+    public void showWeather(String weather, String weatherText, String temperature, String district) {
         View headerView = navView.getHeaderView(0);
         ImageView weatherIconImg = (ImageView) headerView.findViewById(R.id.imageView);
         final TextView weatherView = (TextView) headerView.findViewById(R.id.weather);
         final TextView weatherTextView = (TextView) headerView.findViewById(R.id.weather_text);
         final TextView weatherTemp = (TextView) headerView.findViewById(R.id.weather_temp);
-        TextView districtText= (TextView) headerView.findViewById(R.id.tv_header_district);
+        TextView districtText = (TextView) headerView.findViewById(R.id.tv_header_district);
         if (!TextUtils.isEmpty(weather)) {
             weatherView.setText(weather);
             weatherIconImg.setImageResource(WeatherToIcon.Weather2Icon(weather));
@@ -192,7 +192,7 @@ public class MainActivity extends BaseActivity
         intent.putExtra("weather", weather);
         intent.putExtra("weatherText", weatherText);
         intent.putExtra("temperature", temperature);
-        intent.putExtra("district",district);
+        intent.putExtra("district", district);
         context.startActivity(intent);
     }
 
@@ -257,7 +257,8 @@ public class MainActivity extends BaseActivity
         if (mainPresenter != null) {
             mainPresenter.detachView();
         }
-        objectAnimator.cancel();
+        if (objectAnimator != null)
+            objectAnimator.cancel();
     }
 
 

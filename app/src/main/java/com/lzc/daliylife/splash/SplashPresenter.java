@@ -42,6 +42,7 @@ class SplashPresenter implements SplashContract.SPresenter {
 
     @Override
     public void initIntent() {
+        AMapUtils.getInstance().stopLocation();
         mView.startIntent(mWeather,locationEntity);
     }
 

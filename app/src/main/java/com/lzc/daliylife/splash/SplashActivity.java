@@ -1,15 +1,17 @@
 package com.lzc.daliylife.splash;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
 import com.lzc.daliylife.R;
@@ -17,7 +19,6 @@ import com.lzc.daliylife.base.BaseActivity;
 import com.lzc.daliylife.entity.LocationEntity;
 import com.lzc.daliylife.entity.mob.WeatherEntity;
 import com.lzc.daliylife.main.MainActivity;
-import com.lzc.daliylife.normalUtil.L;
 import com.lzc.daliylife.normalUtil.T;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import butterknife.BindView;
  */
 
 public class SplashActivity extends BaseActivity implements SplashContract.SView {
-    ScaleAnimation scaleAnimation;
+    private AnimatorSet animatorSet;
     private static int GRANT_PERMISSION = 1;
     @BindView(R.id.iv_splash)
     ImageView mImage;
@@ -71,25 +72,18 @@ public class SplashActivity extends BaseActivity implements SplashContract.SView
      * 初始化动画
      */
     private void initAnimation() {
-        scaleAnimation = new ScaleAnimation(1.0f, 0f, 1.0f, 0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        scaleAnimation.setDuration(2400);
-        scaleAnimation.setFillAfter(true);
-        scaleAnimation.setInterpolator(new LinearInterpolator());
-        scaleAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                L.d("onAnimationStart");
-            }
+        animatorSet = new AnimatorSet();
 
+        ObjectAnimator scaleX=ObjectAnimator.ofFloat(mImage,"scaleX",1f,0f);
+        ObjectAnimator scaleY=ObjectAnimator.ofFloat(mImage,"scaleY",1f,0f);
+        animatorSet.playTogether(scaleX,scaleY);
+        animatorSet.setInterpolator(new LinearInterpolator());
+        animatorSet.setDuration(1500);
+        animatorSet.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void onAnimationEnd(Animation animation) {
-                L.d("onAnimationEnd");
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
                 splashPresenter.initIntent();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-                L.d("onAnimationRepeat");
             }
         });
     }
@@ -98,9 +92,9 @@ public class SplashActivity extends BaseActivity implements SplashContract.SView
     @Override
     protected void onStart() {
         super.onStart();
-        int permissionReadPhone = ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.READ_PHONE_STATE);
+        int permissionReadPhone = ContextCompat.checkSelfPermission(SplashActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
         if (permissionReadPhone != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(SplashActivity.this, Manifest.permission.READ_PHONE_STATE)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(SplashActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
 
                 T.showShort("是否同意程序读取手机当前状态");
                 ActivityCompat.requestPermissions(SplashActivity.this,
@@ -138,7 +132,7 @@ public class SplashActivity extends BaseActivity implements SplashContract.SView
 
     @Override
     public void startAnimation() {
-        mImage.startAnimation(scaleAnimation);
+        animatorSet.start();
     }
 
     @Override
