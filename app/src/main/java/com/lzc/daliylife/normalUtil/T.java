@@ -3,7 +3,7 @@ package com.lzc.daliylife.normalUtil;
 import android.os.Looper;
 import android.widget.Toast;
 
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 
 /**
  * Created by lzc on 2017/3/13.
@@ -61,7 +61,7 @@ public class T {
             return;
         }
         if (toast == null) {
-            toast = Toast.makeText(ApplWork.getApplWorkContext(), content, time);
+            toast = Toast.makeText(MyApp.getApplWorkContext(), content, time);
         } else {
             toast.setText(content);
         }
@@ -69,6 +69,6 @@ public class T {
     }
 
     public static void toast(int resId) {
-        toast(ApplWork.getApplWorkContext().getString(resId), Toast.LENGTH_SHORT);
+        toast(MyApp.getApplWorkContext().getString(resId), Toast.LENGTH_SHORT);
     }
 }

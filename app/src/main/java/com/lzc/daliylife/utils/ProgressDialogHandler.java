@@ -8,7 +8,7 @@ import android.os.Message;
 import android.view.WindowManager;
 
 import com.lzc.daliylife.R;
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 
 /**
  * 保持在主线程中的对话框
@@ -42,10 +42,10 @@ public class ProgressDialogHandler extends Handler {
 
     private void initProgressDialog(){
         if (mpd == null) {
-            mpd = new MyProgressDialog(ApplWork.getApplWorkContext());
+            mpd = new MyProgressDialog(MyApp.getApplWorkContext());
             mpd.setTitle(R.string.dialog_progress_tip);
             mpd.setIcon(R.mipmap.ic_launcher);
-            mpd.setMessage(ApplWork.ApplWorkContext.getString(R.string.dialog_progress_message));
+            mpd.setMessage(MyApp.ApplWorkContext.getString(R.string.dialog_progress_message));
 
             mpd.setCancelable(cancelable);
 

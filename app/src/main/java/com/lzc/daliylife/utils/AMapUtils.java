@@ -8,7 +8,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.lzc.daliylife.entity.LocationEntity;
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +26,7 @@ public class AMapUtils {
     private SendLocation mSendLocation;
 
     private AMapUtils() {
-        initLocationOptions(ApplWork.ApplWorkContext);
+        initLocationOptions(MyApp.ApplWorkContext);
     }
 
     public static AMapUtils getInstance() {

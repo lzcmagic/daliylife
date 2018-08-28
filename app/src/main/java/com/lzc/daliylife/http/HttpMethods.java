@@ -14,7 +14,7 @@ import com.lzc.daliylife.entity.mob.LotteryEntity;
 import com.lzc.daliylife.entity.mob.WeatherEntity;
 import com.lzc.daliylife.entity.yiyuan.BSQJEntity;
 import com.lzc.daliylife.entity.yiyuan.SummaryLotteryEntity;
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 import com.lzc.daliylife.normalUtil.NetUtils;
 import com.lzc.daliylife.normalUtil.T;
 
@@ -86,7 +86,7 @@ public class HttpMethods {
      * @return true or false
      */
     private boolean IsConnect(){
-        boolean connected = NetUtils.isConnected(ApplWork.getApplWorkContext());
+        boolean connected = NetUtils.isConnected(MyApp.getApplWorkContext());
         if (!connected){
             T.toast("未检测到网络");
         }

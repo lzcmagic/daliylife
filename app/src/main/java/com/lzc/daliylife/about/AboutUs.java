@@ -2,23 +2,14 @@ package com.lzc.daliylife.about;
 
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lzc.daliylife.R;
 import com.lzc.daliylife.base.*;
-import com.lzc.daliylife.main.MainActivity;
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by lzc on 2017/3/21.
@@ -40,7 +31,7 @@ public class AboutUs extends BaseFragment {
         PackageManager pm = getActivity().getPackageManager();
         PackageInfo packageInfo = null;
         try {
-            packageInfo = pm.getPackageInfo(ApplWork.ApplWorkContext.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            packageInfo = pm.getPackageInfo(MyApp.ApplWorkContext.getPackageName(), PackageManager.GET_CONFIGURATIONS);
 
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();

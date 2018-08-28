@@ -2,7 +2,7 @@ package com.lzc.daliylife.utils;
 
 import android.text.TextUtils;
 
-import com.lzc.daliylife.framework.ApplWork;
+import com.lzc.daliylife.framework.MyApp;
 
 import java.io.Serializable;
 
@@ -16,7 +16,7 @@ public class CacheThread extends Thread {
     Serializable object;
 
     public CacheThread() {
-        mACache = ACache.get(ApplWork.ApplWorkContext);
+        mACache = ACache.get(MyApp.ApplWorkContext);
     }
 
     public void setCacheContent(String key, Serializable value) {
